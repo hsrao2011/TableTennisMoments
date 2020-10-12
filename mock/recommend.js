@@ -1,7 +1,7 @@
-var apiDesc = require("../api/desc.js")
+import apiDesc from "../api/desc.js";
 var mockjs = require("better-mock/dist/mock.mp.js")
-var microBlogs = require("./data/microblogs.js")
-var users = require("./data/users.js")
+import microBlogs from "./data/microblogs.js";
+import users from "./data/users.js";
 
 var recommends = [];
 for(var i = 0; i < 100; i++){
@@ -19,7 +19,7 @@ for(var i = 0; i < 100; i++){
 	};
 }
 
-module.exports = [{
+export default [{
 		api: apiDesc.recommend.list,
 		response: config=>{
 			if(config.query.refresh){
@@ -34,9 +34,7 @@ module.exports = [{
 				&& index < (pageIndex + 1) * pageItemCount);
 			return {
 				code: 0,
-				data: {
-					items:recommendList
-				}
+				items: recommendList
 			};
 		}
 	}

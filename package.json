@@ -9,6 +9,8 @@
   "author": "rhs",
   "license": "ISC",
   "devDependencies": {
-    "better-mock": "^0.2.8"
+    "better-mock": "^0.2.8",
+    "jsonwebtoken": "^8.5.1",
+    "vuex": "^3.5.1"
   }
 }

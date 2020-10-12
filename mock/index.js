@@ -1,10 +1,14 @@
 var mockjs = require("better-mock/dist/mock.mp.js")
-const { param2Obj } = require("@/common/utils.js")
+import utils from "@/utils/utils.js";
 
-var  recommend = require("./recommend.js")
+import recommend from "./recommend.js";
+import user from "./user.js";
+import blog from "./blog.js";
 
 var mocks = [
-	...recommend
+	...recommend,
+	...user,
+	...blog
 ]
 
 // for front mock
@@ -15,12 +19,13 @@ function mockXHR() {
     return function(request) {
       let result = null
       if (response instanceof Function) {
-        const { body, type, url } = request
+        const { url, headers, type, body } = request
         // https://expressjs.com/en/4x/api.html#req
         result = response({
           method: type,
+		  headers: headers,
           body: JSON.parse(body),
-          query: param2Obj(url)
+          query: utils.param2Obj(url)
         })
       } else {
         result = response
@@ -35,7 +40,7 @@ function mockXHR() {
   mockjs.setup({timeout:'200-1000'});
 }
 
-module.exports = {
+export default {
   mocks,
   mockXHR
 }

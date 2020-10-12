@@ -74,4 +74,4 @@ var microBlogs = [{
 	}
 ]
 
-module.exports = microBlogs;
+export default microBlogs;

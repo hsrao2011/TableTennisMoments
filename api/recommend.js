@@ -1,6 +1,10 @@
-var apiDesc = require("./desc.js")
-var {request} = require("./request.js")
+import apiDesc from "./desc.js";
+import {request} from "./request.js";
 
-export function getRecommendList(params){
+function getRecommendList(params){
 	return request(apiDesc.recommend.list, params);
+}
+
+export default {
+	getRecommendList
 }

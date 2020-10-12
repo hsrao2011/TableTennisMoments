@@ -18,7 +18,7 @@ function param2Obj(url) {
   )
 }
 
-function param2query(param){
+function param2Query(param){
 	if(!param) return;
 	var query = "?";
 	Object.keys(param).forEach((key)=>{
@@ -52,10 +52,8 @@ function deepClone(source) {
   return targetObj
 }
 
-
-
-module.exports = {
+export default {
   param2Obj,
-  param2query,
+  param2Query,
   deepClone
 }
