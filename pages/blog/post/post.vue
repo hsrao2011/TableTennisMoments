@@ -15,7 +15,11 @@
 		methods: {
 			onDistribute(){
 				api.create().then((res)=>{
-					
+					uni.showToast({title: res.data.msg,
+					duration: 2000});
+					console.log("发布成功：");
+				}).catch((res) => {
+					console.log("发布异常：" + JSON.stringify(res));
 				});
 			}
 		}

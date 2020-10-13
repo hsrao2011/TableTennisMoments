@@ -1,15 +1,20 @@
 export default {
 	ok:{
-		code:0,
+		code: 0,
 		msg: "ok"
 	},
+	error: {
+		code: -1,
+		msg: "error"
+	},
+	// 10000~10100 token错误
 	tokenNotExist:{
 		code: 10000,
-		msg: "没有token!"
+		msg: "token不存在！"
 	},
 	tokenExpired:{
 		code: 10001,
-		msg: "token 过期！"
+		msg: "token过期！"
 	},
 	tokenInvalid:{
 		code: 10002,

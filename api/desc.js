@@ -8,15 +8,29 @@ export default {
 		}
 	},
 	user:{// 登录
-		login:{
-			url:"/user/login",
-			type:"post"
+		login: {
+			url: "/user/login",
+			type: "post"
+		},
+		logout: {
+			url: "/user/logout",
+			type: "post"
+		},
+		refreshToken: {
+			url: "user/refreshToken",
+			type: "post"
+		},
+		getUserInfo:{
+			url: "/user/getUserInfo",
+			type: "get",
+			token: true
 		}
 	},
 	blog:{// 文章、微博或短视频
 		create:{
 			url:"/blog/create",
-			type:"post"
+			type:"post",
+			token: true
 		}
 	}
 }
