@@ -28,13 +28,11 @@
 			}
 		},
 		created(){
-			console.log("microblog created");
 		},
 		computed:{
 			
 		},
 		mounted(){
-			console.log(this.blogData);
 		},
 		methods: {
 			imageUrl(image){
