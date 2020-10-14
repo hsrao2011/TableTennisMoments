@@ -1,6 +1,6 @@
 <template>
-	<view class="container">
-		<editor id="editor" class="ql-container" :placeholder="placeholder" @ready="onEditorReady"></editor>
+	<view>
+		
 	</view>
 </template>
 
@@ -9,7 +9,7 @@
 	export default {
 		data() {
 			return {
-				placeholder: "你写的，就是头条"
+				
 			}
 		},
 		mounted(){
@@ -18,14 +18,7 @@
 			backButton.firstElementChild.style.display = "none";
 		},
 		methods: {
-			onEditorReady() {
-				uni.createSelectorQuery().select('#editor').context((res) => {
-					this.editorCtx = res.context
-				}).exec()
-			},
-			undo() {
-				this.editorCtx.undo()
-			}
+			
 		},
 		onNavigationBarButtonTap(e){
 			console.log(e);
@@ -55,9 +48,5 @@
 </script>
 
 <style>
-	.editor{
-		width:100%;
-		height: 200upx;
-	}
 
 </style>

@@ -2,7 +2,7 @@
 	<view class="container">
 		<view class="user">
 			<image class="avatar" :src="'/static/data/avatar/' + blogData.user.avatar" alt="头像" mode=""></image>
-			<view class="userinfo">
+			<view class="user-info">
 				<text class="nickname">{{blogData.user.nickName}}</text>
 				<text class="intro">{{blogData.user.intro}}</text>
 			</view>
@@ -10,7 +10,7 @@
 		</view>
 		<view class="content">
 			<text @click="onContentClick">{{blogData.data.content}}</text>
-			<view class="imageGroup" >
+			<view class="image-group" >
 				<view v-for="image in blogData.data.images">
 						<image :src="imageUrl(image)" mode="aspectFill" @click="onPreviewImage(imageUrl(image))"></image>
 				</view>
@@ -54,7 +54,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.container{
 		background-color:#fff;
 		padding-top:5upx;
@@ -65,11 +65,11 @@
 		justify-content:flex-start;
 		padding-top:10upx;
 	}
-	.user .userinfo{
+	.user .user-info{
 		padding:2upx 1upx;
 		margin-left: 5upx;
 	}
-	.user .userinfo>text{
+	.user .user-info>text{
 		display:block;
 	}
 	.user .nickname{
@@ -105,13 +105,13 @@
 		-webkit-line-clamp: 3;  //需要显示时文本行数
 		line-height:32upx;
 	}
-	.content .imageGroup{
+	.content .image-group{
 		display:flex;
 		flex-direction: row;
 		flex-wrap:wrap;
 		justify-content:flex-start;
 	}
-	.content .imageGroup image{
+	.content .image-group image{
 		width:160upx;
 		height:160upx;
 		padding:2upx;

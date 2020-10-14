@@ -26,8 +26,7 @@ export default [{
 				...error.ok,
 			};
 		}
-	},
-	{
+	},{
 		api: apiDesc.user.refreshToken,
 		response: config=> {
 			var payload = jwt.parseToken(config.headers["x-refresh-token"]);
@@ -38,6 +37,14 @@ export default [{
 				...error.ok,
 				token: jwt.createToken(1),
 				refreshToken: jwt.createRefreshToken()
+			}
+		}
+	},{
+		api: apiDesc.user.getUserInfo,
+		response: config=> {
+			return {
+				...error.ok,
+				userInfo: users[0]
 			}
 		}
 	}

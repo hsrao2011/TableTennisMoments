@@ -2,7 +2,27 @@
 	"pages": [{
             "path" : "pages/tabbar/home/home",
             "style" : {
-				"enablePullDownRefresh":true
+				"enablePullDownRefresh":true,
+				"app-plus":{
+					"titleNView":{
+						"searchInput": {
+							"placeholder": "搜索",
+							"borderRadius":"15upx"
+						},
+						"buttons":[{
+							  "fontSrc":"/static/font/iconfont.ttf",
+							  "text":"\ue664",
+							  "fontSize": "24px",
+							  "width": "32px"
+							},{
+								"fontSrc":"/static/font/iconfont.ttf",
+						        "text":"\ue67d",
+						        "fontSize": "24px",
+						        "width": "32px"
+						    }
+						]
+					}
+				}
 			}
         },{
             "path" : "pages/tabbar/tech/tech",
@@ -12,48 +32,108 @@
             "style" : {}
         },{
             "path" : "pages/tabbar/my/my",
-            "style" : {}
+            "style" : {
+				"app-plus": {
+					        "animationType": "pop-in",
+					        "animationDuration": 300
+					    }
+			}
         }
         ,{
             "path" : "pages/user/login/login",
-            "style" : {}
+            "style" : {
+				"app-plus": {
+						"titleNView":{
+							"autoBackButton": "false",
+							"buttons":[{
+								  "type":"close",
+								  "fontSize": "24px",
+								  "width": "32px"
+								}
+							]
+						}
+				    }
+			}
         }
         ,{
             "path" : "pages/blog/post/post",
-            "style" : {}
+            "style" : {
+				"navigationBarBackgroundColor":"#f7f7f7",
+				"navigationBarTitleText":"",
+				"app-plus":{
+					"titleNView":{
+						"autoBackButton": "false",
+						"buttons":[{
+							  "text":"取消",
+							  "fontSize": "18px",
+							  "width": "40px",
+							  "color": "#2c2c2c",
+							  "float": "left"
+							},{
+						        "text":"发布",
+						        "fontSize": "18px",
+						        "width": "40px",
+								"color": "#d81e06"
+						    }
+						]
+					}
+				}
+			}
+        },{
+            "path" : "pages/blog/acticle/acticle",
+            "style" : {
+				"navigationBarBackgroundColor":"#f7f7f7",
+				"navigationBarTitleText":"",
+				"app-plus":{
+					"titleNView":{
+						"autoBackButton": "false",
+						"buttons":[{
+							  "text":"取消",
+							  "fontSize": "18px",
+							  "width": "40px",
+							  "color": "#2c2c2c",
+							  "float": "left"
+							},{
+						        "text":"发布",
+						        "fontSize": "18px",
+						        "width": "40px",
+								"color": "#d81e06"
+						    }
+						]
+					}
+				}
+			}
         }
     ],
 	"tabBar": {
-	    "color": "#7A7E83",
-	    "selectedColor": "#3cc51f",
-	    "borderStyle": "black",
+	    "color": "#2c2c2c",
+	    "selectedColor": "#d81e06",
 	    "backgroundColor": "#ffffff",
 	    "list": [{
 	        "pagePath": "pages/tabbar/home/home",
-	        "iconPath": "static/googleplay.png",
-	        "selectedIconPath": "static/googleplay.png",
-	        "text": "推荐"
+	        "iconPath": "static/tabbar/home.png",
+	        "selectedIconPath": "static/tabbar/home_sel.png",
+	        "text": "首页"
 	    }, {
 	        "pagePath": "pages/tabbar/tech/tech",
-	        "iconPath": "static/googleplay.png",
-	        "selectedIconPath": "static/googleplay.png",
+	        "iconPath": "static/tabbar/tech.png",
+	        "selectedIconPath": "static/tabbar/tech_sel.png",
 	        "text": "技术"
 	    }, {
 	        "pagePath": "pages/tabbar/follow/follow",
-	        "iconPath": "static/googleplay.png",
-	        "selectedIconPath": "static/googleplay.png",
+	        "iconPath": "static/tabbar/follow.png",
+	        "selectedIconPath": "static/tabbar/follow_sel.png",
 	        "text": "关注"
 	    }, {
 	        "pagePath": "pages/tabbar/my/my",
-	        "iconPath": "static/googleplay.png",
-	        "selectedIconPath": "static/googleplay.png",
+	        "iconPath": "static/tabbar/my.png",
+	        "selectedIconPath": "static/tabbar/my_sel.png",
 	        "text": "我的"
 	    }]
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "乒乓圈",
-		"navigationBarBackgroundColor": "#007AFF",
-		"backgroundColor": "#FFFFFF"
+		"navigationBarBackgroundColor": "#d81e06"
 	}
 }

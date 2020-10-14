@@ -1,18 +1,24 @@
 <template>
 	<view>
-		<button type="default" @click="onDistribute">发布</button>
 		<view v-for="microBlog in recommendList">
 			<micro-blog :blog-data="microBlog"></micro-blog>
 		</view>
 		<uni-load-more :status="more"></uni-load-more>
+		<uni-popup ref="popup" type="bottom" @change="onPopupChanged">
+			<distribute @close="onCloseDistribute"></distribute>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
+	import { mapActions, mapState, mapGetters } from "vuex"
 	import api from "../../../api/recommend.js";
 	import microBlog from "@/pages/components/microblog/microblog.vue";
+	import distribute from "@/pages/components/distribute/distribute.vue";
 	export default {
-		components:{"micro-blog":microBlog},
+		components:{"micro-blog":microBlog,
+			"distribute": distribute
+		},
 		data() {
 			return {
 				recommendList:[],
@@ -48,14 +54,40 @@
 				this.more="more"
 			});
 		},
+		onNavigationBarButtonTap(e){
+			console.log(e);
+			if(e.index == 0){
+				if(this.isLogined){
+					uni.hideTabBar();
+					this.$refs.popup.open();
+				}else{
+					uni.showToast({
+						title: "已经离线，请重新登录后再发布",
+						duration: 2000
+					});
+					uni.navigateTo({
+						url: "../../user/login/login",
+					})
+				}
+			}
+		},
+		computed:{
+			...mapState("user", {
+				userInfo: "userInfo"
+			}),
+			...mapGetters("user", {
+				isLogined: "isLogined"
+			})
+		},
 		methods: {
-			onDistribute(){
-				/*uni.navigateTo({
-					url: "../../user/login/login",
-					})*/
-				uni.navigateTo({
-					url: "../../blog/post/post",
-				});
+			onPopupChanged(e){
+				if(!e.show){
+					uni.showTabBar();
+				}
+			},
+			onCloseDistribute(e){
+				this.$refs.popup.close();
+				uni.showTabBar();
 			}
 		}
 	}

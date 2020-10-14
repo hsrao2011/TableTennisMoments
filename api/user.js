@@ -14,8 +14,13 @@ function refreshToken(){
 	return request({api: apiDesc.user.refreshToken});
 }
 
+function getUserInfo(){
+	return request({api: apiDesc.user.getUserInfo});
+}
+
 export default {
 	login,
 	logout,
-	refreshToken
+	refreshToken,
+	getUserInfo
 }
