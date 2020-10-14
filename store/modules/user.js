@@ -43,10 +43,15 @@ var tokenStorage = {
 }
 
 const state = {
-	token: tokenStorage.getToken(),
-	refreshToken: tokenStorage.getRefreshToken()
+	token: "",//tokenStorage.getToken(),
+	refreshToken: tokenStorage.getRefreshToken(),
+	userInfo: {}
 }
-
+const getters = {
+	isLogined(state){
+		return !!state.token;
+	}
+}
 const mutations = {
 	setToken(state, payload){
 		if(!payload)
@@ -61,11 +66,17 @@ const mutations = {
 		state.refreshToken = "";
 		tokenStorage.setToken();
 		tokenStorage.setRefreshToken();
+	},
+	setUserInfo(state, payload){
+		if(payload)
+			state.userInfo = payload.userInfo;
+		else
+		state.userInfo = {};
 	}
 }
 
 const actions = {
-	login({state,commit}, params){
+	login({state, commit, dispatch}, params){
 		if(state.token){
 			return new Promise((resolve) => {
 				resolve({data:error.ok});
@@ -75,8 +86,11 @@ const actions = {
 			return api.login(params).then((res)=>{
 				commit("setToken", res.data);
 				console.log("store: 登录成功！" + JSON.stringify(res.data));
-			}).catch( res => {
-				console.log("store: 登录失败y: " + JSON.stringify(res.data));
+				
+				dispatch("getUserInfo");
+			}).catch( err => {
+				console.log("store: 登录失败: " + JSON.stringify(err.data));
+				throw err;
 			})
 		}
 	},
@@ -84,9 +98,11 @@ const actions = {
 		console.log("store: 开始登出...");
 		return api.logout().then(res => {
 			commit("resetToken");
+			commit("setUserInfo");
 			console.log("store: 登出成功！");
 		}).catch(err => {
 			commit("resetToken");
+			commit("setUserInfo");
 			console.log("store: 登出异常！");
 		});
 	},
@@ -100,6 +116,16 @@ const actions = {
 			dispatch("logout");
 			throw err;
 		});
+	},
+	getUserInfo({state, commit}){
+		console.log("store: 开始获取用户信息...");
+		return api.getUserInfo().then( res => {
+			console.log("store: 获取用户信息成功" + JSON.stringify(res.data));
+			commit("setUserInfo", res.data);
+		}).catch(err => {
+			console.log("store: 获取用户信息失败");
+			throw err;
+		});
 	}
 }
 
@@ -107,5 +133,6 @@ export default {
 	namespaced:true,
 	state,
 	mutations,
-	actions
+	actions,
+	getters
 }

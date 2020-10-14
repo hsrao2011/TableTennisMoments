@@ -1,5 +1,8 @@
-import apiDesc from "../api/desc.js";
 var mockjs = require("better-mock/dist/mock.mp.js")
+
+import apiDesc from "@/api/desc.js";
+import error from "@/api/error.js"
+
 import microBlogs from "./data/microblogs.js";
 import users from "./data/users.js";
 
@@ -33,7 +36,7 @@ export default [{
 				index >= pageIndex * pageItemCount 
 				&& index < (pageIndex + 1) * pageItemCount);
 			return {
-				code: 0,
+				...error.ok,
 				items: recommendList
 			};
 		}
