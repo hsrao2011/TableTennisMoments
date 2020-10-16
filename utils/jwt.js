@@ -2,7 +2,7 @@ var jwt = require('jsonwebtoken');
 import error from "@/api/error.js"
 
 const kSecret = "tabletennismoments";
-const kExpireTime = 10;//1 * 24 * 60 * 60;
+const kExpireTime = 1 * 24 * 60 * 60;
 
 function createToken(userId){
 	return jwt.sign({userId:userId}, kSecret, { expiresIn: kExpireTime});

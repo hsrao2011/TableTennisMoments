@@ -1,10 +1,10 @@
 import apiDesc from "./desc.js"
 import {request} from "./request.js"
 
-function create(params){
-	return request({api: apiDesc.blog.create, params: params});
+function createPost(data){
+	return request({api: apiDesc.blog.createPost, data: data});
 }
 
 export default {
-	create
+	createPost
 }

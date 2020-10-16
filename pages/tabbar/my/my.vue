@@ -104,14 +104,6 @@
 	.user .base-info .user-info{
 		flex-shrink: 1
 	}
-	.user .base-info .user-info > text{
-		display:block;
-	}
-	.user .base-info .nick-name{
-		font-weight:bolder;
-		font-size: 1rem;
-		margin-left: 20upx;
-	}
 	.user .base-info .avatar{
 		flex-shrink: 0;
 		backgroun-color: #f00;
@@ -119,8 +111,16 @@
 		height: 160upx;
 		border-radius:100upx;
 	}
+	.user .base-info .user-info > text{
+		display:block;
+	}
+	.user .base-info .nick-name{
+		font-weight:bolder;
+		font-size: 60upx;
+		margin-left: 20upx;
+	}
 	.user .base-info .intro{
-		font-size: 0.7rem;
+		font-size: 32upx;
 		color:#ccc;
 		max-height:72upx;
 		margin: 10upx 10upx;
@@ -142,16 +142,17 @@
 		align-items: center;
 	}
 	.ext-info-item .ext-info-name{
+		font-size: 0.8rem;
 		font-weight: bold;
 		margin-bottom: 10upx;
 		color: #222;
 	}
 	.ext-info-item .ext-info-value{
-		font-size: 0.8rem;
+		font-size: 0.7rem;
 		color: #aaa;
 	}
 	.btn-logout{
-		color:red;
+		color: #d81e06;
 		margin-top: 50upx;
 		width: 85%;
 	}
@@ -163,7 +164,7 @@
 		height: 160upx;
 		margin-top: 50upx;
 		color: #fff;
-		background-color: #e22;
+		background-color: #d81e06;
 		text-align:center;
 		line-height: 160upx;
 	}

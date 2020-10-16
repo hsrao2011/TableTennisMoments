@@ -11,8 +11,8 @@
 		<view class="content">
 			<text @click="onContentClick">{{blogData.data.content}}</text>
 			<view class="image-group" >
-				<view v-for="image in blogData.data.images">
-						<image :src="imageUrl(image)" mode="aspectFill" @click="onPreviewImage(imageUrl(image))"></image>
+				<view v-for="(image,index) in blogData.data.images">
+						<image :src="imageUrl(image)" mode="aspectFill" @click="onPreviewImage(index)"></image>
 				</view>
 			</view>
 		</view>
@@ -36,12 +36,12 @@
 		},
 		methods: {
 			imageUrl(image){
-				return '/static/data/img/'+ image;
+				return image;
 			},
-			onPreviewImage(url){
+			onPreviewImage(index){
 				uni.previewImage({
-					current:0,
-					urls:[url]
+					current:index,
+					urls: this.blogData.data.images
 					}
 				);
 			},
@@ -64,52 +64,56 @@
 		display:flex;
 		justify-content:flex-start;
 		padding-top:10upx;
+		margin-left: 20upx;
+		align-items: center;
 	}
 	.user .user-info{
-		padding:2upx 1upx;
-		margin-left: 5upx;
+		margin-left: 15upx;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
 	}
 	.user .user-info>text{
 		display:block;
 	}
-	.user .nickname{
-		font-weight:bolder;
-	}
-	
 	.user .avatar{
 		position:relative;
 		backgroun-color:#f00;
-		width:60upx;
-		height:60upx;
-		margin-left:10upx;
+		width:90upx;
+		height:90upx;
 		border-radius:10upx;
 	}
+	.user .nickname{
+		font-weight:bold;
+		font-size: 30upx;
+	}
 	.user .intro{
-		font-size:0.6em;
+		font-size:20upx;
 		color:#ccc;
+		margin-left: 2upx;
+		margin-top: 3upx;
 	}
 	.content {
 		display:flex;
 		flex-direction:column;
 		justify-content: flex-start;
-		margin:10upx 30upx;
+		margin:15upx 30upx;
 	}
 	.content text{
 		font-size:0.9em;
-		max-height:100upx;
 		overflow:hidden;
-		margin-bottom:5upx;
 		text-overflow:ellipsis;
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 3;  //需要显示时文本行数
-		line-height:32upx;
+		line-height:1.2;
 	}
 	.content .image-group{
 		display:flex;
 		flex-direction: row;
 		flex-wrap:wrap;
 		justify-content:flex-start;
+		margin-top: 15upx;
 	}
 	.content .image-group image{
 		width:160upx;
