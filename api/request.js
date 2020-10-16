@@ -3,6 +3,19 @@ import store from "@/store/index.js";
 import error from "@/api/error.js";
 import apiDesc from "@/api/desc.js"
 
+import mock from "@/mock/index.js"
+
+function proxyRequest(params){
+	// #ifdef APP-PLUS 
+	// 直接调用mock
+		return mock.mockRequest(params);
+	// #endif
+	// #ifndef APP-PLUS
+	// 通过uni调用
+		return uni.request(params);
+	// #endif
+}
+
 export function request({api, params, data}){
 	var header = {};
 	header["x-token"] = store.state.user.token;
@@ -10,11 +23,11 @@ export function request({api, params, data}){
 		header["x-refresh-token"] = store.state.user.refreshToken;	
 	}
 	return new Promise(function(resolve, reject){
-		uni.request({
+		proxyRequest({
 			url: api.url + utils.param2Query(params),
 			header: header,
 			method: api.type,
-			data: data,
+			data: data?data:"",
 			success: res => {
 				// 拦截响应
 				var code = res.data.code;
@@ -62,6 +75,8 @@ export function request({api, params, data}){
 				}
 			},
 			fail: (res) => {
+				console.log(res);
+				
 				uni.showToast({
 					title: res
 				});

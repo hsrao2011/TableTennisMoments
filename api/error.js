@@ -7,6 +7,10 @@ export default {
 		code: -1,
 		msg: "error"
 	},
+	errorStorageSave: {
+		code: 1000,
+		msg:  "save storage failed"
+	},
 	// 10000~10100 token错误
 	tokenNotExist:{
 		code: 10000,

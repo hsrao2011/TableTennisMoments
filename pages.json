@@ -63,6 +63,7 @@
 				"app-plus":{
 					"titleNView":{
 						"autoBackButton": "false",
+						"splitLine":{"color":"#e7e7e7"},
 						"buttons":[{
 							  "text":"取消",
 							  "fontSize": "18px",
@@ -87,6 +88,7 @@
 				"app-plus":{
 					"titleNView":{
 						"autoBackButton": "false",
+						"splitLine":{"color":"#e7e7e7"},
 						"buttons":[{
 							  "text":"取消",
 							  "fontSize": "18px",

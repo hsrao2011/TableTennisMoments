@@ -26,11 +26,18 @@ export default {
 			token: true
 		}
 	},
-	blog:{// 文章、微博或短视频
-		create:{
-			url:"/blog/create",
+	blog:{// 文章、微文或短视频
+		createPost:{//发布微文
+			url:"/blog/createPost",
 			type:"post",
-			token: true
+			token: true,
+			params: {content:"", images:[]}
+		}
+	},
+	file:{
+		uploadFile:{
+			url: "/file/uploadFile",
+			type: "post"
 		}
 	}
 }

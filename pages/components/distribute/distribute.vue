@@ -81,11 +81,6 @@
 		margin: 30upx 10upx;
 		align-items: center;
 	}
-	.user .nick-name{
-		font-weight:bolder;
-		font-size: .8rem;
-		margin-left: 20upx;
-	}
 	.user .avatar{
 		flex-shrink: 0;
 		backgroun-color: #d81e06;
@@ -94,6 +89,11 @@
 		border-radius:100upx;
 	}
 	
+	.user .nick-name{
+		font-weight:bolder;
+		font-size: 30upx;
+		margin-left: 20upx;
+	}
 	.close{
 		position: absolute;
 		bottom: 25upx;

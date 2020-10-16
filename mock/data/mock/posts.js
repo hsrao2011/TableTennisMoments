@@ -1,6 +1,6 @@
 var mockjs = require("better-mock/dist/mock.mp.js")
 
-var microBlogs = [{
+var _posts = [{
 		content:"今天回办公室开会，关于泡泡赛和WTT澳门赛的很多媒体服务事宜。很激动，毕竟三月底以来就没回过办公室～一切都在慢慢恢复，希望就在前方。我们，加油！ ​​",
 		images:["zhoudao_1.jpg"],
 		userId: 2
@@ -73,5 +73,17 @@ var microBlogs = [{
 		userId:5
 	}
 ]
-
-export default microBlogs;
+let posts= [];
+(function(){
+	_posts.forEach((post)=>{
+		let images = [];
+		post.images.forEach((fileName)=>{
+			images.push("/static/data/img/" + fileName);
+		})
+		post.images = images;
+		posts.push(post)
+	})
+})();
+export default {
+	posts
+}

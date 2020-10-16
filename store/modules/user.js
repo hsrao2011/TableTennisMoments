@@ -43,7 +43,7 @@ var tokenStorage = {
 }
 
 const state = {
-	token: "",//tokenStorage.getToken(),
+	token: tokenStorage.getToken(),
 	refreshToken: tokenStorage.getRefreshToken(),
 	userInfo: {}
 }

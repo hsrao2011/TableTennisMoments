@@ -12,7 +12,7 @@
  ==================== */
 body {
 	background-color: #f8f8f8;
-	font-size: 28upx;
+	font-size: 48upx;
 	color: #333333;
 	font-family: Helvetica Neue, Helvetica, sans-serif;
 }
@@ -2810,9 +2810,6 @@ scroll-view.cu-steps .cu-item {
 	display: flex;
 }
 
-.rhsflex *{
-	flex: none;
-}
 
 .basis-xs {
 	flex-basis: 20%;
