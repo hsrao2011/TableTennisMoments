@@ -1,17 +1,16 @@
 <template>
 	<view class="container">
 		<view class="user">
-			<image class="avatar" :src="'/static/data/avatar/' + blogData.user.avatar" alt="头像" mode=""></image>
+			<image class="avatar" :src="'/static/data/avatar/' + blog.user.avatar" alt="头像" mode="aspectFill"></image>
 			<view class="user-info">
-				<text class="nickname">{{blogData.user.nickName}}</text>
-				<text class="intro">{{blogData.user.intro}}</text>
+				<text class="nickname">{{blog.user.nickName}}</text>
+				<text class="intro">{{blog.user.intro}}</text>
 			</view>
-			
 		</view>
 		<view class="content">
-			<text @click="onContentClick">{{blogData.data.content}}</text>
+			<text @click="onContentClick">{{blog.data.content}}</text>
 			<view class="image-group" >
-				<view v-for="(image,index) in blogData.data.images">
+				<view v-for="(image,index) in blog.data.images">
 						<image :src="imageUrl(image)" mode="aspectFill" @click="onPreviewImage(index)"></image>
 				</view>
 			</view>
@@ -21,7 +20,7 @@
 
 <script>
 	export default {
-		props:["blogData"],
+		props:["blog"],
 		data() {
 			return {
 				
@@ -41,7 +40,7 @@
 			onPreviewImage(index){
 				uni.previewImage({
 					current:index,
-					urls: this.blogData.data.images
+					urls: this.blog.data.images
 					}
 				);
 			},
@@ -88,8 +87,8 @@
 		font-size: 30upx;
 	}
 	.user .intro{
-		font-size:20upx;
-		color:#ccc;
+		font-size:24upx;
+		color:#aaa;
 		margin-left: 2upx;
 		margin-top: 3upx;
 	}

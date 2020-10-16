@@ -1,7 +1,8 @@
 <template>
 	<view>
-		<view v-for="microBlog in recommendList">
-			<micro-blog :blog-data="microBlog"></micro-blog>
+		<view v-for="(blog, index) in recommendList">
+			<post v-if="blog.data.type=='post'" :blog="blog" :key="index"></post>
+			<acticle v-else="blog.data.type=='acticle'" :blog="blog" :key="index"></acticle>
 		</view>
 		<uni-load-more :status="more"></uni-load-more>
 		<uni-popup ref="popup" type="bottom" @change="onPopupChanged">
@@ -13,10 +14,12 @@
 <script>
 	import { mapActions, mapState, mapGetters } from "vuex"
 	import api from "../../../api/recommend.js";
-	import microBlog from "@/pages/components/microblog/microblog.vue";
+	import post from "@/pages/components/post/post.vue";
+	import acticle from "@/pages/components/acticle/acticle.vue";
 	import distribute from "@/pages/components/distribute/distribute.vue";
 	export default {
-		components:{"micro-blog":microBlog,
+		components:{"post": post,
+			"acticle": acticle,
 			"distribute": distribute
 		},
 		data() {

@@ -28,6 +28,8 @@
 	import api from "@/api/blog.js"
 	import utils from "@/utils/utils.js"
 	import apiFile from "@/api/file.js"
+	import {navigateBack} from "@/pages/page.js"
+	import {mapMutations} from "vuex"
 	
 	export default {
 		data() {
@@ -46,6 +48,9 @@
 			backButton.firstElementChild.style.display = "none";
 		},
 		methods: {
+			...mapMutations("user", [
+				"incrementBlogCount"
+			]),
 			onPicItemClick(index){
 				uni.previewImage({
 					current: index,
@@ -61,69 +66,64 @@
 			},
 			onPicBtnClick(e){
 				uni.chooseImage({
-					count: 9,
-					success: (res) => {
-						console.log(res);
-						res.tempFilePaths.forEach(path=>{
-							console.log(path);
-							this.picList.push(path);
-						})
-					}
-				})
-			},
-			distribute(){
-				
+						count: 9,
+						success: (res) => {
+							console.log(res);
+							res.tempFilePaths.forEach(path=>{
+								console.log(path);
+								this.picList.push(path);
+							})
+						}
+					})
+				},
+				distribute(){
 			}
 		},
 		onNavigationBarButtonTap(e){
 			console.log(e);
 			if(e.index == 0){// 取消
-				var pages = getCurrentPages();
-				if(pages.length <= 1){
-					uni.switchTab({
-						url:"../../tabbar/home/home"
-					})
-				}else{
-					uni.navigateBack({
-						delta: 1,
-					})
-				}
+				navigateBack();
 			}else if(e.index == 1){//发布
 				if(!this.content && this.picList.length == 0){
 					uni.showToast({title: "请编辑内容！",
 					duration: 2000});
 					return;
 				}
-				
-				// 上传文件
-				var uploadUrls = [];
-				try{
-					console.log(this.picList);
-					this.picList.forEach((path, index) =>{
-						apiFile.uploadFile(path).then(res=>{
-							uploadUrls.push(res);
-							if(index == this.picList.length - 1 ){
-								var data = {};
-								data.content = this.content;
-								data.images = uploadUrls;
-								api.createPost(data).then((res)=>{
-									uni.navigateBack({
-										delta: 1
-									})
-									uni.showToast({title: "发布成功！",
-									duration: 2000});
-									console.log("发布成功！");
-									
-								}).catch((res) => {
-									console.log("发布异常：" + JSON.stringify(res));
-								});
-							}
-						});
-					})
-				}catch(err){
-					uni.showToast({title: "上传文件失败！"+ JSON.stringify(err),
+				let that = this;
+				function createBlog(){
+					var data = {};
+					data.content = that.content;
+					data.images = that.picList;
+					api.createPost(data).then((res)=>{
+						that.incrementBlogCount();
+						navigateBack();
+						uni.showToast({title: "发布成功！",
 						duration: 2000});
-						return;
+						console.log("发布成功！");
+					}).catch((res) => {
+						console.log("发布异常：" + res);
+					});
+				}
+				if(this.picList.length > 0){
+					// 上传图片
+					try{
+						let uploadCount = 0;
+						this.picList.forEach((path, index) =>{
+							apiFile.uploadFile(path).then(res=>{
+								uploadCount ++;
+								this.picList[index] = res;
+								if(uploadCount == this.picList.length){
+									createBlog();
+								}
+							});
+						})	
+					}catch(err){
+						uni.showToast({title: "上传文件失败！"+ JSON.stringify(err),
+							duration: 2000});
+							return;
+					}
+				}else{
+					createBlog();
 				}
 			}
 		}

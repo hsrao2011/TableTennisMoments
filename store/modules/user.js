@@ -72,6 +72,9 @@ const mutations = {
 			state.userInfo = payload.userInfo;
 		else
 		state.userInfo = {};
+	},
+	incrementBlogCount(state){
+		state.userInfo.blogsCount ++;
 	}
 }
 

@@ -32,6 +32,12 @@ export default {
 			type:"post",
 			token: true,
 			params: {content:"", images:[]}
+		},
+		createActicle:{// 发文章
+			url: "/blog/createActicle",
+			type: "post",
+			token: true,
+			params: {delta:""}
 		}
 	},
 	file:{

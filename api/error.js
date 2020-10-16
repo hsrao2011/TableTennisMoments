@@ -7,6 +7,10 @@ export default {
 		code: -1,
 		msg: "error"
 	},
+	errorParam: {// 无效参数
+		code: -2,
+		msg: "invalid param"
+	},
 	errorStorageSave: {
 		code: 1000,
 		msg:  "save storage failed"
