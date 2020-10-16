@@ -3,7 +3,7 @@ import error from "@/api/error.js";
 import users from "./data/users.js";
 import jwt from "@/utils/jwt.js"
 
-import postOfStorage from "./data/storage/posts.js"
+import blogOfStorage from "./data/storage/blogs.js"
 
 export default [{
 		api: apiDesc.user.login,
@@ -45,7 +45,7 @@ export default [{
 		api: apiDesc.user.getUserInfo,
 		response: config=> {
 			let userInfo = users[0];
-			userInfo.blogsCount = postOfStorage.getDistributeCount(1);
+			userInfo.blogsCount = blogOfStorage.getBlogCountofUser(1);
 			return {
 				...error.ok,
 				userInfo: userInfo

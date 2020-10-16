@@ -1,6 +1,6 @@
 var mockjs = require("better-mock/dist/mock.mp.js")
-import postOfStorage from "./storage/posts.js"
-import postOfMock  from "./mock/posts.js"
+import blogOfStorage from "./storage/blogs.js"
+import blogOfMock  from "./mock/blogs.js"
 import users from "./users.js";
 
 // 所有微文、文章、短视频数据
@@ -10,9 +10,10 @@ let kMaxCountOfrecommends = 100;
 let recommends = [];
 function initBlogs(){
 	let i = 0;
-	let tempPosts = [...postOfStorage.posts, ...postOfMock.posts];
-	tempPosts.forEach((post, index) => {
-		var userId = post.userId;
+	//let tempBlogs = [...blogOfStorage.blogs, ...blogOfMock.blogs];
+	let tempBlogs = blogOfStorage.blogs;
+	tempBlogs.forEach((blog, index) => {
+		var userId = blog.userId;
 		var user = users.find((item)=>{
 			if(item.id == userId){
 				return item;
@@ -22,27 +23,28 @@ function initBlogs(){
 			user = users[0];
 		}
 		blogs[i++] = {
-			type: "post",
-			data: post,
+			data: blog,
 			user: user
 		};
 	})
 }
-function updatePost(post){
+function updateBlog(blog){
 	var user = users.find((item)=>{
-		if(item.id == post.userId){
+		if(item.id == blog.userId){
 			return item;
 		}
 	})
 	if(!user)
 		return;
-	let blog = {type:"post", data: post, user: user};
-	blogs.push(blog);
-	randomPushRecommends(blog);
+	let _blog = {data: blog, user: user};
+	blogs.push(_blog);
+	randomPushRecommends(_blog);
 }
 
 function initRecommends(){
 	recommends = [];
+	if(blogs.length <= 0)
+		return;
 	for(var i = 0; i < kMaxCountOfrecommends; i++){
 		var blogIndex = mockjs.Random.integer(0, blogs.length-1);
 		recommends[i] = blogs[blogIndex];
@@ -69,7 +71,7 @@ function getPageOf(list, pageItemCount, pageIndex){
 })();
 
 export default {
-	updatePost,
+	updateBlog,
 	randomRecomends,
 	getPageOf,
 	recommends

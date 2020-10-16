@@ -42,6 +42,9 @@
 
 <script>
 	import api from "@/api/blog.js"
+	import apiFile from "@/api/file.js"
+	import {mapMutations} from "vuex"
+	import {navigateBack} from "@/pages/page.js"
 	export default {
 		data() {
 			return {
@@ -61,6 +64,9 @@
 			})
 		},
 		methods: {
+			...mapMutations("user",[
+				"incrementBlogCount"
+			]),
 			readOnlyChange() {
 				this.readOnly = !this.readOnly
 			},
@@ -106,13 +112,6 @@
 			removeFormat() {
 				this.editorCtx.removeFormat()
 			},
-			insertDate() {
-				const date = new Date()
-				const formatDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
-				this.editorCtx.insertText({
-					text: formatDate
-				})
-			},
 			insertImage() {
 				uni.chooseImage({
 					count: 1,
@@ -143,13 +142,54 @@
 				}
 				
 			}else if(e.index == 1){//发布
-				api.create().then((res)=>{
-					uni.showToast({title: res.data.msg,
-					duration: 2000});
-					console.log("发布成功：");
-				}).catch((res) => {
-					console.log("发布异常：" + JSON.stringify(res));
-				});
+				this.editorCtx.getContents({
+					success:res=>{
+						console.log(res);
+						let delta = res.delta;
+						let images =[];
+						delta.ops.forEach( (op, index) => {
+							if(op.insert && op.insert.image){
+								let image = {};
+								image.insert = op.insert;
+								image.attributes = op.attributes;
+							}
+						})
+						let that = this;
+						function createBlog(){
+							var data = {};
+							data.content = delta;
+							api.createActicle(data).then((res)=>{
+								that.incrementBlogCount();
+								navigateBack();
+								uni.showToast({title: "发布成功！",
+								duration: 2000});
+								console.log("发布成功！");
+							}).catch((res) => {
+								console.log("发布异常：" + res);
+							});
+						}
+						if(images.length > 0){
+							let uploadCount = 0;
+							images.forEach((image, index) =>{
+								apiFile.uploadFile(image.insert.image).then(res=>{
+									image.insert.image = res;
+									if(image.attributes && image.attributes["data-local"]){
+										image.attributes["data-local"] = res;
+									}
+									uploadCount++;
+									if(uploadCount == images.length){
+										createBlog();
+									}
+								});
+							})
+						}else{
+							createBlog();
+						}
+						
+						
+						
+					}
+				})
 			}
 		}
 	}

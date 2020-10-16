@@ -106,6 +106,15 @@
 				}
 			}
         }
+        ,{
+            "path" : "pages/components/acticle/acticle",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"tabBar": {
 	    "color": "#2c2c2c",
