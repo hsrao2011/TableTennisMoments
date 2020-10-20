@@ -10,8 +10,7 @@ let kMaxCountOfrecommends = 100;
 let recommends = [];
 function initBlogs(){
 	let i = 0;
-	//let tempBlogs = [...blogOfStorage.blogs, ...blogOfMock.blogs];
-	let tempBlogs = blogOfStorage.blogs;
+	let tempBlogs = [...blogOfStorage.blogs, ...blogOfMock.blogs];
 	tempBlogs.forEach((blog, index) => {
 		var userId = blog.userId;
 		var user = users.find((item)=>{

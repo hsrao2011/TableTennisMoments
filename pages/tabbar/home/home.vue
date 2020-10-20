@@ -1,8 +1,9 @@
 <template>
 	<view>
 		<view v-for="(blog, index) in recommendList">
-			<post v-if="blog.data.type=='post'" :blog="blog" :key="index"></post>
-			<acticle v-else="blog.data.type=='acticle'" :blog="blog" :key="index"></acticle>
+			<post v-if="blog.data.type=='post'" :blog="blog" :brief="true" :key="index"></post>
+			<acticle v-else-if="blog.data.type=='acticle'" :blog="blog" :key="index"></acticle>
+			<short-video v-else="blog.data.type=='short-video'" :blog="blog" :key="index"></short-video>
 		</view>
 		<uni-load-more :status="more"></uni-load-more>
 		<uni-popup ref="popup" type="bottom" @change="onPopupChanged">
@@ -16,17 +17,19 @@
 	import api from "../../../api/recommend.js";
 	import post from "@/pages/components/post/post.vue";
 	import acticle from "@/pages/components/acticle/acticle.vue";
+	import shortVideo from "@/pages/components/short-video/short-video.vue"
 	import distribute from "@/pages/components/distribute/distribute.vue";
 	export default {
 		components:{"post": post,
 			"acticle": acticle,
+			"short-video": shortVideo,
 			"distribute": distribute
 		},
 		data() {
 			return {
-				recommendList:[],
-				pageIndex:0,
-				more:"more"
+				recommendList: [],
+				pageIndex: 0,
+				more: "more"
 			}
 		},
 		mounted() {
@@ -34,6 +37,7 @@
 				this.recommendList = res.data.items;
 				uni.stopPullDownRefresh();
 				this.pageIndex = 0;
+				console.log(res.data.items) 
 			});
 		},
 		onPullDownRefresh(){
@@ -58,7 +62,6 @@
 			});
 		},
 		onNavigationBarButtonTap(e){
-			console.log(e);
 			if(e.index == 0){
 				if(this.isLogined){
 					uni.hideTabBar();

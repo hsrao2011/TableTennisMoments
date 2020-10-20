@@ -1,8 +1,22 @@
 <template>
-	<view>
-		<text >{{blog.user.nickName}}</text>
-		<editor id="editor" class="ql-container" :read-only="readOnly" @ready="onEditorReady">
-		</editor>
+	<view class="container">
+		<view class="content" >
+			<view class="content-title" :class="layout==0?'':'content-title-width'"
+				@click="onTitleClick">
+				<text class="title"> {{blog.data.title}}</text>
+			</view>
+			<view v-if="thumbnailUrl" class="content-thumbnail">
+				<view class="thumbnail-view" >
+					<image class="thumbnail-image" :src="thumbnailUrl" mode="aspectFill" @click="onPreviewThumbnail"></image>
+				</view>
+				
+			</view>
+		</view>
+		<view class="user">
+			<text class="nick-name">{{blog.user.nickName}}</text>
+			<text class="comment-count">36评论</text>
+			<text class="date">一小时前</text>
+		</view>
 	</view>
 </template>
 
@@ -11,24 +25,103 @@
 		props:["blog"],
 		data() {
 			return {
-				readOnly: true,
+				layout: 0
 			}
 		},
-		onLoad(){
-			console.log(blog.data);
+		mounted(){
+			if(this.blog && this.blog.data.images && this.blog.data.images[0])
+				this.layout = Math.random() > 0.5 ? 1: 0;
+		},
+		computed:{
+			thumbnailUrl(){
+				if(this.blog.data.images){
+					return this.blog.data.images[0];
+				}
+				return null;
+			}
 		},
 		methods: {
-			onEditorReady() {
-				uni.createSelectorQuery().select('#editor').context((res) => {
-					this.editorCtx = res.context
-				}).exec()
-				console.log(this.blog.data);
-				this.editorCtx.setContents({delta:this.blog.data.content});
+			onPreviewThumbnail(){
+				uni.previewImage({
+					current:0,
+					urls: [this.thumbnailUrl]
+					}
+				);
 			},
+			onTitleClick(){
+				let that = this;
+				uni.navigateTo({
+					url: "/pages/blog/acticle-detail/acticle-detail",
+					success: function(res) {
+						// 通过eventChannel向被打开页面传送数据
+						res.eventChannel.emit('acceptDataFromOpenerPage', { blog: that.blog })
+					}
+				})
+			}
 		}
 	}
 </script>
 
 <style>
-
+	.container{
+		background-color: #fff;
+		padding: 15upx;
+		margin-bottom: 10upx;
+	}
+	.content{
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-start;
+		justify-content: flex-start;
+	}
+	.content-title{
+		flex: 1 1 auto;
+		width: 100%;
+		padding-top: 20upx;
+		margin-bottom: 20upx;
+	}
+	.content-title-width{
+		width: 35%;
+	}
+	.title{
+		font-size: 1.4rem;
+		font-weight: 550;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 3;  //需要显示时文本行数
+		line-height:1.2;
+	}
+	.content-thumbnail{
+		flex: auto;
+		padding-top: 20upx;
+	}
+	.thumbnail-view{
+		position: relative;
+		padding: 60% 5upx 5upx 5upx;
+		overflow: hidden;
+	}
+	.thumbnail-image{
+		position: absolute;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		border-radius: 15upx;
+	}
+	.user{
+		margin: 10upx 0 0 30upx;
+		color: #7f7f7f;
+	}
+	.nick-name{
+		font-size: 0.9rem;
+	}
+	.comment-count{
+		margin-left: 10upx;
+		font-size: 0.9rem;
+	}
+	.date{
+		margin-left: 10upx;
+		font-size: 0.9rem;
+	}
 </style>

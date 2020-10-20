@@ -6,9 +6,8 @@ let blogs = [];
 
 function initBlogs(){
 	let info = uni.getStorageInfoSync();
-	//let reg = new RegExp("^(" + kBlogType.post + "_|" + kBlogType.acticle + "_|" + kBlogType.shortVideo + "_)");
-	let reg = new RegExp("^(" + kBlogType.acticle + "_|" + kBlogType.shortVideo + "_)");
-	console.log(reg);
+	let reg = new RegExp("^(" + kBlogType.post + "_|" + kBlogType.acticle + "_|" + kBlogType.shortVideo + "_)");
+	//let reg = new RegExp("^(" + kBlogType.acticle + "_|" + kBlogType.shortVideo + "_)");
 	info.keys.forEach((key, index)=>{
 		if(key.search(reg) == 0){
 			try{
@@ -21,7 +20,7 @@ function initBlogs(){
 	});
 }
 
-function saveBlog(type, {userId, content, images}){
+function saveBlog(type, {userId, title, content, html, images}){
 	if(!kBlogType.some(type))
 		return error.errorParam;
 	var prefix = type + "_";
@@ -29,6 +28,12 @@ function saveBlog(type, {userId, content, images}){
 	var value = {userId: userId, type: type, content: content};
 	if(images && images.length > 0){
 		value.images = images;
+	}
+	if(title && title.length > 0){
+		value.title = title;
+	}
+	if(html && html.length > 0){
+		value.html = html;
 	}
 	console.log(value);
 	try {

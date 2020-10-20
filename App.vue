@@ -2,6 +2,10 @@
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
+		// #ifdef APP-NVUE
+		plus.screen.lockOrientation("portrait-primary"); 
+		// #endif
+		
 	},
 	onShow: function() {
 		console.log('App Show');
@@ -16,9 +20,10 @@ export default {
 	@import "colorui/main.css";
 	@import "colorui/icon.css";
 	
-	uni-page-body,html,body{  
-	        height: 100%;  
-	    } 
+	uni-page-body,html,body{ 
+		width: 100%;
+		height: 100%;
+	} 
 		
 /* 解决头条小程序组件内引入字体不生效的问题 */
 /* #ifdef MP-TOUTIAO */

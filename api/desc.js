@@ -37,7 +37,13 @@ export default {
 			url: "/blog/createActicle",
 			type: "post",
 			token: true,
-			params: {delta:""}
+			params: {title:"标题", content:"delta", html:"", images:[]}
+		},
+		createShortVideo:{
+			url: "/blog/createShortVideo",
+			type: "post",
+			token: true,
+			params:{title:"标题", content:"videoUrl"}
 		}
 	},
 	file:{

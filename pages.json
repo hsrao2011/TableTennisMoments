@@ -61,6 +61,7 @@
 				"navigationBarBackgroundColor":"#f7f7f7",
 				"navigationBarTitleText":"",
 				"app-plus":{
+					"softinputMode": "adjustResize",
 					"titleNView":{
 						"autoBackButton": "false",
 						"splitLine":{"color":"#e7e7e7"},
@@ -86,6 +87,7 @@
 				"navigationBarBackgroundColor":"#f7f7f7",
 				"navigationBarTitleText":"",
 				"app-plus":{
+					"softinputMode": "adjustResize",
 					"titleNView":{
 						"autoBackButton": "false",
 						"splitLine":{"color":"#e7e7e7"},
@@ -105,12 +107,30 @@
 					}
 				}
 			}
-        }
-        ,{
-            "path" : "pages/components/acticle/acticle",
+        },{
+            "path" : "pages/blog/post-detail/post-detail",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/blog/acticle-detail/acticle-detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "乒乓圈",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/blog/short-video/short-video",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+				"transparentTitle": "always",
                 "enablePullDownRefresh": false
             }
             

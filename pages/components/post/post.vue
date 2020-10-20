@@ -1,29 +1,34 @@
 <template>
 	<view class="container">
-		<view class="user">
-			<image class="avatar" :src="'/static/data/avatar/' + blog.user.avatar" alt="头像" mode="aspectFill"></image>
-			<view class="user-info">
-				<text class="nickname">{{blog.user.nickName}}</text>
-				<text class="intro">{{blog.user.intro}}</text>
-			</view>
-		</view>
+		<user-base-info :user="blog.user"></user-base-info>
 		<view class="content">
-			<text @click="onContentClick">{{blog.data.content}}</text>
-			<view class="image-group" >
-				<view v-for="(image,index) in blog.data.images">
-						<image :src="imageUrl(image)" mode="aspectFill" @click="onPreviewImage(index)"></image>
-				</view>
-			</view>
+			<text class="content-text" :class="brief?'content-brief':''" @click="onContentClick">{{blog.data.content}}</text>
+			<image-grid :images="blog.data.images" :cols="imageColCount"></image-grid>
 		</view>
 	</view>
 </template>
 
 <script>
+	import userBaseInfo from "../user-base-info/user-base-info"
+	import imageGrid from "../image-grid/image-grid"
 	export default {
-		props:["blog"],
+		components:{
+			"user-base-info": userBaseInfo,
+			"image-grid": imageGrid
+		},
+		props:{
+			blog: Object,
+			brief: {
+				type: Boolean,
+				default: false
+			},
+			imageColCount:{
+				type: Number,
+				default: 3
+			}
+		},
 		data() {
 			return {
-				
 			}
 		},
 		created(){
@@ -45,9 +50,14 @@
 				);
 			},
 			onContentClick(){
-				uni.showToast({
-					title:"点击全文"
-				});
+				let that = this;
+				uni.navigateTo({
+					url: "/pages/blog/post-detail/post-detail",
+					success: function(res) {
+						// 通过eventChannel向被打开页面传送数据
+						res.eventChannel.emit('acceptDataFromOpenerPage', { blog: that.blog })
+					}
+				})
 			}
 		}
 	}
@@ -56,68 +66,26 @@
 <style scoped>
 	.container{
 		background-color:#fff;
-		padding-top:5upx;
-		margin-bottom:5upx;
-	}
-	.user{
-		display:flex;
-		justify-content:flex-start;
-		padding-top:10upx;
-		margin-left: 20upx;
-		align-items: center;
-	}
-	.user .user-info{
-		margin-left: 15upx;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-around;
-	}
-	.user .user-info>text{
-		display:block;
-	}
-	.user .avatar{
-		position:relative;
-		backgroun-color:#f00;
-		width:90upx;
-		height:90upx;
-		border-radius:10upx;
-	}
-	.user .nickname{
-		font-weight:bold;
-		font-size: 30upx;
-	}
-	.user .intro{
-		font-size:24upx;
-		color:#aaa;
-		margin-left: 2upx;
-		margin-top: 3upx;
+		padding: 15upx 15upx 0 15upx;
+		margin-bottom: 10upx;
 	}
 	.content {
-		display:flex;
-		flex-direction:column;
+		display: flex;
+		flex-direction: column;
 		justify-content: flex-start;
-		margin:15upx 30upx;
+		margin-top:15upx;
 	}
-	.content text{
-		font-size:0.9em;
-		overflow:hidden;
-		text-overflow:ellipsis;
+	.content-text{
+		padding: 0 10upx 0 10upx;
+		font-size: 1.4rem;
+		font-weight: 550;
+		line-height:1.2;
+	}
+	.content-brief{
+		overflow: hidden;
+		text-overflow: ellipsis;
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 3;  //需要显示时文本行数
-		line-height:1.2;
-	}
-	.content .image-group{
-		display:flex;
-		flex-direction: row;
-		flex-wrap:wrap;
-		justify-content:flex-start;
-		margin-top: 15upx;
-	}
-	.content .image-group image{
-		width:160upx;
-		height:160upx;
-		padding:2upx;
-		margin-left:10upx;
 	}
 </style>

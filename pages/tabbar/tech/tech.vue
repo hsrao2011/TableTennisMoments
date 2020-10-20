@@ -1,6 +1,6 @@
 <template>
 	<view>
-		
+		技术
 	</view>
 </template>
 

@@ -1,24 +1,17 @@
 <template>
 	<view class="container">
-		<view class="editor">
-			<textarea class="content-text" v-model:value="content" auto-height adjust-position placeholder="placeholder" />
-		</view>
-		<view class="pic-container cu-list grid col-3">
-			<view class="cu-item" v-for="(image, index) in picList" :key="index"
-				@click="onPicItemClick(index)">
-				<view class="content-pic">
-					<image :src="imageUrl(image)" alt="" mode="aspectFill"></image>
-					<view class="delete-pic" @click="onRemovePic(index)">X</view>
-				</view>
+		<view class="content">
+			<view class="content-editor">
+				<textarea class="editor" v-model:value="content"
+				:placeholder="placeholder" placeholder-style="font-size: 1.4rem;"
+				auto-height="true"/>
 			</view>
-			<view class="cu-item add-pic">
-				<view @click="onPicBtnClick">
-					<view class="add-pic-text">+</view>
-				</view>
-			</view>
+			<image-grid ref="imageGrid" :images="images" :editable="true"></image-grid>
 		</view>
-		<view class="toolbar justify-around justify-center align-center">
-			<view class="text-black cuIcon-pic " @click="onPicBtnClick">
+		<view class="toolbar-placeholder">
+		</view>
+		<view class="toolbar">
+			<view class="text-black cuIcon-pic " @click="onToolBarAddImage">
 			</view>
 		</view>
 	</view>
@@ -30,17 +23,22 @@
 	import apiFile from "@/api/file.js"
 	import {navigateBack} from "@/pages/page.js"
 	import {mapMutations} from "vuex"
+	import imageGrid from "../../components/image-grid/image-grid"
 	
 	export default {
+		components:{
+			"image-grid": imageGrid
+		},
+		props:{
+		},
 		data() {
 			return {
 				content:"",
 				placeholder: "你写的，就是头条",
-				picList: []
+				images: []
 			}
 		},
 		computed:{
-			
 		},
 		mounted(){
 			var backButton = document.getElementsByClassName('uni-page-head-hd')[0]
@@ -51,32 +49,8 @@
 			...mapMutations("user", [
 				"incrementBlogCount"
 			]),
-			onPicItemClick(index){
-				uni.previewImage({
-					current: index,
-					urls:this.picList
-					}
-				);
-			},
-			onRemovePic(index){
-				this.picList.splice(index,1);
-			},
-			imageUrl(image){
-				return image;
-			},
-			onPicBtnClick(e){
-				uni.chooseImage({
-						count: 9,
-						success: (res) => {
-							console.log(res);
-							res.tempFilePaths.forEach(path=>{
-								console.log(path);
-								this.picList.push(path);
-							})
-						}
-					})
-				},
-				distribute(){
+			onToolBarAddImage(e){
+				this.$refs.imageGrid.addImage();
 			}
 		},
 		onNavigationBarButtonTap(e){
@@ -84,7 +58,7 @@
 			if(e.index == 0){// 取消
 				navigateBack();
 			}else if(e.index == 1){//发布
-				if(!this.content && this.picList.length == 0){
+				if(!this.content && this.images.length == 0){
 					uni.showToast({title: "请编辑内容！",
 					duration: 2000});
 					return;
@@ -93,7 +67,7 @@
 				function createBlog(){
 					var data = {};
 					data.content = that.content;
-					data.images = that.picList;
+					data.images = that.images;
 					api.createPost(data).then((res)=>{
 						that.incrementBlogCount();
 						navigateBack();
@@ -104,15 +78,15 @@
 						console.log("发布异常：" + res);
 					});
 				}
-				if(this.picList.length > 0){
+				if(this.images.length > 0){
 					// 上传图片
 					try{
 						let uploadCount = 0;
-						this.picList.forEach((path, index) =>{
+						this.images.forEach((path, index) =>{
 							apiFile.uploadFile(path).then(res=>{
 								uploadCount ++;
-								this.picList[index] = res;
-								if(uploadCount == this.picList.length){
+								this.images[index] = res;
+								if(uploadCount == this.images.length){
 									createBlog();
 								}
 							});
@@ -132,73 +106,41 @@
 
 <style>
 	.container{
-		padding: 5upx;
+		padding: 15upx;
+	}
+	.content{
 		display: flex;
 		flex-direction: column;
+		justify-content: flex-start;
+	}
+	.toolbar-placeholder{
+		height: 80upx;
+		flex: 0 0 auto;
+	}
+	.content-editor{
+		flex: auto;
 	}
 	.editor{
-		width:100%;
-		flex: auto;
-		auto-height:true;
-		min-height: 300upx;
-	}
-	.content-text{
-		font-size: 1rem;
-	}
-	.pic-container{
-		background-color: #f7f7f7;
-	}
-	.delete-pic{
-		position: absolute;
-		right: 30upx;
-		top: 15upx;
-		z-order: 100;
-		font-size: 40upx;
-		font-weight: 300;
-		color: #d81e06;
-	}
-	.cu-list.grid .cu-item{
-		height: 0;
-		padding: 33.3% 5upx 5upx 5upx;
-		overflow: hidden;
-	}
-	.content-pic{
-		position: absolute;
-		top: 0;
-		width:100%;
-		height:100%;
+		min-height: 600upx;
+		width: 100%;
+		font-size: 1.4rem;
+		line-height: 1.2;
 	}
 	.toolbar{
 		display: flex;
+		justify-content: space-around;
+		align-items: center;
 		position:fixed;
+		bottom: 0;
 		height: 80upx;
 		line-height: 80upx;
 		width: 100%;
 		background-color: #F2F2F2;
-		bottom: 0upx;
 	}
 	.toolbar view{
 		width: 100upx;
 		height: 80upx;
 		font-size: 56upx;
 		text-align: center;
-	}
-	.add-pic{
-	}
-	.add-pic view{
-		position: absolute;
-		top: 0;
-		width:100%;
-		height:100%;
-		display: flex;
-		align-items: center;
-		justify-content:center;
-		
-	}
-	.add-pic-text{
-		font-size: 100upx;
-		font-weight: 300;
-		text-align: center;
-		color: #d81e06;
 	}
 </style>

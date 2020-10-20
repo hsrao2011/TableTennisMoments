@@ -55,7 +55,7 @@ export function request({api, params, data}){
 					}).catch( res => {
 						console.log("自动跳转到登录页面");
 						uni.navigateTo({
-							url: "../../user/login/login",
+							url: "/pages/user/login/login",
 						})
 						reject(res);
 					});
@@ -66,7 +66,7 @@ export function request({api, params, data}){
 						store.dispatch("user/logout").then(
 							res => {
 								uni.navigateTo({
-									url: "../../user/login/login",
+									url: "/pages/user/login/login",
 								})
 							}
 						)
