@@ -58,7 +58,8 @@
 			}
 		},
 		onLoad(){	
-			this.getUserInfo();
+			if(!this.userInfo)
+				this.getUserInfo();
 		},
 		methods: {
 			...mapActions("user", {

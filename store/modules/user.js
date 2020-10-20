@@ -45,11 +45,16 @@ var tokenStorage = {
 const state = {
 	token: tokenStorage.getToken(),
 	refreshToken: tokenStorage.getRefreshToken(),
-	userInfo: {}
+	userInfo: null
 }
 const getters = {
 	isLogined(state){
 		return !!state.token;
+	},
+	userInfo(state){
+		if(!userInfo){
+			dispatch("")
+		}
 	}
 }
 const mutations = {
@@ -74,7 +79,8 @@ const mutations = {
 		state.userInfo = {};
 	},
 	incrementBlogCount(state){
-		state.userInfo.blogsCount ++;
+		if(state.userInfo)
+			state.userInfo.blogsCount ++;
 	}
 }
 
@@ -123,7 +129,7 @@ const actions = {
 	getUserInfo({state, commit}){
 		console.log("store: 开始获取用户信息...");
 		return api.getUserInfo().then( res => {
-			console.log("store: 获取用户信息成功" + JSON.stringify(res.data));
+			console.log("store: 获取用户信息成功");
 			commit("setUserInfo", res.data);
 		}).catch(err => {
 			console.log("store: 获取用户信息失败");

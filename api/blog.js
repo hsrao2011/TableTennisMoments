@@ -7,8 +7,12 @@ function createPost(data){
 function createActicle(data){
 	return request({api: apiDesc.blog.createActicle, data: data});
 }
+function createShortVideo(data){
+	return request({api: apiDesc.blog.createShortVideo, data: data});
+}
 
 export default {
 	createPost,
-	createActicle
+	createActicle,
+	createShortVideo
 }

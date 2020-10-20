@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view class = "user">
+		<view v-if="userInfo" class = "user">
 			<image class="avatar" :src="'/static/data/avatar/' + userInfo.avatar" alt="头像" mode=""></image>
 			<text class="nick-name">{{userInfo.nickName}}</text>
 		</view>
@@ -25,7 +25,7 @@
 				distributeList:[
 					["发微文", "comment"],
 					["写文章", "edit"],
-					["发短视频", "video"]
+					["发视频", "video"]
 				]
 			}
 		},
@@ -34,32 +34,60 @@
 				userInfo: "userInfo"
 			})
 		},
+		mounted(){
+			if(!this.userInfo)
+				this.getUserInfo();
+		},
 		methods: {
+			...mapActions("user", {
+				getUserInfo: "getUserInfo"
+			}),
 			onClose(e){
 				this.$emit("close",  e);
 			},
 			onItemClick(index){
 				this.onClose();
-				var toUrl;
-				switch(index){
-					case 0:{
-						toUrl = "../../blog/post/post";
-					}
-					break;
-					case 1:{
-						toUrl = "../../blog/acticle/acticle";
-					}
-					break;
-					case 2:{
-						
-					}
-					break;
-				}
-				if(toUrl){
+				new Promise((resolve, reject) =>{
+					switch(index){
+						case 0:{
+							resolve({url: "/pages/blog/post/post"});
+						}
+						break;
+						case 1:{
+							resolve({url: "/pages/blog/acticle/acticle"});
+						}
+						break;
+						case 2:{
+							uni.chooseVideo({
+								count: 1,
+								maxDuration: 60,
+								success: res => {
+									resolve({url: "/pages/blog/short-video/short-video",
+										params: res
+									});
+								},
+								fail: err => {
+									reject();
+								}
+							})
+						}
+						break;
+						default:{
+							reject();
+						}
+						break;
+					}	
+
+				}).then( to => {
 					uni.navigateTo({
-						url:toUrl
+						url: to.url,
+						success: function(res) {
+							// 通过eventChannel向被打开页面传送数据
+							if(to.params)
+								res.eventChannel.emit('acceptDataFromOpenerPage', { params: to.params })
+						}
 					})
-				}
+				})
 			}
 		}
 	}
