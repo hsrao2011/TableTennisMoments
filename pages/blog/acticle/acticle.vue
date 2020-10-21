@@ -140,7 +140,6 @@
 							src: res.tempFilePaths[0],
 							alt: '图像',
 							success: function() {
-								console.log('insert image success')
 							},
 							failed: (err)=>{
 								console.log(err);
@@ -201,7 +200,6 @@
 							data.title = that.title;
 							data.html = html;
 							data.images = images;
-							console.log(data);
 							api.createActicle(data).then((res)=>{
 								that.incrementBlogCount();
 								navigateBack();
@@ -218,19 +216,6 @@
 								ops.forEach((op, index) =>{
 									console.log(op.insert.image);
 									apiFile.uploadFile(op.insert.image).then(path=>{
-										console.log(path);
-										// #ifdef APP-PLUS
-										{// 因为saveFile后，返回的文件非全路径，而无论editor、rich-text控件或jyf-parser
-										// 都无法正确显示(image控件可以)，使得无法正确显示文章,
-										// 以下用android的固定路径替换，并非全部android机都是该路径，故无法保证所有android机上的图片都能显示
-										// iOS肯定无法显示。
-										// 有服务器的话，正确的做法应该是上传服务器，再替换服务器路径。
-										// 现在只是本地模拟。
-											let reg = new RegExp("^_");
-											path = path.replace(reg, "file:///storage/emulated/0/Android/data/io.dcloud.HBuilder/apps/HBuilder/")
-											console.log(path);
-										}
-										// #endif
 										let reg = new RegExp(op.insert.image, "g")
 										html = html.replace(reg, path);
 										op.insert.image = path;

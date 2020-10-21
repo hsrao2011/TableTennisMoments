@@ -2,7 +2,7 @@
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
-		// #ifdef APP-NVUE
+		// #ifdef APP-PLUS
 		plus.screen.lockOrientation("portrait-primary"); 
 		// #endif
 		

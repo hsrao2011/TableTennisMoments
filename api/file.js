@@ -13,11 +13,14 @@ function uploadFile(tempFilePath, isVideo){
 		}
 		
 		// #endif
-		// #ifndef H5
+		// #ifdef APP-PLUS
 		uni.saveFile({
 			tempFilePath: tempFilePath,
 			success: (res) => {
-				resolve(res.savedFilePath);
+				let path = plus.io.convertLocalFileSystemURL(res.savedFilePath)
+				path = "file://" + path;
+				console.log(path);
+				resolve(path);
 			},
 			fail: (res)=>{
 				console.log(res);

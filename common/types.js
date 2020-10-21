@@ -15,4 +15,5 @@ CustomEnum.prototype.some = function(value){
 }
 
 export let kBlogType = new CustomEnum({post: "post", acticle: "acticle", shortVideo:"short-video"});
+export let kPlayState = new CustomEnum({stopped: 0, playing: 1, paused: 2});
 

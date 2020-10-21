@@ -25,9 +25,6 @@
 				}
 			}
         },{
-            "path" : "pages/tabbar/tech/tech",
-            "style" : {}
-        },{
             "path" : "pages/tabbar/follow/follow",
             "style" : {}
         },{
@@ -145,11 +142,6 @@
 	        "iconPath": "static/tabbar/home.png",
 	        "selectedIconPath": "static/tabbar/home_sel.png",
 	        "text": "首页"
-	    }, {
-	        "pagePath": "pages/tabbar/tech/tech",
-	        "iconPath": "static/tabbar/tech.png",
-	        "selectedIconPath": "static/tabbar/tech_sel.png",
-	        "text": "技术"
 	    }, {
 	        "pagePath": "pages/tabbar/follow/follow",
 	        "iconPath": "static/tabbar/follow.png",

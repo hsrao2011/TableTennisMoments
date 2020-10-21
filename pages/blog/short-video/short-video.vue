@@ -93,6 +93,8 @@
 			onTitleBlur(){
 				if(this.title.length > 30){
 					this.titlePrompt = "标题字数不可多于30个字"
+				}else if(this.title.length <= 5){
+					this.titlePrompt = "标题字数不可少于5个字"
 				}else{
 					this.titlePrompt = "";
 				}
@@ -126,13 +128,6 @@
 				try{
 					apiFile.uploadFile(this.videoInfo.tempFilePath, true).then(path=>{
 						console.log(path);
-						// #ifdef APP-PLUS
-						{// 以下处理的说明参见acticle的发布
-							let reg = new RegExp("^_");
-							path = path.replace(reg, "file:///storage/emulated/0/Android/data/io.dcloud.HBuilder/apps/HBuilder/")
-							console.log(path);
-						}
-						// #endif
 						filePath = path;
 						createBlog();
 					});
@@ -183,6 +178,10 @@
 		width: 120upx;
 		padding-top: 20upx;
 		flex: 0 0 auto;
+	}
+	.title-label::after{
+		content:"*";
+		color: #d81e06;
 	}
 	.title-editor{
 		flex: 1 1 auto;

@@ -35,7 +35,6 @@ function saveBlog(type, {userId, title, content, html, images}){
 	if(html && html.length > 0){
 		value.html = html;
 	}
-	console.log(value);
 	try {
 	    uni.setStorageSync(key, JSON.stringify(value));
 	} catch (err) {
