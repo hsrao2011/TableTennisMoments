@@ -3,7 +3,7 @@
 		<view v-for="(blog, index) in recommendList">
 			<post v-if="blog.data.type=='post'" :blog="blog" :brief="true" :key="index"></post>
 			<acticle v-else-if="blog.data.type=='acticle'" :blog="blog" :key="index"></acticle>
-			<short-video v-else="blog.data.type=='short-video'" :blog="blog" :key="index"></short-video>
+			<short-video v-else="blog.data.type=='short-video'" :blog="blog" :key="index" :uniqueId="index"></short-video>
 		</view>
 		<uni-load-more :status="more"></uni-load-more>
 		<uni-popup ref="popup" type="bottom" @change="onPopupChanged">
@@ -37,7 +37,6 @@
 				this.recommendList = res.data.items;
 				uni.stopPullDownRefresh();
 				this.pageIndex = 0;
-				console.log(res.data.items) 
 			});
 		},
 		onPullDownRefresh(){

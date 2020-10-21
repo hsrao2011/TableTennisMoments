@@ -110,7 +110,7 @@
 		margin-top: 10upx;
 	}
 	.grid.col-1.grid-square>view {
-		padding-bottom: 75%;
+		padding-bottom: 60%;
 	}
 	.image-grid-image{
 		position: absolute;
