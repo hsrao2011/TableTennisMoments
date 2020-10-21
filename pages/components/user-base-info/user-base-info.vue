@@ -53,10 +53,10 @@
 	}
 	.user .nickname{
 		font-weight:bold;
-		font-size: 30upx;
+		font-size: 32upx;
 	}
 	.user .intro{
-		font-size:24upx;
+		font-size:28upx;
 		color:#777;
 		margin-left: 2upx;
 		margin-top: 3upx;

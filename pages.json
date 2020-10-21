@@ -132,6 +132,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/blog/short-video-detail/short-video-detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+				"transparentTitle": "always",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"tabBar": {
 	    "color": "#2c2c2c",

@@ -2,9 +2,7 @@
 	<view class="container">
 		<view class="content-video">
 			<video class="video" :src="videoUrl" controls>
-				<cover-view class="backButton" @click="onBack">
-					<
-				</cover-view>
+				<cover-image src="/static/icon/btn-play-return.png" class="backButton" @click="onBack"></cover-image>
 			</video>
 		</view>
 		<view class="content-title">
@@ -19,9 +17,6 @@
 		<view class="distribute">
 			<button class="distribure-btn" type="default" @click="onDistribute">发布</button>
 		</view>
-		
-		
-		
 	</view>
 </template>
 
@@ -72,16 +67,7 @@
 				"incrementBlogCount"
 			]),
 			onBack(){
-				var pages = getCurrentPages();
-				if(pages.length <= 1){
-					uni.switchTab({
-						url:"/pages/tabbar/home/home"
-					})
-				}else{
-					uni.navigateBack({
-						delta: 1,
-					})
-				}
+				navigateBack();
 			},
 			onTitleInput(){
 				if(this.title.length > 30){
@@ -160,10 +146,12 @@
 	}
 	.backButton{
 		position: absolute;
-		top: 30upx;
+		top: 40upx;
 		left: 30upx;
-		color: #a7a7a7;
-		font-size: 56upx;
+		width: 48upx;
+		height: 48upx;
+		padding: 5upx;
+		background-color: rgba(0,0,0,0.2);
 	}
 	.content-title{
 		width: 100%;
