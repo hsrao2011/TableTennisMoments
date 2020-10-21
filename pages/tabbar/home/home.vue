@@ -3,7 +3,8 @@
 		<view v-for="(blog, index) in recommendList">
 			<post v-if="blog.data.type=='post'" :blog="blog" :brief="true" :key="index"></post>
 			<acticle v-else-if="blog.data.type=='acticle'" :blog="blog" :key="index"></acticle>
-			<short-video v-else="blog.data.type=='short-video'" :blog="blog" :key="index" :uniqueId="index"></short-video>
+			<short-video ref="shortVideo" v-else="blog.data.type=='short-video'" :blog="blog" 
+			:key="index" :uniqueId="index" :brief="true"></short-video>
 		</view>
 		<uni-load-more :status="more"></uni-load-more>
 		<uni-popup ref="popup" type="bottom" @change="onPopupChanged">
@@ -76,6 +77,20 @@
 				}
 			}
 		},
+		onShow(){
+			if(this.$refs.shortVideo){
+				this.$refs.shortVideo.forEach((sv)=>{
+					sv.show();
+				})
+			}
+		},
+		onHide(){
+			if(this.$refs.shortVideo){
+				this.$refs.shortVideo.forEach((sv)=>{
+					sv.hide();
+				})
+			}
+		},
 		computed:{
 			...mapState("user", {
 				userInfo: "userInfo"
@@ -88,6 +103,18 @@
 			onPopupChanged(e){
 				if(!e.show){
 					uni.showTabBar();
+					if(this.$refs.shortVideo){
+						this.$refs.shortVideo.forEach((sv)=>{
+							sv.afterForceHide();
+						})
+					}
+				}else{
+					if(this.$refs.shortVideo){
+						console.log("beforeForceHide");
+						this.$refs.shortVideo.forEach((sv)=>{
+							sv.beforeForceHide();
+						})
+					}
 				}
 			},
 			onCloseDistribute(e){

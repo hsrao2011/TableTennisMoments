@@ -1,28 +1,31 @@
 <template>
-	<view>
-		<view class="container">
-			<user-base-info :user="blog.user"></user-base-info>
-			<view class="content">
-				<text class="content-title" :class="brief?'content-title-brief':''" @click="onContentClick">{{blog.data.title}}</text>
-				<view class="content-video-container" >
-					<video v-if="showVideo" :id="videoId" class="content-video" :src="blog.data.content"
-					   :controls="false"  :muted="!thumbnail" show-center-play-btn="false"
-						@play="onVideoPlaying" :initial-time="pos" @ended="onVideoCompleted" @pause="onVideoPaused"
-						@timeupdate="onVideoPos">
-						<cover-view 
-							class="video-cover "	:class="thumbnail?'video-conver-transparent':''"
-							@click="onVideoClick">
-						</cover-view>
-						<cover-image v-show="!isPlaying"
-							src="/static/icon/btn-play-center.png"
-							class="play-btn"
-							@click="onPlayVideo">
-						</cover-image>
-					</video>
-					
-				</view>
+	<view class="container">
+		<user-base-info :user="blog.user"></user-base-info>
+		<view class="content">
+			<text class="content-title" :class="brief?'content-title-brief':''" @click="onContentClick">{{blog.data.title}}</text>
+			<view class="content-video-container" >
+				<video v-if="isShowVideo" :id="videoId" class="content-video" :src="blog.data.content"
+				   :controls="false"  :muted="!thumbnail" show-center-play-btn="false"
+					@play="onVideoPlaying" :initial-time="pos" @ended="onVideoCompleted" @pause="onVideoPaused"
+					@timeupdate="onVideoPos">
+					<cover-view 
+						class="video-cover " :class="thumbnail?'video-conver-transparent':''"
+						@click="onVideoClick">
+					</cover-view>
+					<cover-image v-show="isShowPlayBtn"
+						src="/static/icon/btn-play-center.png"
+						class="play-btn"
+						@click="onPlayVideo">
+					</cover-image>
+					<cover-image v-show="isGotoDetailBtn"
+						src="/static/icon/btn-play-goto-detail.png"
+						class="detail-btn"
+						@click="onGotoDetail">
+					</cover-image>
+				</video>
 				
 			</view>
+			
 		</view>
 	</view>
 </template>
@@ -50,8 +53,9 @@
 			return {
 				thumbnail: false,
 				pos: 0,
-				showVideo: false,
-				playState: kPlayState.stopped
+				isInViewPort: false,
+				playState: kPlayState.stopped,
+				isForceHide: false
 			}
 		},
 		computed:{
@@ -60,20 +64,27 @@
 			},
 			isPlaying(){
 				return this.playState == kPlayState.playing;
+			},
+			isShowPlayBtn(){
+				return !this.isPlaying && !this.autoPlay;
+			},
+			isShowVideo(){
+				return this.isInViewPort && !this.isForceHide;
+			},
+			isGotoDetailBtn(){
+				return this.brief && this.isInViewPort && !this.isForceHide;
 			}
 		},
 		mounted(){
 			this.playState = kPlayState.stopped;
+			this.isForceHide = false;
 			this.autoPlay = false;
-			this.timer = 0;
-			console.log("mounted");
 			this.videoContext = uni.createVideoContext(this.videoId, this);
-			console.log(this.videoContext != null);
-			
+			this.timer = 0;
 			this.observer = uni.createIntersectionObserver(this);
 			this.observer.relativeToViewport().observe('.container', (res) => {
 				if (res.intersectionRatio > 0) {
-					this.showVideo = true;
+					this.isInViewPort = true;
 					if(this.timer){
 						clearTimeout(this.timer);
 					}
@@ -81,25 +92,30 @@
 						this.autoPlay = false;
 						if(this.playState != kPlayState.playing ){
 							this.videoContext.play();
-							console.log("video play called")
 						}
 					}
 					if(!this.thumbnail){
-						this.$nextTick(function(){
+						// 避免快速刷列表时，浪费性能
+						this.getThumbnailTimer = setTimeout(()=>{
 							this.videoContext.play();
-						})
+							this.getThumbnailTimer = 0;
+						},300);
 					}
 				} else{
+					if(this.getThumbnailTimer){
+						clearTimeout(this.getThumbnailTimer);
+					}
 					if(this.playState == kPlayState.playing){
 						this.autoPlay = true;
 						this.videoContext.pause();
 					}
-					this.timer = setTimeout(()=>{
-						this.showVideo = false;
-						this.thumbnail = false;
-						this.playState = kPlayState.stopped
-						this.timer = 0;
-					}, 30000);
+					if(!this.timer){
+						this.timer = setTimeout(()=>{
+							this.isInViewPort = false;
+							this.thumbnail = false;
+							this.timer = 0;
+						}, 5000);
+					}
 				}
 			})
 		},
@@ -108,17 +124,46 @@
 				this.observer.disconnect()
 			}
 		},
-		
 		methods: {
-			onContentClick(){
+			hide(){
+				if(this.isPlaying){
+					this.videoContext.pause();
+					this.autoPlay = true;
+				}
+			},
+			show(){
+				if(this.autoPlay){
+					this.videoContext.play();
+					this.autoPlay = false;
+				}
+			},
+			beforeForceHide(){
+				this.isForceHide = true;
+			},
+			afterForceHide(){
+				this.isForceHide = false;
+				if(this.isInViewPort && this.thumbnail){
+					this.thumbnail = false;
+					this.$nextTick(function(){
+						this.videoContext.play();
+					})
+				}
+			},
+			gotoDetail(){
 				let that = this;
 				uni.navigateTo({
-					/*url: "/pages/blog/post-detail/post-detail",
+					url: "/pages/blog/short-video-detail/short-video-detail",
 					success: function(res) {
 						// 通过eventChannel向被打开页面传送数据
 						res.eventChannel.emit('acceptDataFromOpenerPage', { blog: that.blog })
-					}*/
+					}
 				})
+			},
+			onGotoDetail(){
+				this.gotoDetail();
+			},
+			onContentClick(){
+				this.gotoDetail();
 			},
 			onVideoClick(){
 				if(this.isPlaying){
@@ -142,7 +187,7 @@
 			},
 			onVideoPaused(){
 				this.playState = kPlayState.paused;
-				if(!this.thumbnail){
+				if(!this.thumbnail && this.isInViewPort){
 					this.videoContext.seek(0);
 					this.thumbnail = true;
 				}
@@ -182,9 +227,11 @@
 	.content-video-container{
 		width: 100%;
 		position: relative;
+		margin-top: 20upx;
 		padding-bottom: 60%;
 		height: 0;
 		overflow: hidden;
+		background-color: #000000;
 	}
 	.content-video{
 		position: absolute;
@@ -194,6 +241,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		border-radius: 30upx;
 	}
 	.video-cover{
 		width: 100%;
@@ -209,5 +257,14 @@
 		width: 100upx;
 		height: 100upx;
 		background-color: rgba(0,0,0,0);
+	}
+	.detail-btn{
+		padding: 5upx;
+		position: absolute;
+		top: 30upx;
+		right: 30upx;
+		width: 60upx;
+		height: 60upx;
+		background-color: rgba(0,0,0,0.2);
 	}
 </style>
