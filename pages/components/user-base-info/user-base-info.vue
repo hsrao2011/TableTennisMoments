@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view v-if="user" class="user">
-			<image class="avatar" :src="'/static/data/avatar/' + user.avatar" alt="头像" mode="widthFix"></image>
+			<image class="avatar" :src="'/static/data/avatar/' + user.avatar" alt="头像" mode="aspectFill"></image>
 			<view class="user-info">
 				<text class="nickname">{{user.nickName}}</text>
 				<text class="intro">{{user.intro}}</text>
@@ -46,6 +46,7 @@
 		display:block;
 	}
 	.user .avatar{
+		flex: 0 0 auto;
 		position:relative;
 		width:90upx;
 		height:90upx;

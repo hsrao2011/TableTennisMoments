@@ -105,14 +105,14 @@
 					uni.showTabBar();
 					if(this.$refs.shortVideo){
 						this.$refs.shortVideo.forEach((sv)=>{
-							sv.afterForceHide();
+							sv.show();
 						})
 					}
 				}else{
 					if(this.$refs.shortVideo){
 						console.log("beforeForceHide");
 						this.$refs.shortVideo.forEach((sv)=>{
-							sv.beforeForceHide();
+							sv.hide();
 						})
 					}
 				}

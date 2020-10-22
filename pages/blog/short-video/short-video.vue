@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="content-video">
-			<video class="video" :src="videoUrl" controls>
+			<video class="video" :src="videoUrl" controls autoplay>
 				<cover-image src="/static/icon/btn-play-return.png" class="backButton" @click="onBack"></cover-image>
 			</video>
 		</view>
@@ -38,6 +38,7 @@
 				if(!this.videoInfo)
 					return "";
 				// #ifdef H5
+				console.log("h5")
 				return "/static/data/upload/1.mp4"
 				// #endif
 				return this.videoInfo.tempFilePath;
@@ -79,7 +80,7 @@
 			onTitleBlur(){
 				if(this.title.length > 30){
 					this.titlePrompt = "标题字数不可多于30个字"
-				}else if(this.title.length <= 5){
+				}else if(this.title.length < 5){
 					this.titlePrompt = "标题字数不可少于5个字"
 				}else{
 					this.titlePrompt = "";
@@ -87,6 +88,9 @@
 			},
 			onDistribute(){
 				//发布
+				if(this.title.length == 0){
+					this.titlePrompt = "标题字数不可少于5个字";
+				}
 				if(this.titlePrompt.length > 0){
 					uni.showToast({
 						title: this.titlePrompt,
