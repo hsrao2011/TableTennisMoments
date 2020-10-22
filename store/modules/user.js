@@ -50,11 +50,6 @@ const state = {
 const getters = {
 	isLogined(state){
 		return !!state.token;
-	},
-	userInfo(state){
-		if(!userInfo){
-			dispatch("")
-		}
 	}
 }
 const mutations = {

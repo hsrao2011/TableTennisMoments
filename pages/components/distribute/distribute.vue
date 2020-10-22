@@ -60,7 +60,7 @@
 						case 2:{
 							uni.chooseVideo({
 								count: 1,
-								maxDuration: 60,
+								maxDuration: 600,
 								success: res => {
 									resolve({url: "/pages/blog/short-video/short-video",
 										params: res
@@ -86,6 +86,12 @@
 							if(to.params)
 								res.eventChannel.emit('acceptDataFromOpenerPage', { params: to.params })
 						}
+					})
+				}).catch(err =>{
+					console.log(err);
+					uni.showToast({
+						title: "选择视频文件错误",
+						duration:2000
 					})
 				})
 			}

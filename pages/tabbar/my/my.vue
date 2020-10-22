@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view v-if="isLogined" class="user">
+		<view v-if="userInfo" class="user">
 			<view class = "base-info">
 				<image class="avatar" :src="'/static/data/avatar/' + userInfo.avatar" alt="头像" mode=""></image>
 				<view class="user-info">

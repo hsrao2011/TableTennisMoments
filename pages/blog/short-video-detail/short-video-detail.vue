@@ -1,13 +1,13 @@
 <template>
 	<view class="container">
-		<view class="content-video-container" >
-			<video v-if="blog" id="video-detail" class="content-video" :src="blog.data.content"
-			   :controls="true"  show-center-play-btn="true" autoplay="true"
+		<view v-if="blog" class="content-video-container" >
+			<video  id="short-video-detail" class="content-video" 
+				:src="blog.data.content" :initial-time="startPos" autoplay
+				controls  show-center-play-btn 
 				@play="onVideoPlaying" @ended="onVideoCompleted" @pause="onVideoPaused"
 				@timeupdate="onVideoPos">
 				<cover-image src="/static/icon/btn-play-return.png" class="backButton" @click="onBack"></cover-image>
 			</video>
-			<image v-else src="/static/icon/btn-play-return.png" class="backButton" @click="onBack"></image>
 		</view>
 		<view class="content" v-if="blog">
 			<user-base-info  :user="blog.user"></user-base-info>
@@ -28,6 +28,7 @@
 			return {
 				blog: null,
 				pos: 0,
+				startPos: 0,
 				playState: kPlayState.stopped,
 			}
 		},
@@ -35,21 +36,25 @@
 			// #ifdef APP-PLUS
 			plus.navigator.setFullscreen(true);
 			// #endif
-			
 			this.playState = kPlayState.stopped;
-			const eventChannel = this.getOpenerEventChannel()
-			// 监听acceptDataFromOpenerPage事件，获取上一页面通过eventChannel传送到当前页面的数据
+			this.eventChannel = this.getOpenerEventChannel()
 			let that = this;
-			eventChannel.on('acceptDataFromOpenerPage', function(data) {
+			this.eventChannel.on('acceptDataFromOpenerPage', function(data) {
+				that.startPos = data.startPos;
 				that.blog = Object.assign({}, {}, data.blog);
-				that.videoContext = uni.createVideoContext("video-detail", that);
 			})
-			
+		},
+		onReady(){
+			this.videoContext = uni.createVideoContext("short-video-detail", this);
 		},
 		onUnload(){
 			// #ifdef APP-PLUS
 			plus.navigator.setFullscreen(false);
 			// #endif
+			if(this.eventChannel){
+				this.eventChannel.emit('acceptReturnData',
+				 { startPos: this.pos});
+			}
 		},
 		computed:{
 			isPlaying(){
@@ -75,8 +80,8 @@
 			onVideoPaused(){
 				this.playState = kPlayState.paused;
 			},
-			onVideoPos({currentTime, duration}){
-				this.pos = currentTime;
+			onVideoPos(e){
+				this.pos = e.detail.currentTime;
 			}
 		}
 	}

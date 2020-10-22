@@ -4,12 +4,13 @@
 		<view class="content">
 			<text class="content-title" :class="brief?'content-title-brief':''" @click="onContentClick">{{blog.data.title}}</text>
 			<view class="content-video-container" >
-				<video v-if="isShowVideo" :id="videoId" class="content-video" :src="blog.data.content"
-				   :controls="false"  :muted="!thumbnail" show-center-play-btn="false"
-					@play="onVideoPlaying" :initial-time="pos" @ended="onVideoCompleted" @pause="onVideoPaused"
-					@timeupdate="onVideoPos">
+				<video v-if="isRenderVideo" :id="videoId" class="content-video" :src="blog.data.content"
+				   :controls="false" show-center-play-btn="false"
+					:muted="!isThumbnailReady" :initial-time="pos"
+					@play="onVideoPlaying"  @ended="onVideoCompleted" @pause="onVideoPaused"
+					@timeupdate="onVideoPos" @error="onVideoError">
 					<cover-view 
-						class="video-cover " :class="thumbnail?'video-conver-transparent':''"
+						class="video-cover " :class="isThumbnailReady?'video-conver-transparent':''"
 						@click="onVideoClick">
 					</cover-view>
 					<cover-image v-show="isShowPlayBtn"
@@ -31,8 +32,10 @@
 </template>
 
 <script>
+	
+	
 	import userBaseInfo from "../user-base-info/user-base-info"
-	import {kPlayState} from "@/common/types.js"
+	import {kPlayState, kShortVideoGetThumbnailStage} from "@/common/types.js"
 	export default {
 		components:{
 			"user-base-info": userBaseInfo
@@ -51,11 +54,12 @@
 		},
 		data() {
 			return {
-				thumbnail: false,
+				thumbnail: kShortVideoGetThumbnailStage.none,
 				pos: 0,
 				isInViewPort: false,
 				playState: kPlayState.stopped,
-				isForceHide: false
+				hideVideo: false,
+				autoPlay: false
 			}
 		},
 		computed:{
@@ -65,59 +69,29 @@
 			isPlaying(){
 				return this.playState == kPlayState.playing;
 			},
+			isThumbnailReady(){
+				return this.thumbnail == kShortVideoGetThumbnailStage.ready;
+			},
 			isShowPlayBtn(){
 				return !this.isPlaying && !this.autoPlay;
 			},
-			isShowVideo(){
-				return this.isInViewPort && !this.isForceHide;
+			isRenderVideo(){
+				return !this.hideVideo && ((this.isInViewPort && this.thumbnail >= kShortVideoGetThumbnailStage.getting) || (
+				!this.isInViewPort && this.thumbnail == kShortVideoGetThumbnailStage.ready));
 			},
 			isGotoDetailBtn(){
-				return this.brief && this.isInViewPort && !this.isForceHide;
+				return this.brief && this.isInViewPort;
 			}
 		},
 		mounted(){
-			this.playState = kPlayState.stopped;
-			this.isForceHide = false;
-			this.autoPlay = false;
+			this.debug = true;
 			this.videoContext = uni.createVideoContext(this.videoId, this);
-			this.timer = 0;
+			this.timerHide = 0;
 			this.observer = uni.createIntersectionObserver(this);
-			this.observer.relativeToViewport().observe('.container', (res) => {
-				if (res.intersectionRatio > 0) {
-					this.isInViewPort = true;
-					if(this.timer){
-						clearTimeout(this.timer);
-					}
-					if(this.autoPlay){
-						this.autoPlay = false;
-						if(this.playState != kPlayState.playing ){
-							this.videoContext.play();
-						}
-					}
-					if(!this.thumbnail){
-						// 避免快速刷列表时，浪费性能
-						this.getThumbnailTimer = setTimeout(()=>{
-							this.videoContext.play();
-							this.getThumbnailTimer = 0;
-						},300);
-					}
-				} else{
-					if(this.getThumbnailTimer){
-						clearTimeout(this.getThumbnailTimer);
-					}
-					if(this.playState == kPlayState.playing){
-						this.autoPlay = true;
-						this.videoContext.pause();
-					}
-					if(!this.timer){
-						this.timer = setTimeout(()=>{
-							this.isInViewPort = false;
-							this.thumbnail = false;
-							this.timer = 0;
-						}, 5000);
-					}
-				}
-			})
+			let that = this;
+			this.observer.relativeToViewport().observe('.content-video-container', res=>{
+				that.intersectionObserver(res);
+			});
 		},
 		destroyed(){
 			if(this.observer) {
@@ -125,28 +99,101 @@
 			}
 		},
 		methods: {
-			hide(){
-				if(this.isPlaying){
-					this.videoContext.pause();
+			log(msg){
+				if(this.debug && this.isInViewPort){
+					console.log(msg);
+				}
+			},
+			intersectionObserver(res){
+				try{
+					if (res.intersectionRatio > 0) {
+						this.isInViewPort = true;
+						this.log("enter viewport: " + this.toString());
+						if(this.timerHide){
+							clearTimeout(this.timerHide);
+							this.timerHide = 0;
+						}
+						if(this.autoPlay){
+							this.autoPlay = false;
+							this.thumbnail = kShortVideoGetThumbnailStage.ready;
+							if(this.playState != kPlayState.playing ){
+								this.$nextTick(function(){
+									this.videoContext.play();
+								})
+							}
+						}else{
+							this.prepareThumbnail();
+						}
+					} else{
+						this.log("leave viewport: " + this.toString());
+						if(this.timerGetThumbnail){
+							this.thumbnail = kShortVideoGetThumbnailStage.none;
+							clearTimeout(this.timerGetThumbnail);
+							this.timerGetThumbnail = 0;
+						}
+						if(!this.timerHide){
+							this.timerHide = setTimeout(()=>{
+								this.stop();
+								this.timerHide = 0;
+							}, 2000);
+						}
+						if(this.thumbnail == kShortVideoGetThumbnailStage.getting){
+							this.videoContext.pause();
+							this.thumbnail = kShortVideoGetThumbnailStage.none;
+						}else if(this.thumbnail == kShortVideoGetThumbnailStage.ready){
+							if(this.playState == kPlayState.playing){
+								this.autoPlay = true;
+								this.videoContext.pause();
+							}
+						}
+						this.isInViewPort = false;
+					}
+				}catch(err){
+					console.log("intersectionObserver exception!" + JSON.stringify(err));
+				}
+			},
+			stop(){
+				if(this.thumbnail == kShortVideoGetThumbnailStage.ready && this.playState == kPlayState.playing){
 					this.autoPlay = true;
 				}
+				this.videoContext.stop();
+				this.thumbnail = kShortVideoGetThumbnailStage.none;
+				this.playState = kPlayState.stopped;
+				this.log("short-video stop: " +  this.toString());
 			},
-			show(){
-				if(this.autoPlay){
-					this.videoContext.play();
-					this.autoPlay = false;
+			prepareThumbnail(){
+				if(this.thumbnail == kShortVideoGetThumbnailStage.none && this.isInViewPort){
+					this.thumbnail = kShortVideoGetThumbnailStage.waitingTimer;
+					// 避免快速刷列表时，浪费性能
+					this.timerGetThumbnail = setTimeout(()=>{
+						this.thumbnail = kShortVideoGetThumbnailStage.getting;
+						this.timerGetThumbnail = 0;
+						this.$nextTick(function(){
+							this.videoContext.play();
+						})
+					},300);
+					this.log("short-video prepareThumbnail start: " + this.toString());
 				}
 			},
-			beforeForceHide(){
-				this.isForceHide = true;
+			toString(){
+				return "id:"+ this.uniqueId +",isInViewPort:" + this.isInViewPort + ",thumbnail:" + this.thumbnail + ",autoPlay:" + this.autoPlay + ",state:"+this.playState +",pos:"+this.pos;
 			},
-			afterForceHide(){
-				this.isForceHide = false;
-				if(this.isInViewPort && this.thumbnail){
-					this.thumbnail = false;
+			hide(){
+				this.log("short-video hide: " + this.toString());
+				this.stop();
+				this.hideVideo = true;
+			},
+			show(){
+				this.hideVideo = false;
+				this.log("short-video show: " + this.toString());
+				if(this.autoPlay){
+					this.autoPlay = false;
+					this.thumbnail = kShortVideoGetThumbnailStage.ready;
 					this.$nextTick(function(){
 						this.videoContext.play();
 					})
+				}else{
+					this.prepareThumbnail();
 				}
 			},
 			gotoDetail(){
@@ -155,7 +202,11 @@
 					url: "/pages/blog/short-video-detail/short-video-detail",
 					success: function(res) {
 						// 通过eventChannel向被打开页面传送数据
-						res.eventChannel.emit('acceptDataFromOpenerPage', { blog: that.blog })
+						res.eventChannel.emit('acceptDataFromOpenerPage', 
+						 { blog: that.blog, startPos: that.pos});
+						res.eventChannel.on('acceptReturnData', function(data){
+							that.pos = data.startPos;
+						})
 					}
 				})
 			},
@@ -178,7 +229,7 @@
 				this.playState = kPlayState.stopped;
 			},
 			onVideoPlaying(){
-				if(!this.thumbnail){
+				if(this.thumbnail == kShortVideoGetThumbnailStage.getting){
 					this.$nextTick(function(){
 						this.videoContext.pause();
 					})
@@ -187,13 +238,20 @@
 			},
 			onVideoPaused(){
 				this.playState = kPlayState.paused;
-				if(!this.thumbnail && this.isInViewPort){
-					this.videoContext.seek(0);
-					this.thumbnail = true;
+				if(this.thumbnail == kShortVideoGetThumbnailStage.getting){
+					this.videoContext.seek(this.pos);
+					this.thumbnail = kShortVideoGetThumbnailStage.ready;
 				}
 			},
-			onVideoPos({currentTime, duration}){
-				this.pos = currentTime;
+			onVideoPos(e){
+				if(this.thumbnail == kShortVideoGetThumbnailStage.ready)
+					this.pos = e.detail.currentTime;
+			},
+			onVideoError(event){
+				uni.showToast({
+					title: "视频播放异常！",
+					duration: 2000
+				})
 			}
 		}
 	}
