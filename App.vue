@@ -9,10 +9,22 @@ export default {
 	},
 	onShow: function() {
 		console.log('App Show');
+		
 	},
 	onHide: function() {
 		console.log('App Hide');
+	},
+	method:{
+		on(type, obj, callback){
+			if(type == "screen-orientation"){
+				this.onScreenDirectionChanged = callback;
+				
+				
+				
+			}
+		}
 	}
+	
 };
 </script>
 

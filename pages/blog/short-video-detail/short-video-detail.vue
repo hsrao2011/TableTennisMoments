@@ -1,15 +1,16 @@
 <template>
 	<view class="container">
-		<view v-if="blog" class="content-video-container" >
+		<view v-if="blog" class="content-video-container"
+		   :class="onlyVideo?'content-video-container-fullscreen':''">
 			<video  id="short-video-detail" class="content-video" 
 				:src="blog.data.content" :initial-time="startPos" autoplay
 				controls  show-center-play-btn 
 				@play="onVideoPlaying" @ended="onVideoCompleted" @pause="onVideoPaused"
-				@timeupdate="onVideoPos">
-				<cover-image src="/static/icon/btn-play-return.png" class="backButton" @click="onBack"></cover-image>
+				@timeupdate="onVideoPos" >
+				<cover-image v-show="!onlyVideo" src="/static/icon/btn-play-return.png" class="backButton" @click="onBack"></cover-image>
 			</video>
 		</view>
-		<view class="content" v-if="blog">
+		<view class="content" v-if="blog && !onlyVideo">
 			<user-base-info  :user="blog.user"></user-base-info>
 			<text class="content-title">{{blog.data.title}}</text>
 		</view>
@@ -30,10 +31,13 @@
 				pos: 0,
 				startPos: 0,
 				playState: kPlayState.stopped,
+				landscape: false,
+				controlBarVisible: true
 			}
 		},
 		onLoad(){
 			// #ifdef APP-PLUS
+			plus.screen.unlockOrientation(); 
 			plus.navigator.setFullscreen(true);
 			// #endif
 			this.playState = kPlayState.stopped;
@@ -47,9 +51,20 @@
 		onReady(){
 			this.videoContext = uni.createVideoContext("short-video-detail", this);
 		},
+		mounted(){
+			let that = this;
+			this.landscapeObserver = uni.createMediaQueryObserver(this);
+			this.landscapeObserver.observe({
+                    orientation: 'landscape'  //屏幕方向为纵向
+                }, matches => {
+                        this.landscape = matches
+                })
+		},
 		onUnload(){
+			this.landscapeObserver.disconnect();
 			// #ifdef APP-PLUS
 			plus.navigator.setFullscreen(false);
+			plus.screen.lockOrientation("portrait-primary"); 
 			// #endif
 			if(this.eventChannel){
 				this.eventChannel.emit('acceptReturnData',
@@ -59,12 +74,12 @@
 		computed:{
 			isPlaying(){
 				return this.playState == kPlayState.playing;
+			},
+			onlyVideo(){
+				return this.landscape;
 			}
 		},
 		destroyed(){
-			if(this.observer) {
-				this.observer.disconnect()
-			}
 		},
 		methods: {
 			onBack(){
@@ -90,7 +105,8 @@
 <style scoped>
 	.container{
 		background-color:#fff;
-		height: 100%;
+		width: 100%;
+		height:100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
@@ -104,6 +120,10 @@
 		overflow: hidden;
 		background-color: #000000;
 	}
+	.content-video-container-fullscreen{
+		padding-bottom: 0;
+		height: 100%;
+	},
 	.content-video{
 		position: absolute;
 		top: 0;
