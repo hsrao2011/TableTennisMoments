@@ -57,12 +57,6 @@ function randomPushRecommends(blog){
 function randomRecomends(){
 	recommends = recommends.sort(()=>Math.random()-0.5)
 }
-function getPageOf(list, pageItemCount, pageIndex){
-	var result = list.filter((item, index)=>
-		index >= pageIndex * pageItemCount 
-		&& index < (pageIndex + 1) * pageItemCount);
-	return result;
-}
 
 (function(){
 	initBlogs();
@@ -72,6 +66,5 @@ function getPageOf(list, pageItemCount, pageIndex){
 export default {
 	updateBlog,
 	randomRecomends,
-	getPageOf,
 	recommends
 }

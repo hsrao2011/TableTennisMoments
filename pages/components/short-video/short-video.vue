@@ -105,6 +105,8 @@
 			},
 			createIntersectionObserver(){
 				this.releaseIntersectionObserver();
+				if(this.hideVideo)
+					return;
 				let that = this;
 				this.observer = uni.createIntersectionObserver(this);
 				this.observer.relativeToViewport().observe('.content-video-container', res=>{

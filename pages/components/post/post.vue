@@ -14,7 +14,7 @@
 	export default {
 		components:{
 			"user-base-info": userBaseInfo,
-			"image-grid": imageGrid
+			"image-grid": imageGrid,
 		},
 		props:{
 			blog: Object,

@@ -8,16 +8,19 @@
 			<view class="ql-container">  
 				<jyf-parser class="ql-editor" :html="blog.data.html" ></jyf-parser>  
 			</view>
+			<comment-list :targetId="blog.data.id" ></comment-list>
 		</view>
 	</view>
 </template>
 
 <script>
 	import userBaseInfo from "@/pages/components/user-base-info/user-base-info"
+	import commentList from "@/pages/components/comment-list/comment-list.vue"
 	import jyfParser from "@/components/jyf-parser/jyf-parser"
 	export default {
 		components:{
 			"user-base-info": userBaseInfo,
+			"comment-list": commentList,
 			"jyf-parser": jyfParser
 		},
 		data() {
