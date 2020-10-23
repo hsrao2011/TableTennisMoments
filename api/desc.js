@@ -31,25 +31,39 @@ export default {
 			url:"/blog/createPost",
 			type:"post",
 			token: true,
-			params: {content:"", images:[]}
+			data: {content:"", images:[]}
 		},
 		createActicle:{// 发文章
 			url: "/blog/createActicle",
 			type: "post",
 			token: true,
-			params: {title:"标题", content:"delta", html:"", images:[]}
+			data: {title:"标题", content:"delta", html:"", images:[]}
 		},
 		createShortVideo:{
 			url: "/blog/createShortVideo",
 			type: "post",
 			token: true,
-			params:{title:"标题", content:"videoUrl"}
+			data:{title:"标题", content:"videoUrl"}
 		}
 	},
 	file:{
 		uploadFile:{
 			url: "/file/uploadFile",
 			type: "post"
+		}
+	},
+	comment:{
+		list:{
+			url: "/comment/list",
+			type: "get",
+			params: {targetId:"目标Id", targetType:"目标类型：blog, comment"}
+		},
+		create:{
+			url: "/comment/create",
+			type: "post",
+			token: true,
+			data: {targetId:"目标Id", targetType:"目标类型：blog, comment",
+			content:"评价内容"}
 		}
 	}
 }

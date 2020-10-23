@@ -3,6 +3,7 @@ var mockjs = require("better-mock/dist/mock.mp.js")
 import apiDesc from "@/api/desc.js";
 import error from "@/api/error.js"
 import blog from "./data/blog.js";
+import data from "./data/data.js"
 
 export default [{
 		api: apiDesc.recommend.list,
@@ -14,10 +15,10 @@ export default [{
 			let pageIndex = config.query.pageIndex || 0;
 			pageIndex %= 5;
 			
-			let pageList = blog.getPageOf(blog.recommends, pageItemCount, pageIndex);
+			let page = data.getPageOf(blog.recommends, pageItemCount, pageIndex);
 			return {
 				...error.ok,
-				items: pageList
+				...page
 			};
 		}
 	}

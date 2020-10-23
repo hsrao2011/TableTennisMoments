@@ -1,0 +1,1 @@
+var mockjs = require("better-mock/dist/mock.mp.js")

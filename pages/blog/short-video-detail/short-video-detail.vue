@@ -14,16 +14,19 @@
 			<user-base-info  :user="blog.user"></user-base-info>
 			<text class="content-title">{{blog.data.title}}</text>
 		</view>
+		<comment-list :targetId="blog.data.id" ></comment-list>
 	</view>
 </template>
 
 <script>
 	import userBaseInfo from "@/pages/components/user-base-info/user-base-info.vue"
+	import commentList from "@/pages/components/comment-list/comment-list.vue"
 	import {kPlayState} from "@/common/types.js"
 	import {navigateBack} from "@/pages/page.js"
 	export default {
 		components:{
-			"user-base-info": userBaseInfo
+			"user-base-info": userBaseInfo,
+			"comment-list": commentList
 		},
 		data() {
 			return {

@@ -20,9 +20,9 @@ function param2Obj(url) {
 
 function param2Query(param){
 	if(!param) return "";
-	var query = "?";
+	var query = "";
 	Object.keys(param).forEach((key)=>{
-		query? query= "?" : query= "&";
+		query? query += "&" : query = "?";
 		query += key;
 		query += "="
 		query += param[key];

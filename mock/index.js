@@ -7,11 +7,13 @@ import error from "@/api/error.js"
 import recommend from "./recommend.js";
 import user from "./user.js";
 import blog from "./blog.js";
+import comment from "./comment.js";
 
 var mocks = [
 	...recommend,
 	...user,
-	...blog
+	...blog,
+	...comment
 ]
 
 // for front mock

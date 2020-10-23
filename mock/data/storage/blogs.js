@@ -25,7 +25,7 @@ function saveBlog(type, {userId, title, content, html, images}){
 		return error.errorParam;
 	var prefix = type + "_";
 	var key = prefix + utils.createGuid();
-	var value = {userId: userId, type: type, content: content};
+	var value = {id: blogs.length, userId: userId, type: type, content: content};
 	if(images && images.length > 0){
 		value.images = images;
 	}

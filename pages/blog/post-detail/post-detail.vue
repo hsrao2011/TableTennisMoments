@@ -1,18 +1,23 @@
 <template>
-	<view  class="container">
-		<post v-if="blog" :blog="blog" :imageColCount="2"></post>
+	<view  v-if="blog" class="container">
+		<post  :blog="blog" :imageColCount="2"></post>
+		<comment-list ref="commentList" :targetId="blog.data.id" ></comment-list>
+		<uni-load-more v-if="more" :status="more"></uni-load-more>
 	</view>
 </template>
 
 <script>
 	import post from "@/pages/components/post/post.vue";
+	import commentList from "@/pages/components/comment-list/comment-list.vue"
 	export default {
 		components:{
-			"post": post
+			"post": post,
+			"comment-list": commentList
 		},
 		data() {
 			return {
-				blog: null
+				blog: null,
+				more: ""
 			}
 		},
 		onLoad(){
@@ -24,9 +29,35 @@
 			})
 		},
 		mounted(){
-			
+			this.refreshComment();
+		},
+		onPullDownRefresh(){
+			this.refreshComment();
+		},
+		onReachBottom(){
+			if(this.more == "noMore")
+				return;
+			this.more="loading"
+			let that = this;
+			this.$refs.commentList.loadMore((res)=>{
+				uni.stopPullDownRefresh();
+				if(res.pageIndex >= res.pageCount - 1 )
+					that.more="noMore"
+				else
+					that.more="more"
+			});
 		},
 		methods: {
+			refreshComment(){
+				let that = this;
+				this.$refs.commentList.refresh((res)=>{
+					uni.stopPullDownRefresh();
+					if(res.pageIndex >= res.pageCount - 1 )
+						that.more="noMore"
+					else
+						that.more="more"
+				})
+			}
 		}
 	}
 </script>
@@ -35,6 +66,5 @@
 	.container{
 		background-color:#fff;
 		margin-bottom: 15upx;
-		height: 100%;
 	}
 </style>

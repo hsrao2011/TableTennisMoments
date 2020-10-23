@@ -23,8 +23,9 @@ export function request({api, params, data}){
 		header["x-refresh-token"] = store.state.user.refreshToken;	
 	}
 	return new Promise(function(resolve, reject){
+		let url = api.url + utils.param2Query(params);
 		proxyRequest({
-			url: api.url + utils.param2Query(params),
+			url: url,
 			header: header,
 			method: api.type,
 			data: data?data:"",
