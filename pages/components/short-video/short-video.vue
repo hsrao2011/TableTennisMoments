@@ -50,7 +50,6 @@
 				type: Number,
 				default: Math.floor(Math.random() * 1000000)
 			}
-			
 		},
 		data() {
 			return {
@@ -87,16 +86,16 @@
 			this.debug = true;
 			this.videoContext = uni.createVideoContext(this.videoId, this);
 			this.timerHide = 0;
-			this.observer = uni.createIntersectionObserver(this);
 			let that = this;
-			this.observer.relativeToViewport().observe('.content-video-container', res=>{
-				that.intersectionObserver(res);
-			});
+			that.createIntersectionObserver();
+			setInterval(function() {
+				// fix: uniapp 如果长时间observe，会产生异常，
+				//      造成不再触发事件
+				that.createIntersectionObserver();
+			}, 10000);
 		},
 		destroyed(){
-			if(this.observer) {
-				this.observer.disconnect()
-			}
+			this.releaseIntersectionObserver();
 		},
 		methods: {
 			log(msg){
@@ -104,9 +103,27 @@
 					console.log(msg);
 				}
 			},
+			createIntersectionObserver(){
+				this.releaseIntersectionObserver();
+				let that = this;
+				this.observer = uni.createIntersectionObserver(this);
+				this.observer.relativeToViewport().observe('.content-video-container', res=>{
+					that.intersectionObserver(res);
+				});
+			},
+			releaseIntersectionObserver(){
+				if(this.observer) {
+					this.observer.disconnect()
+					this.observer = null;
+				}
+			},
 			intersectionObserver(res){
+				if(this.hideVideo)
+					return;
 				try{
 					if (res.intersectionRatio > 0) {
+						if(this.isInViewPort)
+							return;
 						this.isInViewPort = true;
 						this.log("enter viewport: " + this.toString());
 						if(this.timerHide){
@@ -114,7 +131,6 @@
 							this.timerHide = 0;
 						}
 						if(this.autoPlay){
-							this.autoPlay = false;
 							this.thumbnail = kShortVideoGetThumbnailStage.ready;
 							if(this.playState != kPlayState.playing ){
 								this.$nextTick(function(){
@@ -125,6 +141,8 @@
 							this.prepareThumbnail();
 						}
 					} else{
+						if(!this.isInViewPort)
+							return;
 						this.log("leave viewport: " + this.toString());
 						if(this.timerGetThumbnail){
 							this.thumbnail = kShortVideoGetThumbnailStage.none;
@@ -182,12 +200,12 @@
 				this.log("short-video hide: " + this.toString());
 				this.stop();
 				this.hideVideo = true;
+				this.releaseIntersectionObserver();
 			},
 			show(){
 				this.hideVideo = false;
 				this.log("short-video show: " + this.toString());
 				if(this.autoPlay){
-					this.autoPlay = false;
 					this.thumbnail = kShortVideoGetThumbnailStage.ready;
 					this.$nextTick(function(){
 						this.videoContext.play();
@@ -195,6 +213,7 @@
 				}else{
 					this.prepareThumbnail();
 				}
+				this.createIntersectionObserver();
 			},
 			gotoDetail(){
 				let that = this;
@@ -234,6 +253,7 @@
 						this.videoContext.pause();
 					})
 				}
+				this.autoPlay = false;
 				this.playState = kPlayState.playing;	
 			},
 			onVideoPaused(){
