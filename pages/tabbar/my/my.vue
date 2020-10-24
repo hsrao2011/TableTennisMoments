@@ -9,7 +9,7 @@
 				</view>
 			</view>
 			<view class="ext-info">
-				<view class="ext-info-item" v-for="item in extInfoList">
+				<view class="ext-info-item" v-for="(item, index) in extInfoList" :key="index">
 					<view class="ext-info-name">{{item[0]}}</view>
 					<view class="ext-info-value">{{item[1]}}</view>
 				</view>

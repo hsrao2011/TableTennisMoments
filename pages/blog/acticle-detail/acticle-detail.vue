@@ -1,6 +1,6 @@
 <template>
-	<view class="container">
-		<view class="content" v-if="blog">
+	<view  class="container">
+		<view v-if="blog" class="content">
 			<view class="title">
 				<text>{{blog.data.title}}</text>
 			</view>
@@ -8,8 +8,9 @@
 			<view class="ql-container">  
 				<jyf-parser class="ql-editor" :html="blog.data.html" ></jyf-parser>  
 			</view>
-			<comment-list :targetId="blog.data.id" ></comment-list>
+			<comment-list ref="commentList" :targetId="blog.data.id" ></comment-list>
 		</view>
+		<uni-load-more :status="more"></uni-load-more>
 	</view>
 </template>
 
@@ -25,18 +26,48 @@
 		},
 		data() {
 			return {
-				blog: null
+				blog: null,
+				more: "loading"
 			}
 		},
 		onLoad(){
 			const eventChannel = this.getOpenerEventChannel()
-			// 监听acceptDataFromOpenerPage事件，获取上一页面通过eventChannel传送到当前页面的数据
 			let that = this;
 			eventChannel.on('acceptDataFromOpenerPage', function(data) {
 				that.blog = Object.assign({}, that.blog, data.blog);
+				that.$nextTick(function(){
+					that.refreshComment();
+				})
 			})
 		},
+		onPullDownRefresh(){
+			this.refreshComment();
+		},
+		onReachBottom(){
+			if(this.more == "noMore")
+				return;
+			this.more="loading"
+			let that = this;
+			this.$refs.commentList.loadMore((res)=>{
+				uni.stopPullDownRefresh();
+				if(res.pageIndex >= res.pageCount - 1 )
+					that.more="noMore"
+				else
+					that.more="more"
+			});
+		},
 		methods: {
+			refreshComment(){
+				this.more = "loading"
+				let that = this;
+				this.$refs.commentList.loadFirst((res)=>{
+					uni.stopPullDownRefresh();
+					if(res.pageIndex >= res.pageCount - 1 )
+						that.more="noMore"
+					else
+						that.more="more"
+				})
+			}
 		}
 	}
 </script>
@@ -45,7 +76,7 @@
 	.container{
 		background-color:#fff;
 		padding: 80upx 15upx 0 15upx;
-		height: 100%;
+		min-height: 100%;
 	}
 	.content{
 		display: flex;

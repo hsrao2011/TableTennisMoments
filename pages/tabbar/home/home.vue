@@ -1,7 +1,7 @@
 <template>
 	<view>
-		<view v-for="(blog, index) in recommendList">
-			<post v-if="blog.data.type=='post'" :blog="blog" :brief="true" :key="index"></post>
+		<view v-for="(blog, index) in recommendList" :key="index">
+			<post v-if="blog.data.type=='post'" :blog="blog" :brief="true" ></post>
 			<acticle v-else-if="blog.data.type=='acticle'" :blog="blog" :key="index"></acticle>
 			<short-video ref="shortVideo" v-else="blog.data.type=='short-video'" :blog="blog" 
 			:key="index" :uniqueId="index" :brief="true"></short-video>
@@ -30,7 +30,7 @@
 			return {
 				recommendList: [],
 				pageIndex: 0,
-				more: "more"
+				more: "loading"
 			}
 		},
 		mounted() {
@@ -55,8 +55,6 @@
 					this.recommendList.splice(0,20);
 				}
 				this.recommendList = this.recommendList.concat(res.data.items);
-				
-				uni.stopPullDownRefresh();
 				this.pageIndex += 1;
 				this.more="more"
 			});

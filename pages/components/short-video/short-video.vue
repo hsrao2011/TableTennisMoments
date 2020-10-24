@@ -108,15 +108,25 @@
 				if(this.hideVideo)
 					return;
 				let that = this;
-				this.observer = uni.createIntersectionObserver(this);
-				this.observer.relativeToViewport().observe('.content-video-container', res=>{
-					that.intersectionObserver(res);
-				});
+				try{
+					this.observer = uni.createIntersectionObserver(this);
+					this.observer.relativeToViewport().observe('.content-video-container', res=>{
+						that.intersectionObserver(res);
+					});
+				}
+				catch(err){
+				}
 			},
 			releaseIntersectionObserver(){
 				if(this.observer) {
-					this.observer.disconnect()
-					this.observer = null;
+					try{
+						console.log("before disconnect");
+						this.observer.disconnect()
+						console.log("end disconnect");
+						this.observer = null;
+					}catch(err){
+						
+					}
 				}
 			},
 			intersectionObserver(res){

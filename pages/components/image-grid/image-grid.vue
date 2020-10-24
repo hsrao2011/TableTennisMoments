@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="grid grid-square" :class="'col-' + colCount">
-			<view   v-for="(image,index) in images">
+			<view   v-for="(image,index) in images" :key="index">
 				<image class="image-grid-image" :src="imageUrl(image)" mode="aspectFill" @click="onPreviewImage(index)"></image>
 				<view v-if="editable" class="remove-image" @click="removeImage(index)">X</view>
 			</view>

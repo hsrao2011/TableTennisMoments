@@ -3,7 +3,7 @@ function getPageOf(list, pageItemCount, pageIndex){
 		index >= pageIndex * pageItemCount 
 		&& index < (pageIndex + 1) * pageItemCount);
 	let page ={items};
-	page.pageIndex = pageIndex;
+	page.pageIndex = Number.parseInt(pageIndex);
 	page.pageCount = Math.floor(list.length / pageItemCount) + 1;
 	return page;
 }

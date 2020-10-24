@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
-		<view class="" v-for="(item, index) in commentList" >
-			<comment :comment="item" :key="index"></comment>
+		<view class="" v-for="(item, index) in commentList" :key="index">
+			<comment :comment="item"></comment>
 		</view>
 	</view>
 </template>
@@ -30,10 +30,9 @@
 			}
 		},
 		methods: {
-			refresh(success){
+			loadFirst(success){
 				api.getCommentList({targetId:this.targetId, targetType: this.targetType}).then((res)=>{
 					this.commentList = res.data.items;
-					console.log(res);
 					this.pageCount = res.data.pageCount;
 					this.pageIndex = res.data.pageIndex;
 					success({pageIndex: this.pageIndex, pageCount: this.pageCount});
@@ -61,6 +60,8 @@
 
 <style scoped>
 	.container{
+		width: 100%;
 		background-color: #fff;
+		padding: 0 20upx;
 	}
 </style>

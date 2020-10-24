@@ -10,7 +10,7 @@ export default [{
 		response: config=>{
 			const { query} = config
 			let pageItemCount = 10;
-			let pageIndex = config.query.pageIndex || 0;
+			let pageIndex = Number.parseInt(query.pageIndex) || 0;
 			let comments = comment.getComments({targetId:query.targetId, targetType: query.targetType})
 			let page = data.getPageOf(comments, pageItemCount, pageIndex);
 			return {

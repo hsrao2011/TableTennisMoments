@@ -32,11 +32,12 @@
 
 <style scoped>
 	.container{
+		width: 100%;
 		display: flex;
 		flex-wrap: nowrap;
 		justify-content: flex-start;
 		align-items: flex-start;
-		padding: 15upx;
+		padding: 20upx;
 		margin-top: 20upx;
 	}
 	.left{
@@ -64,6 +65,7 @@
 		margin-top: 30upx;
 		font-size: 1rem;
 		line-height: 1.4;
+		white-space: normal;
 	}
 	.right .date{
 		margin-top: 30upx;

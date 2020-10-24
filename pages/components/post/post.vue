@@ -65,6 +65,7 @@
 
 <style scoped>
 	.container{
+		width: 100%;
 		background-color:#fff;
 		padding: 15upx 15upx 0 15upx;
 		margin-bottom: 10upx;

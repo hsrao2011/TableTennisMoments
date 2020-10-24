@@ -1,8 +1,11 @@
 <template>
 	<view  v-if="blog" class="container">
-		<post  :blog="blog" :imageColCount="2"></post>
-		<comment-list ref="commentList" :targetId="blog.data.id" ></comment-list>
-		<uni-load-more v-if="more" :status="more"></uni-load-more>
+		<view class="content">
+			<post  :blog="blog" :imageColCount="2"></post>
+			<comment-list ref="commentList" :targetId="blog.data.id" ></comment-list>
+			<uni-load-more :status="more"></uni-load-more>
+		</view>
+		
 	</view>
 </template>
 
@@ -17,19 +20,18 @@
 		data() {
 			return {
 				blog: null,
-				more: ""
+				more: "loading"
 			}
 		},
 		onLoad(){
 			const eventChannel = this.getOpenerEventChannel()
-			// 监听acceptDataFromOpenerPage事件，获取上一页面通过eventChannel传送到当前页面的数据
 			let that = this;
 			eventChannel.on('acceptDataFromOpenerPage', function(data) {
 				that.blog = Object.assign({}, that.blog, data.blog);
+				that.$nextTick(function(){
+					that.refreshComment();
+				})
 			})
-		},
-		mounted(){
-			this.refreshComment();
 		},
 		onPullDownRefresh(){
 			this.refreshComment();
@@ -40,7 +42,6 @@
 			this.more="loading"
 			let that = this;
 			this.$refs.commentList.loadMore((res)=>{
-				uni.stopPullDownRefresh();
 				if(res.pageIndex >= res.pageCount - 1 )
 					that.more="noMore"
 				else
@@ -49,8 +50,9 @@
 		},
 		methods: {
 			refreshComment(){
+				this.more = "loading"
 				let that = this;
-				this.$refs.commentList.refresh((res)=>{
+				this.$refs.commentList.loadFirst((res)=>{
 					uni.stopPullDownRefresh();
 					if(res.pageIndex >= res.pageCount - 1 )
 						that.more="noMore"
@@ -64,7 +66,10 @@
 
 <style scoped>
 	.container{
+		width: 100%;
 		background-color:#fff;
 		margin-bottom: 15upx;
+		min-height: 100%;
+		padding: 15upx;
 	}
 </style>
