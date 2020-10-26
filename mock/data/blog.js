@@ -66,5 +66,6 @@ function randomRecomends(){
 export default {
 	updateBlog,
 	randomRecomends,
-	recommends
+	recommends,
+	blogs
 }

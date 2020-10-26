@@ -71,7 +71,7 @@ const mutations = {
 		if(payload)
 			state.userInfo = payload.userInfo;
 		else
-		state.userInfo = {};
+			state.userInfo = null;
 	},
 	incrementBlogCount(state){
 		if(state.userInfo)

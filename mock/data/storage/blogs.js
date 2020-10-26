@@ -1,3 +1,4 @@
+var mockjs = require("better-mock/dist/mock.mp.js")
 import utils from "@/utils/utils.js"
 import error from "@/api/error.js"
 import blog from "../blog.js"
@@ -12,7 +13,11 @@ function initBlogs(){
 		if(key.search(reg) == 0){
 			try{
 				let value = uni.getStorageSync(key);
-				blogs.push(JSON.parse(value));
+				let blog = JSON.parse(value)
+				if(!blog.date){
+					blog.date = mock.Random.datetime('y-MM-dd HH:mm:ss');
+				}
+				blogs.push(blog);
 			}catch(err){
 				console.log(err);
 			}

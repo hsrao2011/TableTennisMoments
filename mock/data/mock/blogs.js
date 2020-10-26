@@ -5,7 +5,7 @@ var _blogs = [{
 		content:"今天回办公室开会，关于泡泡赛和WTT澳门赛的很多媒体服务事宜。很激动，毕竟三月底以来就没回过办公室～一切都在慢慢恢复，希望就在前方。我们，加油！ ​​",
 		images:["zhoudao_1.jpg"],
 		userId: 2,
-		type:"post"
+		type:"post",
 	},{
 		id: 1,
 		content:"",
@@ -111,6 +111,7 @@ let blogs= [];
 			images.push("/static/data/img/" + fileName);
 		})
 		blog.images = images;
+		blog.date = mockjs.Random.datetime('y-MM-dd HH:mm:ss');
 		blogs.push(blog)
 	})
 })();

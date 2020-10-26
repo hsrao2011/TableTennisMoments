@@ -5,21 +5,12 @@
 				"enablePullDownRefresh":true,
 				"app-plus":{
 					"titleNView":{
-						"searchInput": {
-							"placeholder": "搜索",
-							"borderRadius":"15upx"
-						},
 						"buttons":[{
 							  "fontSrc":"/static/font/iconfont.ttf",
 							  "text":"\ue664",
 							  "fontSize": "24px",
 							  "width": "32px"
-							},{
-								"fontSrc":"/static/font/iconfont.ttf",
-						        "text":"\ue67d",
-						        "fontSize": "24px",
-						        "width": "32px"
-						    }
+							}
 						]
 					}
 				}

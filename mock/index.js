@@ -8,12 +8,14 @@ import recommend from "./recommend.js";
 import user from "./user.js";
 import blog from "./blog.js";
 import comment from "./comment.js";
+import follow from "./follow.js"
 
 var mocks = [
 	...recommend,
 	...user,
 	...blog,
-	...comment
+	...comment,
+	...follow
 ]
 
 // for front mock

@@ -65,5 +65,18 @@ export default {
 			data: {targetId:"目标Id", targetType:"目标类型：blog, comment",
 			content:"评价内容"}
 		}
+	},
+	follow:{
+		listUser:{
+			url: "/follow/listUser",
+			type: "get",
+			token: true,
+			params: {userId:"获取谁的关注列表"}
+		},
+		listBlog:{
+			url: "/follow/listBlog",
+			type: "get",
+			token: true
+		}
 	}
 }
