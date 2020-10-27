@@ -5,8 +5,8 @@ function getFollowUserList(params){
 	return request({api: apiDesc.follow.listUser, params: params});
 }
 
-function getFollowBlogList(){
-	return request({api: apiDesc.follow.listBlog});
+function getFollowBlogList(params){
+	return request({api: apiDesc.follow.listBlog, params});
 }
 
 export default {

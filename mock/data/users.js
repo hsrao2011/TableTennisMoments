@@ -1,8 +1,8 @@
 var mockjs = require("better-mock/dist/mock.mp.js")
 
-var userInfos = [{
+let userInfos = [{
 		id: 1,
-		nickName: "约球约球",
+		nickName: "知止而后有定",
 		avatar: "0.jpg",
 		intro: "银白弧线划过天际坠入蓝色的海洋, 飞溅起一朵朵白色的浪花, 仿佛仙境一般让人流连忘返",
 		followsCount: 128,

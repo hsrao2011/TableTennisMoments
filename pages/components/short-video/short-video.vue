@@ -88,7 +88,7 @@
 			this.timerHide = 0;
 			let that = this;
 			that.createIntersectionObserver();
-			setInterval(function() {
+			this.createIntersectionObserverTimer = setInterval(function() {
 				// fix: uniapp 如果长时间observe，会产生异常，
 				//      造成不再触发事件
 				that.createIntersectionObserver();
@@ -96,11 +96,12 @@
 		},
 		destroyed(){
 			this.releaseIntersectionObserver();
+			clearInterval(this.createIntersectionObserverTimer);
 		},
 		methods: {
-			log(msg){
-				if(this.debug && this.isInViewPort){
-					console.log(msg);
+			log(where){
+				if(this.debug){
+					console.log(this.toString() + " at " + where);
 				}
 			},
 			createIntersectionObserver(){
@@ -115,17 +116,18 @@
 					});
 				}
 				catch(err){
+					console.log(err);
 				}
 			},
 			releaseIntersectionObserver(){
 				if(this.observer) {
 					try{
-						console.log("before disconnect");
+						//console.log("before disconnect");
 						this.observer.disconnect()
-						console.log("end disconnect");
+						//console.log("end disconnect");
 						this.observer = null;
 					}catch(err){
-						
+						console.log(err);
 					}
 				}
 			},
@@ -137,7 +139,7 @@
 						if(this.isInViewPort)
 							return;
 						this.isInViewPort = true;
-						this.log("enter viewport: " + this.toString());
+						
 						if(this.timerHide){
 							clearTimeout(this.timerHide);
 							this.timerHide = 0;
@@ -145,17 +147,15 @@
 						if(this.autoPlay){
 							this.thumbnail = kShortVideoGetThumbnailStage.ready;
 							if(this.playState != kPlayState.playing ){
-								this.$nextTick(function(){
-									this.videoContext.play();
-								})
+								this.play();
 							}
 						}else{
 							this.prepareThumbnail();
 						}
+						this.log("intersectionObserver enter viewport");
 					} else{
 						if(!this.isInViewPort)
 							return;
-						this.log("leave viewport: " + this.toString());
 						if(this.timerGetThumbnail){
 							this.thumbnail = kShortVideoGetThumbnailStage.none;
 							clearTimeout(this.timerGetThumbnail);
@@ -168,28 +168,76 @@
 							}, 2000);
 						}
 						if(this.thumbnail == kShortVideoGetThumbnailStage.getting){
-							this.videoContext.pause();
+							this.pause();
 							this.thumbnail = kShortVideoGetThumbnailStage.none;
 						}else if(this.thumbnail == kShortVideoGetThumbnailStage.ready){
 							if(this.playState == kPlayState.playing){
 								this.autoPlay = true;
-								this.videoContext.pause();
+								this.pause();
 							}
 						}
 						this.isInViewPort = false;
+						this.log("intersectionObserver leave viewport 2");
 					}
 				}catch(err){
 					console.log("intersectionObserver exception!" + JSON.stringify(err));
 				}
 			},
+			play(){
+				this.$nextTick(function(){
+					if(this.videoContext){
+						try{
+							this.videoContext.play();
+						}catch(err){
+							console.log(err);
+						}
+					}
+				})
+			},
+			pause(){
+				this.$nextTick(function(){
+					if(this.videoContext){
+						try{
+							this.videoContext.pause();
+						}catch(err){
+							console.log(err);
+						}
+					}
+				})
+			},
 			stop(){
 				if(this.thumbnail == kShortVideoGetThumbnailStage.ready && this.playState == kPlayState.playing){
 					this.autoPlay = true;
 				}
-				this.videoContext.stop();
+				this.$nextTick(function(){
+					try{
+						if(this.videoContext){
+							this.videoContext.stop();
+						}
+					}catch(err){
+						console.log(err);
+					}
+				})
+				
 				this.thumbnail = kShortVideoGetThumbnailStage.none;
-				this.playState = kPlayState.stopped;
-				this.log("short-video stop: " +  this.toString());
+				this.changePlayState(kPlayState.stopped);
+				this.log("stop");
+			},
+			seek(pos){
+				this.$nextTick(function(){
+					try{
+						if(this.videoContext){
+							this.videoContext.seek(pos);
+						}
+					}catch(err){
+						console.log(err);
+					}
+				})
+			},
+			changePlayState(state){
+				this.$nextTick(function(){
+					this.playState = state;
+				})
 			},
 			prepareThumbnail(){
 				if(this.thumbnail == kShortVideoGetThumbnailStage.none && this.isInViewPort){
@@ -198,30 +246,26 @@
 					this.timerGetThumbnail = setTimeout(()=>{
 						this.thumbnail = kShortVideoGetThumbnailStage.getting;
 						this.timerGetThumbnail = 0;
-						this.$nextTick(function(){
-							this.videoContext.play();
-						})
+						this.play();
 					},300);
-					this.log("short-video prepareThumbnail start: " + this.toString());
+					this.log("prepareThumbnail start");
 				}
 			},
 			toString(){
-				return "id:"+ this.uniqueId +",isInViewPort:" + this.isInViewPort + ",thumbnail:" + this.thumbnail + ",autoPlay:" + this.autoPlay + ",state:"+this.playState +",pos:"+this.pos;
+				return "id:"+ this.uniqueId +",hide:"+ this.hideVideo +",isInViewPort:" + this.isInViewPort + ",thumbnail:" + this.thumbnail + ",autoPlay:" + this.autoPlay + ",state:"+this.playState +",pos:"+this.pos;
 			},
 			hide(){
-				this.log("short-video hide: " + this.toString());
-				this.stop();
 				this.hideVideo = true;
+				this.log("hide");
+				this.stop();
 				this.releaseIntersectionObserver();
 			},
 			show(){
 				this.hideVideo = false;
-				this.log("short-video show: " + this.toString());
+				this.log("show");
 				if(this.autoPlay){
 					this.thumbnail = kShortVideoGetThumbnailStage.ready;
-					this.$nextTick(function(){
-						this.videoContext.play();
-					})
+					this.play();
 				}else{
 					this.prepareThumbnail();
 				}
@@ -245,33 +289,32 @@
 				this.gotoDetail();
 			},
 			onContentClick(){
-				this.gotoDetail();
+				this.log("onContentClick");
+				//this.gotoDetail();
 			},
 			onVideoClick(){
 				if(this.isPlaying){
-					this.videoContext.pause();
+					this.pause();
 				}
 			},
 			onPlayVideo(){
-				this.videoContext.play();
+				this.play();
 			},
 			onVideoCompleted(event){
-				this.videoContext.seek(0);
-				this.playState = kPlayState.stopped;
+				this.seek(0);
+				this.changePlayState(kPlayState.stopped);
 			},
 			onVideoPlaying(){
 				if(this.thumbnail == kShortVideoGetThumbnailStage.getting){
-					this.$nextTick(function(){
-						this.videoContext.pause();
-					})
+					this.pause();
 				}
 				this.autoPlay = false;
-				this.playState = kPlayState.playing;	
+				this.changePlayState(kPlayState.playing);
 			},
 			onVideoPaused(){
-				this.playState = kPlayState.paused;
+				this.changePlayState(kPlayState.paused);
 				if(this.thumbnail == kShortVideoGetThumbnailStage.getting){
-					this.videoContext.seek(this.pos);
+					this.seek(this.pos);
 					this.thumbnail = kShortVideoGetThumbnailStage.ready;
 				}
 			},
@@ -292,7 +335,7 @@
 <style scoped>
 	.container{
 		background-color:#fff;
-		padding: 15upx 15upx 0 15upx;
+		padding: 15upx 15upx 15upx 15upx;
 		margin-bottom: 10upx;
 	}
 	.content {

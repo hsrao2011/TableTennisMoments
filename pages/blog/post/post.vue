@@ -41,9 +41,11 @@
 		computed:{
 		},
 		mounted(){
-			var backButton = document.getElementsByClassName('uni-page-head-hd')[0]
-			console.log(backButton.firstElementChild);
-			backButton.firstElementChild.style.display = "none";
+			if(document){
+				var backButton = document.getElementsByClassName('uni-page-head-hd')[0]
+				console.log(backButton.firstElementChild);
+				backButton.firstElementChild.style.display = "none";
+			}
 		},
 		methods: {
 			...mapMutations("user", [
@@ -54,11 +56,27 @@
 			}
 		},
 		onNavigationBarButtonTap(e){
-			console.log(e);
+			let empty = !this.content && this.images.length == 0;
 			if(e.index == 0){// 取消
-				navigateBack();
+				if(empty){
+					navigateBack();
+					return;
+				}
+				uni.showModal({
+					title: "放弃编辑",
+					content: "暂时不支持保存草稿，放弃后将丢失当前已编辑的内容，确定放弃吗？",
+					showCancel: true,
+					confirmText:"放弃",
+					confirmColor: "#d81e06",
+					cancelText: "继续编辑",
+					success(res){
+						if(res.confirm){
+							navigateBack();
+						}
+					}
+				})
 			}else if(e.index == 1){//发布
-				if(!this.content && this.images.length == 0){
+				if(empty){
 					uni.showToast({title: "请编辑内容！",
 					duration: 2000});
 					return;
@@ -70,7 +88,10 @@
 					data.images = that.images;
 					api.createPost(data).then((res)=>{
 						that.incrementBlogCount();
-						navigateBack();
+						getApp().globalData.updateBlog = true;
+						uni.switchTab({
+							url: "/pages/tabbar/follow/follow"
+						})
 						uni.showToast({title: "发布成功！",
 						duration: 2000});
 						console.log("发布成功！");
@@ -107,6 +128,9 @@
 <style>
 	.container{
 		padding: 15upx;
+		background-color: #fff;
+		width: 100%;
+		height: 100%;
 	}
 	.content{
 		display: flex;
@@ -131,6 +155,7 @@
 		justify-content: space-around;
 		align-items: center;
 		position:fixed;
+		left: 0;
 		bottom: 0;
 		height: 80upx;
 		line-height: 80upx;

@@ -1,6 +1,6 @@
 <template>
-	<view>
-		<blog :blogList = "recommendList"></blog>
+	<view class="container">
+		<blog-list ref="blogList" :blogList = "recommendList"></blog-list>
 		<uni-load-more :status="more"></uni-load-more>
 		<uni-popup ref="popup" type="bottom" @change="onPopupChanged">
 			<distribute @close="onCloseDistribute"></distribute>
@@ -11,11 +11,11 @@
 <script>
 	import { mapActions, mapState, mapGetters } from "vuex"
 	import api from "../../../api/recommend.js";
-	import blog from "@/pages/components/blog/blog.vue"
+	import blogList from "@/pages/components/blog-list/blog-list.vue"
 	import distribute from "@/pages/components/distribute/distribute.vue";
 	export default {
 		components:{
-			"blog": blog,
+			"blog-list": blogList,
 			"distribute": distribute
 		},
 		data() {
@@ -26,6 +26,9 @@
 			}
 		},
 		mounted() {
+			if(this.$refs.blogList){
+				this.$refs.blogList.show();
+			}
 			api.getRecommendList({refresh:true}).then((res)=>{
 				this.recommendList = res.data.items;
 				uni.stopPullDownRefresh();
@@ -33,7 +36,6 @@
 			});
 		},
 		onPullDownRefresh(){
-			console.log("onPullDownRefresh");
 			api.getRecommendList({refresh:true}).then((res)=>{
 				this.recommendList = res.data.items;
 				uni.stopPullDownRefresh();
@@ -68,18 +70,13 @@
 			}
 		},
 		onShow(){
-			if(this.$refs.shortVideo){
-				this.$refs.shortVideo.forEach((sv)=>{
-					sv.show();
-				})
+			if(this.$refs.blogList){
+				this.$refs.blogList.show();
 			}
 		},
 		onHide(){
-			if(this.$refs.shortVideo){
-				this.$refs.shortVideo.forEach((sv)=>{
-					sv.hide();
-				})
-			}
+			if(this.$refs.blogList)
+				this.$refs.blogList.hide();
 		},
 		computed:{
 			...mapState("user", {
@@ -115,6 +112,8 @@
 	}
 </script>
 
-<style>
-
+<style scoped>
+	.container{
+		width: 100%;
+	}
 </style>

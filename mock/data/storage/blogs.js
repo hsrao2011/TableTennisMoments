@@ -15,7 +15,8 @@ function initBlogs(){
 				let value = uni.getStorageSync(key);
 				let blog = JSON.parse(value)
 				if(!blog.date){
-					blog.date = mock.Random.datetime('y-MM-dd HH:mm:ss');
+					let dateString = mockjs.Random.datetime('y-MM-dd HH:mm:ss');
+					blog.date = new Date(Date.parse(dateString.replace(/-/g,"/")));
 				}
 				blogs.push(blog);
 			}catch(err){
@@ -28,6 +29,7 @@ function initBlogs(){
 function saveBlog(type, {userId, title, content, html, images}){
 	if(!kBlogType.some(type))
 		return error.errorParam;
+			
 	var prefix = type + "_";
 	var key = prefix + utils.createGuid();
 	var value = {id: blogs.length, userId: userId, type: type, content: content};
@@ -40,6 +42,7 @@ function saveBlog(type, {userId, title, content, html, images}){
 	if(html && html.length > 0){
 		value.html = html;
 	}
+	value.date = new Date();
 	try {
 	    uni.setStorageSync(key, JSON.stringify(value));
 	} catch (err) {

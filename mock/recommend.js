@@ -8,11 +8,12 @@ import data from "./data/data.js"
 export default [{
 		api: apiDesc.recommend.list,
 		response: config=>{
-			if(config.query.refresh){
+			let {query, headers} = config;
+			if(query.refresh){
 				blog.randomRecomends();
 			}
 			let pageItemCount = 20;
-			let pageIndex = config.query.pageIndex || 0;
+			let pageIndex = query.pageIndex || 0;
 			pageIndex %= 5;
 			
 			let page = data.getPageOf(blog.recommends, pageItemCount, pageIndex);

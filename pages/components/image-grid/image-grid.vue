@@ -109,7 +109,7 @@
 	.container{
 		margin-top: 10upx;
 	}
-	.grid.col-1.grid-square>view {
+	.grid.col-1.grid-square > view {
 		padding-bottom: 60%;
 	}
 	.image-grid-image{

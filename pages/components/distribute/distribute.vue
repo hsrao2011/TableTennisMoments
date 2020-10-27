@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="distribute-container">
 		<view v-if="userInfo" class = "user">
 			<image class="avatar" :src="'/static/data/avatar/' + userInfo.avatar" alt="头像" mode=""></image>
 			<text class="nick-name">{{userInfo.nickName}}</text>
@@ -100,20 +100,19 @@
 </script>
 
 <style scoped>
-	
-	.container{
+	.distribute-container{
 		background-color: #f8f8f8;
+		width: 100%;
 		height: 420upx;
-		padding: 10upx 10upx;
+		padding: 10upx 0upx;
 	}
-	
 	.user{
 		display: flex;
 		background-color: #f8f8f8;
 		justify-content: flex-start;
+		align-items: center;
 		padding: 10upx 20upx;
 		margin: 30upx 10upx;
-		align-items: center;
 	}
 	.user .avatar{
 		flex-shrink: 0;
@@ -122,7 +121,6 @@
 		height: 60upx;
 		border-radius:100upx;
 	}
-	
 	.user .nick-name{
 		font-weight:bolder;
 		font-size: 30upx;

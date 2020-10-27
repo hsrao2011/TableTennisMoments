@@ -77,7 +77,7 @@
 			this.landscapeObserver.observe({
 				orientation: 'landscape'  //屏幕方向为纵向
 			}, matches => {
-				console.log("landscapeObserver:" + this.landscape);
+				//console.log("landscapeObserver:" + this.landscape);
 				this.landscape = matches
 			})
 		},
@@ -156,6 +156,7 @@
 		width: 100%;
 		min-height: 100%;
 		padding: 15upx;
+		background-color: #fff;
 	}
 	.fixed{
 		position: fixed;
@@ -192,7 +193,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		border-radius: 30upx;
 	}
 	.user-base-info{
 		padding: 20upx;

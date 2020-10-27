@@ -5,7 +5,7 @@
 				<image class="avatar" :src="'/static/data/avatar/' + userInfo.avatar" alt="头像" mode=""></image>
 				<view class="user-info">
 					<text class="nick-name">{{userInfo.nickName}}</text>
-					<text class="intro">{{userInfo.intro}}</text>
+					<view class="intro">{{userInfo.intro}}</view>
 				</view>
 			</view>
 			<view class="ext-info">
@@ -15,9 +15,10 @@
 				</view>
 			</view>
 		</view>
-		<view>
+		<view class="btn-login-container">
 			<button :class="btnLoginClass" @click="onLogin">{{loginButtonName}}</button>
 		</view>
+		<view class="placeholder"></view>
 	</view>
 </template>
 
@@ -83,19 +84,20 @@
 
 <style scoped>
 	.container{
-		background-color: #f8f8f8;
+		background-color: #fff;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		padding: 15upx;
+		min-height: 100%;
 	}
 	.user{
 		display: flex;
 		background-color: #fefefe;
 		flex-direction: column;
 		justify-content: flex-start;
-		padding: 10upx 20upx;
-		margin: 10upx 10upx;
+		padding: 50upx 40upx;
+		flex: none;
 	}
 	.user .base-info{
 		align-items: center;
@@ -152,21 +154,30 @@
 		font-size: 0.7rem;
 		color: #aaa;
 	}
+	.btn-login-container{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex: 0 0 auto;
+	}
 	.btn-logout{
 		color: #d81e06;
-		margin-top: 50upx;
+		margin: 50upx 0 50upx 0;
 		width: 85%;
 	}
 	
 	.btn-login{
 		border-radius: 1000upx;
-		border:0upx solid #000;
+		border:0 solid #000;
 		width:160upx;
 		height: 160upx;
-		margin-top: 50upx;
+		margin: 50upx 0 50upx 0;
 		color: #fff;
 		background-color: #d81e06;
 		text-align:center;
 		line-height: 160upx;
+	}
+	.placeholder{
+		flex: auto;
 	}
 </style>

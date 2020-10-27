@@ -2,6 +2,7 @@ var mockjs = require("better-mock/dist/mock.mp.js")
 import blogOfStorage from "./storage/blogs.js"
 import blogOfMock  from "./mock/blogs.js"
 import users from "./users.js";
+import follow from "./follow.js"
 
 // 所有微文、文章、短视频数据
 let blogs = [];
@@ -36,7 +37,8 @@ function updateBlog(blog){
 	if(!user)
 		return;
 	let _blog = {data: blog, user: user};
-	blogs.push(_blog);
+	blogs.splice(0, 0, _blog);
+	follow.updateBlog(_blog);
 	randomPushRecommends(_blog);
 }
 
