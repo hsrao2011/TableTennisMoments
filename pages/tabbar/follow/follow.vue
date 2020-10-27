@@ -102,6 +102,12 @@
 				logout: "logout"
 			}),
 			loadData(){
+				if(!this.userInfo){
+					this.getUserInfo();
+					this.more = "noMore";
+					uni.stopPullDownRefresh();
+					return;
+				}
 				api.getFollowUserList({userId: this.userInfo.id}).then((res)=>{
 					this.listUser = res.data.items;
 				}).catch(err=>{
