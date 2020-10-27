@@ -122,12 +122,9 @@ const actions = {
 		});
 	},
 	getUserInfo({state, commit}){
-		console.log("store: 开始获取用户信息...");
 		return api.getUserInfo().then( res => {
-			console.log("store: 获取用户信息成功");
 			commit("setUserInfo", res.data);
 		}).catch(err => {
-			console.log("store: 获取用户信息失败");
 			throw err;
 		});
 	}

@@ -44,7 +44,6 @@
 					if(this.commentList.length > 200){
 						this.commentList.splice(0,20);
 					}
-					console.log(res);
 					this.commentList = this.commentList.concat(res.data.items);
 					this.pageCount = res.data.pageCount;
 					this.pageIndex = res.data.pageIndex;
@@ -63,5 +62,6 @@
 		width: 100%;
 		background-color: #fff;
 		padding: 0 20upx;
+		margin-top: 20upx;
 	}
 </style>

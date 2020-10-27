@@ -17,7 +17,9 @@
 			}
         },{
             "path" : "pages/tabbar/follow/follow",
-            "style" : {}
+            "style" : {
+				"enablePullDownRefresh":true
+			}
         },{
             "path" : "pages/tabbar/my/my",
             "style" : {

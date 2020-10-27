@@ -1,19 +1,19 @@
 import users from "./users.js";
-import blog from "./blog.js"
+import blogjs from "./blog.js"
 let _follows =[{
-		id: 0,
+		id: 1,
 		userId: 1,
 		followUserId: 2
 	},{
-		id: 1,
+		id: 2,
 		userId: 1,
 		followUserId: 3
 	},{
-		id: 2,
+		id: 3,
 		userId: 1,
 		followUserId: 4
 	},{
-		id: 3,
+		id: 4,
 		userId: 1,
 		followUserId: 5
 	}
@@ -25,7 +25,7 @@ function getFollowUserList({userId}){
 			return true;
 		return false;
 	})
-	
+	follows.push()
 	let followUserList = [];
 	follows.forEach((follow, index) =>{
 		var user = users.find((item)=>{
@@ -43,7 +43,7 @@ function getFollowUserList({userId}){
 }
 
 let followBlogListOfUser = [];
-function getfollowBlogListOfUser({userId}){
+function getFollowBlogListOfUser({userId}){
 	let list = [];
 	followBlogListOfUser.some((item)=>{
 		if(item.userId == userId){
@@ -54,36 +54,54 @@ function getfollowBlogListOfUser({userId}){
 	})
 	return list;
 }
-function getFollowBlogList({userId}){
+function getFollowBlogList({userId, refresh}){
 	let list = [];
-	list = getfollowBlogListOfUser({userId});
-	if(list.length)
-		return list;
-	let blogs = blog.blogs;
+	if(!refresh){
+		list = getFollowBlogListOfUser({userId});
+		if(list.length)
+			return list;
+	}
+	let blogs = blogjs.blogs;
 	let follows = _follows.filter((item, index)=>{
 		if(item.userId == userId)
 			return true;
 		return false;
 	})
+	follows.push({id: 0, userId: userId, followUserId: userId});
+	
 	let blogList = [];
-	blogs.forEach((blog) => {
-		let userId = blog.user.id;
+	blogs.forEach((item) => {
+		let itemUserId = item.user.id;
 		follows.some((follow)=>{
-			if(userId == follow.followUserId){
-				blogList.push(blog);
+			if(itemUserId == follow.followUserId){
+				blogList.push(item);
 				return true;
 			}
 			return false;
 		})
 	})
 	blogList.sort(function(a,b){
-		return a.date > b.date;
+		return a.data.date > b.data.date;
 	})
 	followBlogListOfUser.push({userId, list: blogList});
 	return blogList;
 }
-
+function updateBlog(blog){
+	let list = [];
+	list = getFollowBlogList({userId: 1});
+	if(list){
+		list.some((item,index,arr)=>{
+			if(item.data.id == blog.data.id){
+				arr.splice(index,1);
+				return true;
+			}
+			return false;
+		})
+		list.splice(0, 0, blog)
+	}	
+}
 export default {
 	getFollowUserList,
-	getFollowBlogList
+	getFollowBlogList,
+	updateBlog
 }

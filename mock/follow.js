@@ -24,10 +24,14 @@ export default [{
 			if(payload.code != error.ok.code){
 				return payload;
 			}
-			let followBlogs = follow.getFollowBlogList({userId: payload.userId})
+			let refresh = query.refresh || false;
+			let followBlogs = follow.getFollowBlogList({userId: payload.userId, refresh})
+			
+			let pageIndex = Number.parseInt(query.pageIndex) || 0;
+			let page = data.getPageOf(followBlogs, 15, pageIndex);
 			return {
 				...error.ok,
-				items: followBlogs
+				...page
 			};
 		}
 	}

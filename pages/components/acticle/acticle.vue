@@ -14,8 +14,8 @@
 		</view>
 		<view class="user">
 			<text class="nick-name">{{blog.user.nickName}}</text>
-			<text class="comment-count">36评论</text>
-			<text class="date">一小时前</text>
+			<text class="comment-count">{{commentCount}}评论</text>
+			<text class="date">{{date}}</text>
 		</view>
 	</view>
 </template>
@@ -38,6 +38,19 @@
 					return this.blog.data.images[0];
 				}
 				return null;
+			},
+			date(){
+				let yesterday = new Date();
+				yesterday.setTime(yesterday.getTime() - 24*60*60*1000);
+				let blogDate = new Date(this.blog.data.date);
+				if(blogDate < yesterday){
+					return blogDate.toLocaleDateString();
+				}else{
+					return blogDate.toLocaleTimeString();
+				}
+			},
+			commentCount(){
+				return Math.floor(Math.random()* 200);
 			}
 		},
 		methods: {

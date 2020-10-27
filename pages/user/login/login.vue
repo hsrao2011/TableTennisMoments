@@ -23,9 +23,11 @@
 			}
 		},
 		mounted(){
-			var backButton = document.getElementsByClassName('uni-page-head-hd')[0]
-			if(backButton)
-				backButton.style.display = 'none';	
+			if(document){
+				var backButton = document.getElementsByClassName('uni-page-head-hd')[0]
+				if(backButton)
+					backButton.style.display = 'none';	
+			}
 		},
 		onLoad(){
 		},

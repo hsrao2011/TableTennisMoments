@@ -68,7 +68,24 @@
 				"incrementBlogCount"
 			]),
 			onBack(){
-				navigateBack();
+				let empty = !this.title;
+				if(empty){
+					navigateBack();
+					return;
+				}
+				uni.showModal({
+					title: "放弃编辑",
+					content: "暂时不支持保存草稿，放弃后将丢失当前已编辑的内容，确定放弃吗？",
+					showCancel: true,
+					confirmText:"放弃",
+					confirmColor: "#d81e06",
+					cancelText: "继续编辑",
+					success(res){
+						if(res.confirm){
+							navigateBack();
+						}
+					}
+				})
 			},
 			onTitleInput(){
 				if(this.title.length > 30){
@@ -107,7 +124,10 @@
 					console.log(data);
 					api.createShortVideo(data).then((res)=>{
 						that.incrementBlogCount();
-						navigateBack();
+						getApp().globalData.updateBlog = true;
+						uni.switchTab({
+							url: "/pages/tabbar/follow/follow"
+						});
 						uni.showToast({title: "发布成功！",
 							ion: 2000});
 						console.log("发布成功！");
@@ -117,7 +137,6 @@
 				}
 				try{
 					apiFile.uploadFile(this.videoInfo.tempFilePath, true).then(path=>{
-						console.log(path);
 						filePath = path;
 						createBlog();
 					});
@@ -131,11 +150,13 @@
 
 <style scoped>
 	.container{
-		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: flex-start;
+		background-color: #fff;
+		width: 100%;
+		height: 100%;
 	}
 	.content-video{
 		width: 100%;

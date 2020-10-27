@@ -101,17 +101,32 @@ var _blogs = [{
 		images:["797e6fe8d68a4db7a9edadea17e39c91_tplv-obj_1295_983.webp","3a2d5df5b8f64becadea0fa99f6d3599_tplv-obj_1622_964.webp"],
 		userId:5,
 		type:"post"
+	},{
+		id: 15,
+		title: "老当益壮，七十三岁的大爷，没有几个人能打得过",
+		type: "short-video",
+		content: "/static/data/upload/5A29D483EE423E8C6F4EA8FA6C50DB47.mp4",
+		userId: 3
+	},{
+		id: 17,
+		title: "成都市职工比赛(第四赛区)",
+		type: "short-video",
+		content: "/static/data/upload/82D74E3954EE09BCB956ECC4D9C75B9A.mp4",
+		userId: 5
 	}
 ]
 let blogs= [];
 (function(){
 	_blogs.forEach((blog)=>{
-		let images = [];
-		blog.images.forEach((fileName)=>{
-			images.push("/static/data/img/" + fileName);
-		})
-		blog.images = images;
-		blog.date = mockjs.Random.datetime('y-MM-dd HH:mm:ss');
+		if(blog.images){
+			let images = [];
+			blog.images.forEach((fileName)=>{
+				images.push("/static/data/img/" + fileName);
+			})
+			blog.images = images;
+		}
+		let dateString = mockjs.Random.datetime('y-MM-dd HH:mm:ss');
+		blog.date = new Date(Date.parse(dateString.replace(/-/g,"/")));
 		blogs.push(blog)
 	})
 })();

@@ -5,7 +5,7 @@
 				<textarea class="title-editor" v-model:value="title"
 				 placeholder-style="font-size: 1.6rem; font-weight:500;" :placeholder="placeholder"
 					@blur="onTitleBlur" @input="onTitleInput"/>
-				<text v-if="titlePrompt" class="title-prompt" >{{titlePrompt}}</text>
+				<view v-if="titlePrompt" class="title-prompt" >{{titlePrompt}}</view>
 			</view>
 			<editor id="editor" class="ql-container" placeholder="开始输入..." showImgSize showImgToolbar showImgResize
 				placeholder-style="font-size: 1.4rem"
@@ -56,7 +56,6 @@
 			if(document){
 				var backButton = document.getElementsByClassName('uni-page-head-hd')[0]
 				if(backButton){
-					console.log(backButton.firstElementChild);
 					backButton.firstElementChild.style.display = "none";
 				}
 			}
@@ -150,18 +149,30 @@
 			}
 		},
 		onNavigationBarButtonTap(e){
-			console.log(e);
 			if(e.index == 0){// 取消
-				var pages = getCurrentPages();
-				if(pages.length <= 1){
-					uni.switchTab({
-						url:"/pages/tabbar/home/home"
-					})
-				}else{
-					uni.navigateBack({
-						delta: 1,
-					})
-				}
+				let not_empty = this.title;
+				this.editorCtx.getContents({
+					success:res=>{
+						not_empty = not_empty || res.html != "<p><br></p>";
+						if(!not_empty){
+							navigateBack();
+							return;
+						}
+						uni.showModal({
+							title: "放弃编辑",
+							content: "暂时不支持保存草稿，放弃后将丢失当前已编辑的内容，确定放弃吗？",
+							showCancel: true,
+							confirmText:"放弃",
+							confirmColor: "#d81e06",
+							cancelText: "继续编辑",
+							success(res){
+								if(res.confirm){
+									navigateBack();
+								}
+							}
+						})
+					},
+				});
 				
 			}else if(e.index == 1){//发布
 				if(this.title.length == 0){
@@ -176,13 +187,13 @@
 				}
 				this.editorCtx.getContents({
 					success:res=>{
-						console.log(res);
 						let delta = res.delta;
 						let html  = res.html;
 						let images = [];
-						if(!res.delta || res.delta.ops.length <= 0){
+						let empty = res.html == "<p><br></p>";
+						if(empty){
 							uni.showToast({
-								title: "正文内容为空",
+								title: "正文内容为空！",
 								duration: 2000
 							})
 							return;
@@ -196,13 +207,18 @@
 						let that = this;
 						function createBlog(){
 							var data = {};
-							data.content = delta;
+							data.content = JSON.stringify(delta);
 							data.title = that.title;
 							data.html = html;
 							data.images = images;
 							api.createActicle(data).then((res)=>{
 								that.incrementBlogCount();
-								navigateBack();
+								getApp().globalData.updateBlog = true;
+								that.$nextTick(function(){
+									uni.switchTab({
+										url: "/pages/tabbar/follow/follow"
+									});
+								})
 								uni.showToast({title: "发布成功！",
 								duration: 2000});
 								console.log("发布成功！");
@@ -214,7 +230,6 @@
 							let uploadCount = 0;
 							try{
 								ops.forEach((op, index) =>{
-									console.log(op.insert.image);
 									apiFile.uploadFile(op.insert.image).then(path=>{
 										let reg = new RegExp(op.insert.image, "g")
 										html = html.replace(reg, path);
@@ -245,6 +260,9 @@
 <style scoped>
 	@import "./editor-icon.css";
 	.container{
+		background-color: #fff;
+		width: 100%;
+		height: 100%;
 	}
 	.content {
 		padding: 10upx;
@@ -256,6 +274,7 @@
 	}
 	.title-prompt{
 		color:#d81e06;
+		width: 100%;
 		font-size: 0.8rem;
 		line-height: 1.2;
 		border-bottom: 1px #efefef solid;

@@ -1,26 +1,23 @@
 <script>
 export default {
+	globalData:{
+		updateBlog: false
+	},
 	onLaunch: function() {
-		console.log('App Launch');
 		// #ifdef APP-PLUS
 		plus.screen.lockOrientation("portrait-primary"); 
 		// #endif
 		
 	},
 	onShow: function() {
-		console.log('App Show');
 		
 	},
 	onHide: function() {
-		console.log('App Hide');
 	},
 	method:{
 		on(type, obj, callback){
 			if(type == "screen-orientation"){
 				this.onScreenDirectionChanged = callback;
-				
-				
-				
 			}
 		}
 	}
@@ -35,6 +32,7 @@ export default {
 	uni-page-body,html,body{ 
 		width: 100%;
 		height: 100%;
+		background-color: #f7f7f7;
 	} 
 		
 /* 解决头条小程序组件内引入字体不生效的问题 */

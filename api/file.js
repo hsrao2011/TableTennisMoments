@@ -2,7 +2,6 @@ import apiDesc from "./desc.js";
 
 // 模拟上传文件流程，实际直接写在本地
 function uploadFile(tempFilePath, isVideo){
-	console.log(tempFilePath);
 	return new Promise((resolve, reject) => {
 		// #ifdef H5
 		// h5下不支持保存文件，所以模拟替换为固定文件
@@ -19,7 +18,6 @@ function uploadFile(tempFilePath, isVideo){
 			success: (res) => {
 				let path = plus.io.convertLocalFileSystemURL(res.savedFilePath)
 				path = "file://" + path;
-				console.log(path);
 				resolve(path);
 			},
 			fail: (res)=>{

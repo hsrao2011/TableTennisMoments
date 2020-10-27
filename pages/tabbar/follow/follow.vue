@@ -22,35 +22,61 @@
 				</view>
 			</scroll-view>
 		</view>
-		<blog :blogList="listBlog"></blog>
+		<blog-list ref="blogList" :blogList="listBlog"></blog-list>
+		<uni-load-more :status="more"></uni-load-more>
 	</view>
 </template>
 
 <script>
 	import { mapActions, mapState, mapGetters } from "vuex"
 	import api from "@/api/follow.js"
-	import blog from "@/pages/components/blog/blog.vue"
+	import blogList from "@/pages/components/blog-list/blog-list.vue"
 	export default {
 		components:{
-			"blog": blog
+			"blog-list": blogList
 		},
 		data() {
 			return {
 				listUser:[],
-				listBlog: []
+				listBlog: [],
+				more: "loading"
 			}
 		},
 		onLoad(){
-			
-		},
-		onShow(){
 			if(!this.userInfo)
 				this.getUserInfo();
-			else if(this.listUser.length == 0){
-				this.loadData();
+		},
+		mounted(){
+			this.pageIndex = 0;
+			this.pageCount = 0;
+			if(this.$refs.blogList){
+				this.$refs.blogList.show();
+			}	
+		},
+		onShow(){
+			if(this.userInfo ){
+				if(this.listUser.length == 0){
+					this.loadData();
+				}else if(getApp().globalData.updateBlog){
+					uni.pageScrollTo({
+						scrollTop: 0,
+						duration: 300
+					})
+					this.loadBlog();
+				}
+			}
+			if(this.$refs.blogList){
+				this.$refs.blogList.show();
+			}
+		},
+		onHide(){
+			if(this.$refs.blogList){
+				this.$refs.blogList.hide();
 			}
 		},
 		mounted(){
+			this.pageIndex = 0;
+			this.pageCount = 0;
 		},
 		watch:{
 			userInfo(){
@@ -78,22 +104,60 @@
 			loadData(){
 				api.getFollowUserList({userId: this.userInfo.id}).then((res)=>{
 					this.listUser = res.data.items;
+				}).catch(err=>{
+					console.log(err);
 				});
-				
-				api.getFollowBlogList().then((res)=>{
-					this.listBlog = res.data.items;
-				});
+				this.loadBlog(true);
+			},
+			loadBlog(refresh=true){
+				if(refresh){
+					api.getFollowBlogList({refresh:true}).then((res)=>{
+						this.listBlog = res.data.items;
+						getApp().globalData.updateBlog = false;
+						this.pageCount = res.data.pageCount;
+						this.pageIndex = res.data.pageIndex;
+						uni.stopPullDownRefresh();
+						if(this.pageIndex + 1 == this.pageCount)
+							this.more = "noMore";
+						else
+							this.more="more"
+					}).catch(err=>{
+						console.log(err);
+					});
+				}else{
+					api.getFollowBlogList({pageIndex: this.pageIndex + 1}).then((res)=>{
+						if(this.listBlog.length > 200){
+							this.listBlog.splice(0,20);
+						}
+						this.listBlog = this.listBlog.concat(res.data.items);
+						this.pageCount = res.data.pageCount;
+						this.pageIndex = res.data.pageIndex;
+						if(this.pageIndex + 1 == this.pageCount)
+							this.more = "noMore";
+						else
+							this.more="more"
+					}).catch(err=>{
+						console.log(err);
+					});
+				}
 			}
-		}
+		},
+		onPullDownRefresh(){
+			this.more="loading"
+			this.loadData();
+		},
+		onReachBottom(){
+			if(this.more == "noMore")
+				return;
+			this.more="loading"
+			this.loadBlog(false);
+		},
 	}
 </script>
 
 <style scoped>
 	.container{
-		padding: 20upx;
-		background-color: #fff;
 		width: 100%;
-		height: 100%;
 	}
 	.user-list > scroll-view{
 		flex: 1 1 auto;
@@ -104,6 +168,7 @@
 		justify-content: flex-start;
 		align-items: center;
 		flex-wrap: nowrap;
+		margin: 20upx 0 20upx 0;
 	}
 	.user-list .user-item{
 		display: inline-block;
@@ -126,8 +191,12 @@
 		border: 2px red solid;
 	}
 	.user text{
+		display: inline-block;
 		margin-top: 15upx;
 		font-size: 24upx;
 		text-overflow: ellipsis;
+		width: 100upx;
+		overflow: hidden;
+		line-height: 30upx;
 	}
 </style>
