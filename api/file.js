@@ -6,7 +6,7 @@ function uploadFile(tempFilePath, isVideo){
 		// #ifdef H5
 		// h5下不支持保存文件，所以模拟替换为固定文件
 		if(isVideo){
-			resolve("/static/data/upload/1.mp4");
+			resolve("/static/data/upload/82D74E3954EE09BCB956ECC4D9C75B9A.mp4");
 		}else{
 			resolve("/static/data/upload/1.jpg");
 		}

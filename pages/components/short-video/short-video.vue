@@ -289,8 +289,8 @@
 				this.gotoDetail();
 			},
 			onContentClick(){
-				this.log("onContentClick");
-				//this.gotoDetail();
+				//this.log("onContentClick");
+				this.gotoDetail();
 			},
 			onVideoClick(){
 				if(this.isPlaying){
@@ -322,11 +322,8 @@
 				if(this.thumbnail == kShortVideoGetThumbnailStage.ready)
 					this.pos = e.detail.currentTime;
 			},
-			onVideoError(event){
-				uni.showToast({
-					title: "视频播放异常！",
-					duration: 2000
-				})
+			onVideoError(e){
+				console.log(e.detail);
 			}
 		}
 	}
