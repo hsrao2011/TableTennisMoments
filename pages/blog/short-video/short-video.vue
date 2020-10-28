@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="content-video">
-			<video class="video" :src="videoUrl" controls autoplay>
+			<video id="video" class="video" :src="videoUrl" controls autoplay>
 				<cover-image src="/static/icon/btn-play-return.png" class="backButton" @click="onBack"></cover-image>
 			</video>
 		</view>
@@ -56,12 +56,15 @@
 				delete params.errMsg;
 				that.videoInfo = Object.assign({}, that.videoInfo, params);
 				that.$set(that.videoInfo, "tempFilePath", params.tempFilePath);
+				
+				that.videoContext = uni.createVideoContext("video", that)
 			})	
 		},
 		onUnload(){
 			// #ifdef APP-PLUS
 			plus.navigator.setFullscreen(false);
 			// #endif
+			uni.hideLoading();
 		},
 		methods: {
 			...mapMutations("user",[
@@ -115,33 +118,45 @@
 					})
 					return;
 				}
-				let filePath = "";
-				let that = this;
-				function createBlog(){
-					var data = {};
-					data.content = filePath;
-					data.title = that.title;
-					console.log(data);
-					api.createShortVideo(data).then((res)=>{
-						that.incrementBlogCount();
-						getApp().globalData.updateBlog = true;
-						uni.switchTab({
-							url: "/pages/tabbar/follow/follow"
-						});
-						uni.showToast({title: "发布成功！",
-							ion: 2000});
-						console.log("发布成功！");
-					}).catch((err) => {
-						console.log("发布异常, 上传文章失败：" + JSON.stringify(err));
-					});
-				}
+				if(this.videoContext)
+					this.videoContext.pause();
+				uni.showLoading({
+					title: "发布中...",
+					mask: true
+				})
 				try{
+					let filePath = "";
+					let that = this;
+					function createBlog(){
+						var data = {};
+						data.content = filePath;
+						data.title = that.title;
+						api.createShortVideo(data).then((res)=>{
+							that.incrementBlogCount();
+							getApp().globalData.updateBlog = true;
+							uni.switchTab({
+								url: "/pages/tabbar/follow/follow"
+							});
+							uni.showToast({title: "发布成功！",
+								ion: 2000});
+						}).catch((err) => {
+							uni.hideLoading();
+							uni.showToast({title: "调用发布接口发生异常:"+ JSON.stringify(err),
+								duration: 2000});
+						});
+					}
 					apiFile.uploadFile(this.videoInfo.tempFilePath, true).then(path=>{
 						filePath = path;
 						createBlog();
+					}).catch(err=>{
+						uni.hideLoading();
+						uni.showToast({title: "上传文件发生异常:"+ JSON.stringify(err),
+							duration: 2000});
 					});
 				}catch(err){
-					console.log("发布异常, 视频上传失败：" + JSON.stringify(err));
+					uni.hideLoading();
+					uni.showToast({title: "发布失败！"+ JSON.stringify(err),
+						duration: 2000});
 				}
 			}
 		}

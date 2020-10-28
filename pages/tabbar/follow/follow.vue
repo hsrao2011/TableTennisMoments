@@ -49,9 +49,6 @@
 		mounted(){
 			this.pageIndex = 0;
 			this.pageCount = 0;
-			if(this.$refs.blogList){
-				this.$refs.blogList.show();
-			}	
 		},
 		onShow(){
 			if(this.userInfo ){
@@ -65,14 +62,8 @@
 					this.loadBlog();
 				}
 			}
-			if(this.$refs.blogList){
-				this.$refs.blogList.show();
-			}
 		},
 		onHide(){
-			if(this.$refs.blogList){
-				this.$refs.blogList.hide();
-			}
 		},
 		mounted(){
 			this.pageIndex = 0;

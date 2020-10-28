@@ -47,6 +47,9 @@
 				backButton.firstElementChild.style.display = "none";
 			}
 		},
+		onUnload(){
+			uni.hideLoading();
+		},
 		methods: {
 			...mapMutations("user", [
 				"incrementBlogCount"
@@ -81,27 +84,32 @@
 					duration: 2000});
 					return;
 				}
-				let that = this;
-				function createBlog(){
-					var data = {};
-					data.content = that.content;
-					data.images = that.images;
-					api.createPost(data).then((res)=>{
-						that.incrementBlogCount();
-						getApp().globalData.updateBlog = true;
-						uni.switchTab({
-							url: "/pages/tabbar/follow/follow"
-						})
-						uni.showToast({title: "发布成功！",
-						duration: 2000});
-						console.log("发布成功！");
-					}).catch((res) => {
-						console.log("发布异常：" + res);
-					});
-				}
-				if(this.images.length > 0){
-					// 上传图片
-					try{
+				uni.showLoading({
+					title: "发布中...",
+					mask: true
+				})
+				try{
+					let that = this;
+					function createBlog(){
+						var data = {};
+						data.content = that.content;
+						data.images = that.images;
+						api.createPost(data).then((res)=>{
+							that.incrementBlogCount();
+							getApp().globalData.updateBlog = true;
+							uni.switchTab({
+								url: "/pages/tabbar/follow/follow"
+							})
+							uni.showToast({title: "发布成功！",
+							duration: 2000});
+						}).catch(err=>{
+							uni.hideLoading();
+							uni.showToast({title: "调用发布接口发生异常："+ JSON.stringify(err),
+								duration: 2000});
+						});
+					}
+					if(this.images.length > 0){
+						// 上传图片
 						let uploadCount = 0;
 						this.images.forEach((path, index) =>{
 							apiFile.uploadFile(path).then(res=>{
@@ -110,15 +118,19 @@
 								if(uploadCount == this.images.length){
 									createBlog();
 								}
+							}).catch(err=>{
+								uni.hideLoading();
+								uni.showToast({title: "上传文件发生异常:"+ JSON.stringify(err),
+									duration: 2000});
 							});
 						})	
-					}catch(err){
-						uni.showToast({title: "上传文件失败！"+ JSON.stringify(err),
-							duration: 2000});
-							return;
+					}else{
+						createBlog();
 					}
-				}else{
-					createBlog();
+				}catch(err){
+					uni.hideLoading();
+					uni.showToast({title: "发布失败！"+ JSON.stringify(err),
+						duration: 2000});
 				}
 			}
 		}

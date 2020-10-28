@@ -46,22 +46,8 @@ function initRecommends(){
 	recommends = [];
 	if(blogs.length <= 0)
 		return;
-	let videoIndex= [];
 	for(var i = 0; i < kMaxCountOfrecommends; i++){
 		var blogIndex = mockjs.Random.integer(0, blogs.length-1);
-		if(blogs[blogIndex].data.type =="short-video"){//减少短视频的随机数量
-			let exist = videoIndex.some((item)=>{
-				if(item == blogIndex)
-					return true;
-				return false;
-			})
-			if(exist){
-				i--;
-				continue;
-			}else{
-				videoIndex.push(blogIndex);
-			}
-		}
 		recommends[i] = blogs[blogIndex];
 	}
 }

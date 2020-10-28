@@ -50,6 +50,8 @@
 				);
 			},
 			onContentClick(){
+				if(!this.brief)
+					return;
 				let that = this;
 				uni.navigateTo({
 					url: "/pages/blog/post-detail/post-detail",
@@ -74,7 +76,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
-		margin-top:15upx;
+		margin-top:30upx;
 	}
 	.content-text{
 		padding: 0 10upx 0 10upx;
