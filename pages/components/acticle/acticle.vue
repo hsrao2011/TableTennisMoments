@@ -78,14 +78,14 @@
 <style>
 	.container{
 		background-color: #fff;
-		padding: 15upx;
+		padding: 15upx 30upx 15upx 30upx;
 		margin-bottom: 10upx;
 	}
 	.content{
 		display: flex;
 		flex-wrap: wrap;
 		align-items: flex-start;
-		justify-content: flex-start;
+		justify-content: space-between;
 	}
 	.content-title{
 		flex: 1 1 auto;
@@ -109,19 +109,20 @@
 	}
 	.content-thumbnail{
 		flex: auto;
-		padding-top: 20upx;
+		padding: 10upx 10upx 0 10upx;
 	}
 	.thumbnail-view{
 		position: relative;
-		padding: 60% 5upx 5upx 5upx;
+		padding: 60% 15upx 15upx 15upx;
 		overflow: hidden;
 	}
 	.thumbnail-image{
 		position: absolute;
+		left: 0;
 		top: 0;
 		width: 100%;
 		height: 100%;
-		border-radius: 15upx;
+		border-radius: 5upx;
 	}
 	.user{
 		margin: 10upx 0 0 30upx;

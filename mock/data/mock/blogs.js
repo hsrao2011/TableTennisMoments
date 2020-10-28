@@ -182,7 +182,7 @@ let blogs= [];
 		if(blog.images){
 			let images = [];
 			blog.images.forEach((fileName)=>{
-				if(fileName.search("/static/") !=0)
+				if(fileName.search("/static/") < 0)
 					images.push("/static/data/img/" + fileName);
 				else
 					images.push(fileName);
