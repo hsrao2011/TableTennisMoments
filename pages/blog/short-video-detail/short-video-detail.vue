@@ -1,14 +1,13 @@
 <template>
 	<view v-if="blog" class="container">
 		<view ref="fixed" class="fixed" id="fixed">
-			<view class="content-video-container"
-			   :class="onlyVideo?'content-video-container-fullscreen':''">
+			<view class="content-video-container" :class="onlyVideo?'content-video-container-fullscreen':''">
 				<video  id="short-video-detail" class="content-video" 
-					:src="blog.data.content" :initial-time="startPos" autoplay
+					:src="blog.data.content" :initial-time="playPos(uniqueName)" autoplay
 					controls  show-center-play-btn 
 					@play="onVideoPlaying" @ended="onVideoCompleted" @pause="onVideoPaused"
 					@timeupdate="onVideoPos" >
-					<cover-image v-show="!onlyVideo" src="/static/icon/btn-play-return.png" class="backButton" @click="onBack"></cover-image>
+					<cover-image v-show="!onlyVideo" src="/static/icon/btn-play-return.png" class="back-btn" @click="onBack"></cover-image>
 				</video>
 			</view>
 			<user-base-info class="user-base-info" :user="blog.user"></user-base-info>
@@ -27,6 +26,7 @@
 	import commentList from "@/pages/components/comment-list/comment-list.vue"
 	import {kPlayState} from "@/common/types.js"
 	import {navigateBack} from "@/pages/page.js"
+	import { mapMutations, mapGetters } from "vuex"
 	export default {
 		components:{
 			"user-base-info": userBaseInfo,
@@ -41,7 +41,8 @@
 				playState: kPlayState.stopped,
 				landscape: false,
 				controlBarVisible: true,
-				fixedHeight: 0
+				fixedHeight: 0,
+				videoPaddingHeight: 60
 			}
 		},
 		onLoad(){
@@ -53,23 +54,23 @@
 			this.eventChannel = this.getOpenerEventChannel()
 			let that = this;
 			this.eventChannel.on('acceptDataFromOpenerPage', function(data) {
-				that.startPos = data.startPos;
 				that.blog = Object.assign({}, {}, data.blog);
 				that.$nextTick(function(){
 					that.refreshComment();
 					that.$nextTick(function(){
 						const query = uni.createSelectorQuery().in(that);
 						query.select("#fixed").boundingClientRect(data => {
-							that.fixedHeight = data.height;
+							if(data){
+								that.fixedHeight = data.height;
+							}
+							
 						}).exec();
 					})
-					
 				})
 			})
 		},
 		onReady(){
 			this.videoContext = uni.createVideoContext("short-video-detail", this);
-			
 		},
 		mounted(){
 			let that = this;
@@ -87,17 +88,20 @@
 			plus.navigator.setFullscreen(false);
 			plus.screen.lockOrientation("portrait-primary"); 
 			// #endif
-			if(this.eventChannel){
-				this.eventChannel.emit('acceptReturnData',
-				 { startPos: this.pos});
-			}
+			this.setPlayPos({videoId: this.uniqueName, pos: this.pos});
 		},
 		computed:{
+			...mapGetters("video",{
+				playPos: "playPos"
+			}),
 			isPlaying(){
 				return this.playState == kPlayState.playing;
 			},
 			onlyVideo(){
 				return this.landscape;
+			},
+			uniqueName(){
+				return this.blog.data.id;
 			}
 		},
 		onPullDownRefresh(){
@@ -118,6 +122,17 @@
 		destroyed(){
 		},
 		methods: {
+			...mapMutations("video",{
+				setPlayPos: "setPlayPos"
+			}),
+			initVideoPlaceHolderHeight(){
+				that.$nextTick(function(){
+					const query = uni.createSelectorQuery().in(that);
+					query.select("#fixed").boundingClientRect(data => {
+						that.fixedHeight = data.height;
+					}).exec();
+				})
+			},
 			onBack(){
 				navigateBack();
 			},
@@ -155,7 +170,6 @@
 	.container{
 		width: 100%;
 		min-height: 100%;
-		padding: 30upx;
 		background-color: #fff;
 	}
 	.fixed{
@@ -173,15 +187,14 @@
 		width: 100%;
 		position: relative;
 		top: 0;
+		left: 0;
 		height: 0;
-		padding-bottom: 60%;
+		padding-top: 60%;
 		overflow: hidden;
+		background-color: red;
 	}
 	.content-video-container-fullscreen{
 		position: fixed;
-		top: 0;
-		left: 0;
-		padding-bottom: 0;
 		height: 100vh;
 	},
 	.content-video{
@@ -203,10 +216,12 @@
 		background-color: rgba(0,0,0,0);
 	}
 	.content{
+		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: flex-start;
+		padding: 0 30upx 0 30upx;
 	}
 	.content-title{
 		padding: 10upx 10upx 0 10upx;
@@ -214,8 +229,8 @@
 		font-weight: 550;
 		line-height:1.2;
 	}
-	.backButton{
-		padding: 5upx;
+	.back-btn{
+		padding: 15upx;
 		position: absolute;
 		top: 40upx;
 		left: 30upx;

@@ -81,7 +81,6 @@
 				);
 			},
 			addImage(){
-				console.log(this.restImageCount);
 				if(this.restImageCount <= 0){
 					uni.showToast({
 						title: "已达到最大个数",

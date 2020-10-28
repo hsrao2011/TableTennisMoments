@@ -28,7 +28,6 @@
 
 <style scoped>
 	.container{
-		
 	}
 	.user{
 		display:flex;

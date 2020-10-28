@@ -26,9 +26,6 @@
 			}
 		},
 		mounted() {
-			if(this.$refs.blogList){
-				this.$refs.blogList.show();
-			}
 			api.getRecommendList({refresh:true}).then((res)=>{
 				this.recommendList = res.data.items;
 				uni.stopPullDownRefresh();
@@ -70,13 +67,8 @@
 			}
 		},
 		onShow(){
-			if(this.$refs.blogList){
-				this.$refs.blogList.show();
-			}
 		},
 		onHide(){
-			if(this.$refs.blogList)
-				this.$refs.blogList.hide();
 		},
 		computed:{
 			...mapState("user", {

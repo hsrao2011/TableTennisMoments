@@ -23,27 +23,13 @@
 			blogList:{
 				type: Array,
 				default: []
-			}
+			}			
 		},
 		data() {
 			return {
 			}
 		},
 		methods: {
-			show(){
-				if(this.$refs.shortVideo){
-					this.$refs.shortVideo.forEach((sv)=>{
-						sv.show();
-					})
-				}
-			},
-			hide(){
-				if(this.$refs.shortVideo){
-					this.$refs.shortVideo.forEach((sv)=>{
-						sv.hide();
-					})
-				}
-			}
 		}
 	}
 </script>

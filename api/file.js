@@ -12,6 +12,10 @@ function uploadFile(tempFilePath, isVideo){
 		}
 		
 		// #endif
+		/*setTimeout(()=>{
+			reject("测试上传文件异常");
+		},2000)
+		return;*/
 		// #ifdef APP-PLUS
 		uni.saveFile({
 			tempFilePath: tempFilePath,

@@ -66,6 +66,9 @@
 				source: 'url("https://sungd.github.io/Pacifico.ttf")'
 			})
 		},
+		onUnload(){
+			uni.hideLoading();
+		},
 		methods: {
 			...mapMutations("user",[
 				"incrementBlogCount"
@@ -198,37 +201,43 @@
 							})
 							return;
 						}
-						let ops = [];
-						delta.ops.forEach( (op, index) => {
-							if(op.insert && op.insert.image){
-								ops.push(op);
-							}
+						uni.showLoading({
+							title: "发布中...",
+							mask: true
 						})
-						let that = this;
-						function createBlog(){
-							var data = {};
-							data.content = JSON.stringify(delta);
-							data.title = that.title;
-							data.html = html;
-							data.images = images;
-							api.createActicle(data).then((res)=>{
-								that.incrementBlogCount();
-								getApp().globalData.updateBlog = true;
-								that.$nextTick(function(){
-									uni.switchTab({
-										url: "/pages/tabbar/follow/follow"
-									});
+						try{
+							let ops = [];
+							delta.ops.forEach( (op, index) => {
+								if(op.insert && op.insert.image){
+									ops.push(op);
+								}
+							})
+							let that = this;
+							function createBlog(){
+								var data = {};
+								data.content = JSON.stringify(delta);
+								data.title = that.title;
+								data.html = html;
+								data.images = images;
+								api.createActicle(data).then((res)=>{
+									that.incrementBlogCount();
+									getApp().globalData.updateBlog = true;
+									that.$nextTick(function(){
+										uni.switchTab({
+											url: "/pages/tabbar/follow/follow"
+										});
+									})
+									uni.showToast({title: "发布成功！",
+									duration: 2000});
+									console.log("发布成功！");
+								}).catch(err=>{
+									uni.hideLoading();
+									uni.showToast({title: "调用接口发生异常："+ JSON.stringify(err),
+										duration: 2000});
 								})
-								uni.showToast({title: "发布成功！",
-								duration: 2000});
-								console.log("发布成功！");
-							}).catch((err) => {
-								console.log("发布异常, 上传文章失败：" + JSON.stringify(err));
-							});
-						}
-						if(ops.length > 0){
-							let uploadCount = 0;
-							try{
+							}
+							if(ops.length > 0){
+								let uploadCount = 0;
 								ops.forEach((op, index) =>{
 									apiFile.uploadFile(op.insert.image).then(path=>{
 										let reg = new RegExp(op.insert.image, "g")
@@ -242,13 +251,19 @@
 										if(uploadCount == ops.length){
 											createBlog();
 										}
+									}).catch(err=>{
+										uni.hideLoading()
+										uni.showToast({title: "上传文件异常！"+ JSON.stringify(err),
+											duration: 2000});
 									});
 								})
-							}catch(err){
-								console.log("发布异常, 图片上传失败：" + JSON.stringify(err));
+							}else{
+								createBlog();
 							}
-						}else{
-							createBlog();
+						}catch(err){
+							uni.hideLoading();
+							uni.showToast({title: "发布失败！"+ JSON.stringify(err),
+								duration: 2000});
 						}
 					}
 				})

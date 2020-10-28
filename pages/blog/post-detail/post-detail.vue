@@ -1,11 +1,10 @@
 <template>
-	<view  v-if="blog" class="container">
-		<view class="content">
-			<post  :blog="blog" :imageColCount="2"></post>
+	<view  class="container">
+		<view v-if="blog" class="content">
+			<post :blog="blog" :imageColCount="2"></post>
 			<comment-list ref="commentList" :targetId="blog.data.id" ></comment-list>
 			<uni-load-more :status="more"></uni-load-more>
 		</view>
-		
 	</view>
 </template>
 
@@ -14,6 +13,7 @@
 	import commentList from "@/pages/components/comment-list/comment-list.vue"
 	export default {
 		components:{
+			
 			"post": post,
 			"comment-list": commentList
 		},
@@ -66,10 +66,14 @@
 
 <style scoped>
 	.container{
-		width: 100%;
-		background-color:#fff;
-		margin-bottom: 15upx;
 		min-height: 100%;
-		padding: 30upx;
+		padding: 10upx 30upx 0upx 30upx;
+		background-color: #fff;
+	}
+	.content{
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-end;
 	}
 </style>
