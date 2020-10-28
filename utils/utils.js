@@ -104,9 +104,50 @@ var createGuid = (function(){
 	}
 })();
 
+
+function formatDate(date){
+	let formated = "";
+	let now = new Date();
+	let nowYear = now.getFullYear();
+	let nowMonth = now.getMonth();
+	let nowDay = now.getDate();
+	let year3 = new Date;
+	year3.setFullYear(nowYear-3);
+	let year1 = new Date;
+	year1.setFullYear(nowYear-1);
+	let month1 = new Date();
+	month1.setMonth(nowMonth - 1);
+	let day7 = new Date();
+	day7.setDate(nowDay - 7);
+	let day3 = new Date();
+	day3.setDate(nowDay - 3);
+	let day1 = new Date();
+	day1.setDate(nowDay - 1);
+	if(date < year3)
+		formated = "三年前";
+	else if(date < year1)
+		formated = "一年前";
+	else if(date < month1)
+		formated = "一个月前";
+	else if(date < day7)
+		formated = "七天前";
+	else if(date < day3)
+		formated = "三天前";
+	else if(date < day1)
+		formated = "一天前";
+	else{
+		let hour = date.getHours();
+		let minute = date.getMinutes();
+		formated = "" + hour + "时";
+		formated += minute + "分";
+	}
+	return formated;
+}
+
 export default {
   param2Obj,
   param2Query,
   deepClone,
-  createGuid
+  createGuid,
+  formatDate
 }

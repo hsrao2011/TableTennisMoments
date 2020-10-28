@@ -70,6 +70,6 @@
 		background-color:#fff;
 		margin-bottom: 15upx;
 		min-height: 100%;
-		padding: 15upx;
+		padding: 30upx;
 	}
 </style>

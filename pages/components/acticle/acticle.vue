@@ -21,6 +21,7 @@
 </template>
 
 <script>
+	import utils from "@/utils/utils.js"
 	export default {
 		props:["blog"],
 		data() {
@@ -40,14 +41,9 @@
 				return null;
 			},
 			date(){
-				let yesterday = new Date();
-				yesterday.setTime(yesterday.getTime() - 24*60*60*1000);
 				let blogDate = new Date(this.blog.data.date);
-				if(blogDate < yesterday){
-					return blogDate.toLocaleDateString();
-				}else{
-					return blogDate.toLocaleTimeString();
-				}
+				let formated = utils.formatDate(blogDate);
+				return formated;
 			},
 			commentCount(){
 				return Math.floor(Math.random()* 200);

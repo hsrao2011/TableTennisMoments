@@ -61,7 +61,6 @@
 	.container{
 		width: 100%;
 		background-color: #fff;
-		padding: 0 20upx;
 		margin-top: 20upx;
 	}
 </style>

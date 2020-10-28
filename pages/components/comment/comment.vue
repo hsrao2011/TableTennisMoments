@@ -37,7 +37,6 @@
 		flex-wrap: nowrap;
 		justify-content: flex-start;
 		align-items: flex-start;
-		padding: 20upx;
 		margin-top: 20upx;
 	}
 	.left{
