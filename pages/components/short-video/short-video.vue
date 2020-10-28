@@ -344,19 +344,19 @@
 		padding: 10upx 20upx 10upx 20upx;
 	}
 	.content-title{
-		padding-bottom:30upx;
 		font-size: 1.4rem;
 		font-weight: 550;
 		line-height:1.4;
-	}
-	.content-title-brief{
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+	.content-title-brief{
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 2;  //需要显示时文本行数
 	}
 	.content-video-container{
+		margin-top:30upx;
 		width: 100%;
 		position: relative;
 		left: 0;
