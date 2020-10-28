@@ -99,12 +99,13 @@
 	.title{
 		font-size: 1.4rem;
 		font-weight: 550;
+		line-height:1.4;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 3;  //需要显示时文本行数
-		line-height:1.2;
+		
 	}
 	.content-thumbnail{
 		flex: auto;

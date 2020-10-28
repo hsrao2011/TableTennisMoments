@@ -345,7 +345,7 @@
 		padding: 10upx 10upx 0 10upx;
 		font-size: 1.4rem;
 		font-weight: 550;
-		line-height:1.2;
+		line-height:1.4;
 	}
 	.content-title-brief{
 		overflow: hidden;

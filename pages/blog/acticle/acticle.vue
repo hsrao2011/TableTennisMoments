@@ -271,6 +271,7 @@
 	.title-editor{
 		font-size: 1.6rem;
 		font-weight: 700;
+		line-height: 1.6;
 	}
 	.title-prompt{
 		color:#d81e06;
@@ -335,7 +336,7 @@
 		background: #fff;
 		margin-top: 20px;
 		font-size: 1.4rem;
-		line-height: 1.2;
+		line-height: 1.8;
 	}
 	.ql-active {
 		color: #06c;

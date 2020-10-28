@@ -75,7 +75,7 @@
 <style scoped>
 	.container{
 		background-color:#fff;
-		padding: 80upx 15upx 0 15upx;
+		padding: 60upx 15upx 0 15upx;
 		min-height: 100%;
 	}
 	.content{
@@ -88,8 +88,7 @@
 		padding: 0 10upx 0 10upx;
 		font-size: 1.4rem;
 		font-weight: 550;
-		line-height:1.2;
-		margin-bottom: 20upx;
+		line-height:1.6;
 	}
 	.ql-container {
 		box-sizing: border-box;
@@ -99,7 +98,10 @@
 		background: #fff;
 		margin-top: 50upx;
 		font-size: 1.4rem;
-		line-height: 1.2;
+		line-height: 1.8;
+	}
+	.ql-editor{
+		text-align: justify;
 	}
 	.ql-active {
 		color: #06c;

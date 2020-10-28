@@ -63,7 +63,7 @@
 	}
 	.right .comment{
 		margin-top: 30upx;
-		font-size: 1rem;
+		font-size: 1.2rem;
 		line-height: 1.4;
 		white-space: normal;
 	}
