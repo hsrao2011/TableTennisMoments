@@ -332,17 +332,19 @@
 <style scoped>
 	.container{
 		background-color:#fff;
-		padding: 15upx 15upx 15upx 15upx;
+		padding: 15upx 20upx 15upx 20upx;
 		margin-bottom: 10upx;
 	}
 	.content {
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
+		align-items: flex-start;
 		margin-top:15upx;
+		padding: 10upx 20upx 10upx 20upx;
 	}
 	.content-title{
-		padding: 10upx 10upx 0 10upx;
+		padding-bottom:30upx;
 		font-size: 1.4rem;
 		font-weight: 550;
 		line-height:1.4;
@@ -357,21 +359,22 @@
 	.content-video-container{
 		width: 100%;
 		position: relative;
-		margin-top: 20upx;
-		padding-bottom: 60%;
+		left: 0;
+		top: 0;
 		height: 0;
 		overflow: hidden;
+		padding-bottom: 60%;
 		background-color: #000000;
 	}
 	.content-video{
 		position: absolute;
 		top: 0;
+		left: 0;
 		width: 100%;
 		height: 100%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		border-radius: 30upx;
 	}
 	.video-cover{
 		width: 100%;

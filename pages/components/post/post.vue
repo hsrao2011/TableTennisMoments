@@ -67,7 +67,7 @@
 	.container{
 		width: 100%;
 		background-color:#fff;
-		padding: 15upx 15upx 0 15upx;
+		padding: 15upx 20upx 0 20upx;
 		margin-bottom: 10upx;
 	}
 	.content {

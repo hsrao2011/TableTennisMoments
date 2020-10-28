@@ -43,6 +43,21 @@
 		onPullDownRefresh(){
 			this.refreshComment();
 		},
+		watch:{
+			blog(){
+				if(!this.blog)
+					return;
+				// #ifdef APP-PLUS
+				let localPath = "/static/data/upload/"
+				let uploadPath = plus.io.convertLocalFileSystemURL(localPath);
+				if(uploadPath.search("file://") < 0){
+					uploadPath= "file://" + uploadPath;
+				}
+				let re = new RegExp(localPath, "g");
+				this.blog.data.html = this.blog.data.html.replace(re, uploadPath, "g");
+				// #endif
+			}
+		},
 		onReachBottom(){
 			if(this.more == "noMore")
 				return;
@@ -75,7 +90,7 @@
 <style scoped>
 	.container{
 		background-color:#fff;
-		padding: 60upx 15upx 0 15upx;
+		padding: 60upx 30upx 0 30upx;
 		min-height: 100%;
 	}
 	.content{

@@ -155,7 +155,7 @@
 	.container{
 		width: 100%;
 		min-height: 100%;
-		padding: 15upx;
+		padding: 30upx;
 		background-color: #fff;
 	}
 	.fixed{
@@ -195,7 +195,7 @@
 		align-items: center;
 	}
 	.user-base-info{
-		padding: 20upx;
+		padding: 30upx;
 	}
 	.placeholder{
 		width: 100%;
@@ -209,7 +209,6 @@
 		align-items: flex-start;
 	}
 	.content-title{
-		margin-top: 50upx;
 		padding: 10upx 10upx 0 10upx;
 		font-size: 1.4rem;
 		font-weight: 550;
