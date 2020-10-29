@@ -101,13 +101,13 @@ var _blogs = [{
 		images:["797e6fe8d68a4db7a9edadea17e39c91_tplv-obj_1295_983.webp","3a2d5df5b8f64becadea0fa99f6d3599_tplv-obj_1622_964.webp"],
 		userId:5,
 		type:"post"
-	},{
+	},/*{
 		id: 15,
 		title: "老当益壮，七十三岁的大爷，没有几个人能打得过",
 		type: "short-video",
 		content: "/static/data/upload/5A29D483EE423E8C6F4EA8FA6C50DB47.mp4",
 		userId: 3
-	},{
+	},*/{
 		id: 16,
 		type: "acticle",
 		userId: 3,
