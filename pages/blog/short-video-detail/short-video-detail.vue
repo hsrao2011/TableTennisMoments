@@ -196,8 +196,10 @@
 		background-color: red;
 	}
 	.bsvd-content-video-container-fullscreen{
-		position: fixed;
 		height: 100vh;
+		right: 0;
+		bottom: 0;
+		padding-top: 0;
 	},
 	.bsvd-content-video{
 		position: absolute;
