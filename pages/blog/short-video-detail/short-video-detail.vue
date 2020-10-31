@@ -1,20 +1,20 @@
 <template>
-	<view v-if="blog" class="container">
-		<view ref="fixed" class="fixed" id="fixed">
-			<view class="content-video-container" :class="onlyVideo?'content-video-container-fullscreen':''">
-				<video  id="short-video-detail" class="content-video" 
+	<view v-if="blog" class="bsvd-container">
+		<view ref="fixed" class="bsvd-fixed" id="fixed">
+			<view class="bsvd-content-video-container" :class="onlyVideo?'bsvd-content-video-container-fullscreen':''">
+				<video  id="short-video-detail" class="bsvd-content-video" 
 					:src="blog.data.content" :initial-time="playPos(uniqueName)" autoplay
 					controls  show-center-play-btn 
 					@play="onVideoPlaying" @ended="onVideoCompleted" @pause="onVideoPaused"
 					@timeupdate="onVideoPos" >
-					<cover-image v-show="!onlyVideo" src="/static/icon/btn-play-return.png" class="back-btn" @click="onBack"></cover-image>
+					<cover-image v-show="!onlyVideo" src="/static/icon/btn-play-return.png" class="bsvd-back-btn" @click="onBack"></cover-image>
 				</video>
 			</view>
-			<user-base-info class="user-base-info" :user="blog.user"></user-base-info>
+			<user-base-info class="bsvd-user-base-info" :user="blog.user"></user-base-info>
 		</view>
-		<view class="content">
-			<view class="placeholder" :style="{height: fixedHeight + 'px'}"></view>
-			<text class="content-title">{{blog.data.title}}</text>
+		<view class="bsvd-content">
+			<view class="bsvd-placeholder" :style="{height: fixedHeight + 'px'}"></view>
+			<text class="bsvd-content-title">{{blog.data.title}}</text>
 			<comment-list ref="commentList" :targetId="blog.data.id" ></comment-list>
 		</view>
 		<uni-load-more :status="more"></uni-load-more>
@@ -167,12 +167,13 @@
 </script>
 
 <style scoped>
-	.container{
+	.bsvd-container{
 		width: 100%;
-		min-height: 100%;
+		height: 100%;
+		min-height: 100vh;
 		background-color: #fff;
 	}
-	.fixed{
+	.bsvd-fixed{
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -182,8 +183,9 @@
 		justify-content: flex-start;
 		align-items: flex-start;
 		z-index: 10;
+		background-color: #fff;
 	}
-	.content-video-container{
+	.bsvd-content-video-container{
 		width: 100%;
 		position: relative;
 		top: 0;
@@ -193,11 +195,11 @@
 		overflow: hidden;
 		background-color: red;
 	}
-	.content-video-container-fullscreen{
+	.bsvd-content-video-container-fullscreen{
 		position: fixed;
 		height: 100vh;
 	},
-	.content-video{
+	.bsvd-content-video{
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -207,29 +209,28 @@
 		justify-content: center;
 		align-items: center;
 	}
-	.user-base-info{
+	.bsvd-user-base-info{
 		padding: 30upx;
 	}
-	.placeholder{
+	.bsvd-placeholder{
 		width: 100%;
 		height: 0;
 		background-color: rgba(0,0,0,0);
 	}
-	.content{
+	.bsvd-content{
 		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: flex-start;
-		padding: 0 30upx 0 30upx;
 	}
-	.content-title{
-		padding: 10upx 10upx 0 10upx;
+	.bsvd-content-title{
+		padding: 30upx 30upx 30upx 30upx;
 		font-size: 1.4rem;
 		font-weight: 550;
 		line-height:1.2;
 	}
-	.back-btn{
+	.bsvd-back-btn{
 		padding: 15upx;
 		position: absolute;
 		top: 40upx;

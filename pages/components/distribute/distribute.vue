@@ -1,8 +1,8 @@
 <template>
 	<view class="distribute-container">
-		<view v-if="userInfo" class = "user">
-			<image class="avatar" :src="'/static/data/avatar/' + userInfo.avatar" alt="头像" mode=""></image>
-			<text class="nick-name">{{userInfo.nickName}}</text>
+		<view v-if="userInfo" class = "distribute-user">
+			<image class="distribute-avatar" :src="'/static/data/avatar/' + userInfo.avatar" alt="头像" mode=""></image>
+			<text class="distribute-nick-name">{{userInfo.nickName}}</text>
 		</view>
 		<view class="cu-list grid col-3">
 			<view class="cu-item" v-for="(item, index) in distributeList" :key="index"
@@ -11,7 +11,7 @@
 				<text class="text-red">{{item[0]}}</text>
 			</view>
 		</view>
-		<view class="close">
+		<view class="distribute-close">
 			<text @click="onClose">X</text>
 		</view>
 	</view>
@@ -106,7 +106,7 @@
 		height: 420upx;
 		padding: 10upx 0upx;
 	}
-	.user{
+	.distribute-user{
 		display: flex;
 		background-color: #f8f8f8;
 		justify-content: flex-start;
@@ -114,19 +114,19 @@
 		padding: 10upx 20upx;
 		margin: 30upx 10upx;
 	}
-	.user .avatar{
+	.distribute-user .distribute-avatar{
 		flex-shrink: 0;
 		backgroun-color: #d81e06;
 		width: 60upx;
 		height: 60upx;
 		border-radius:100upx;
 	}
-	.user .nick-name{
+	.distribute-user .distribute-nick-name{
 		font-weight:bolder;
 		font-size: 30upx;
 		margin-left: 20upx;
 	}
-	.close{
+	.distribute-close{
 		position: absolute;
 		bottom: 25upx;
 		display: flex;
@@ -134,7 +134,7 @@
 		align-items: center;
 		width: 100%;
 	}
-	.close text{
+	.distribute-close text{
 		text-align: center;
 		width: 40upx;
 		font-size: 40upx;

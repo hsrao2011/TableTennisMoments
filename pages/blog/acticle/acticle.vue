@@ -1,11 +1,11 @@
 <template>
-	<view class="container">
-		<view class='content'>
+	<view class="blog-acticle-container">
+		<view class='blog-acticle-content'>
 			<view class="flex flex-direction align-start justify-start">
-				<textarea class="title-editor" v-model:value="title"
+				<textarea class="blog-acticle-title-editor" v-model:value="title"
 				 placeholder-style="font-size: 1.6rem; font-weight:500;" :placeholder="placeholder"
 					@blur="onTitleBlur" @input="onTitleInput"/>
-				<view v-if="titlePrompt" class="title-prompt" >{{titlePrompt}}</view>
+				<view v-if="titlePrompt" class="blog-acticle-title-prompt" >{{titlePrompt}}</view>
 			</view>
 			<editor id="editor" class="ql-container" placeholder="开始输入..." showImgSize showImgToolbar showImgResize
 				placeholder-style="font-size: 1.4rem"
@@ -13,7 +13,7 @@
 				>
 			</editor>
 		</view>
-		<view class='toolbar' :style="{bottom: bottom}">
+		<view class='blog-acticle-toolbar' :style="{bottom: bottom}">
 			<scroll-view scroll-x="true" @tap="format">
 				<view class="iconfont icon-charutupian" @tap="insertImage"></view>
 				<view :class="formats.bold ? 'ql-active' : ''" class="iconfont icon-zitijiacu" data-name="bold"></view>
@@ -274,21 +274,21 @@
 
 <style scoped>
 	@import "./editor-icon.css";
-	.container{
+	.blog-acticle-container{
 		background-color: #fff;
 		width: 100%;
-		height: 100%;
+		height: 100vh;
 	}
-	.content {
+	.blog-acticle-content {
 		padding: 10upx;
 		padding-bottom: 60upx;
 	}
-	.title-editor{
+	.blog-acticle-title-editor{
 		font-size: 1.6rem;
 		font-weight: 700;
 		line-height: 1.6;
 	}
-	.title-prompt{
+	.blog-acticle-title-prompt{
 		color:#d81e06;
 		width: 100%;
 		font-size: 0.8rem;
@@ -302,7 +302,7 @@
 		cursor: pointer;
 		font-size: 48upx;
 	}
-	.toolbar {
+	.blog-acticle-toolbar {
 		background-color: #f7f7f7;
 		display: flex;
 		justify-content: space-around;
@@ -316,7 +316,7 @@
 		height: 60upx;
 		bottom: 0;
 	}
-	.toolbar>scroll-view{
+	.blog-acticle-toolbar>scroll-view{
 		flex: 1 1 auto;
 		white-space: nowrap;
 		overflow: hidden;
@@ -325,11 +325,11 @@
 		justify-content: space-around;
 		align-items: center;
 	}
-	.toolbar>scroll-view view{
+	.blog-acticle-toolbar>scroll-view view{
 		flex: 0 0 auto;
 		margin-left: 25upx;
 	}
-	.toolbar>view{
+	.blog-acticle-toolbar>view{
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
@@ -338,7 +338,7 @@
 		height: 80upx;
 		border-left: 1px #fefefe solid;
 	}
-	.toolbar>view>view{
+	.blog-acticle-toolbar>view>view{
 		flex: 0 0 auto;
 		margin-left: 15upx;
 	}

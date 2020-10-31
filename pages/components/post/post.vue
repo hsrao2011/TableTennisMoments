@@ -1,8 +1,8 @@
 <template>
-	<view class="container">
+	<view class="post-container">
 		<user-base-info :user="blog.user"></user-base-info>
-		<view class="content">
-			<text class="content-text" :class="brief?'content-brief':''" @click="onContentClick">{{blog.data.content}}</text>
+		<view class="post-content">
+			<text class="post-content-text" :class="brief?'post-content-brief':''" @click="onContentClick">{{blog.data.content}}</text>
 			<image-grid :images="blog.data.images" :cols="imageColCount"></image-grid>
 		</view>
 	</view>
@@ -32,9 +32,6 @@
 			}
 		},
 		created(){
-		},
-		computed:{
-			
 		},
 		mounted(){
 		},
@@ -66,29 +63,31 @@
 </script>
 
 <style scoped>
-	.container{
+	.post-container{
 		width: 100%;
 		background-color:#fff;
-		padding: 15upx 20upx 0 20upx;
+		padding: 24upx 30upx 14upx 30upx;
 		margin-bottom: 10upx;
 	}
-	.content {
+	.post-content {
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
-		margin-top:30upx;
+		padding-top: 20upx;
 	}
-	.content-text{
-		padding: 0 10upx 0 10upx;
+	.post-content-text{
 		font-size: 1.4rem;
 		font-weight: 550;
 		line-height:1.4;
 	}
-	.content-brief{
+	.post-content-brief{
 		overflow: hidden;
 		text-overflow: ellipsis;
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 3;  //需要显示时文本行数
+	}
+	.post-content text{
+		margin-bottom: 20upx;
 	}
 </style>

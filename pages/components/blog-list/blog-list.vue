@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="blog-list-container">
 		<view v-for="(blog, index) in blogList" :key="index">
 			<post v-if="blog.data.type=='post'" :blog="blog" :brief="true" ></post>
 			<acticle v-else-if="blog.data.type=='acticle'" :blog="blog"></acticle>
@@ -34,8 +34,8 @@
 	}
 </script>
 
-<style>
-	.container{
+<style scoped>
+	.blog-list-container{
 	}
 
 </style>

@@ -1,24 +1,24 @@
 <template>
-	<view class="container">
-		<view v-if="userInfo" class="user">
-			<view class = "base-info">
-				<image class="avatar" :src="'/static/data/avatar/' + userInfo.avatar" alt="头像" mode=""></image>
-				<view class="user-info">
-					<text class="nick-name">{{userInfo.nickName}}</text>
-					<view class="intro">{{userInfo.intro}}</view>
+	<view class="my-container">
+		<view v-if="userInfo" class="my-user">
+			<view class="my-base-info">
+				<image class="my-avatar" :src="'/static/data/avatar/' + userInfo.avatar" alt="头像" mode=""></image>
+				<view class="my-user-info">
+					<text class="my-nick-name">{{userInfo.nickName}}</text>
+					<view class="my-intro">{{userInfo.intro}}</view>
 				</view>
 			</view>
-			<view class="ext-info">
-				<view class="ext-info-item" v-for="(item, index) in extInfoList" :key="index">
-					<view class="ext-info-name">{{item[0]}}</view>
-					<view class="ext-info-value">{{item[1]}}</view>
+			<view class="my-ext-info">
+				<view class="my-ext-info-item" v-for="(item, index) in extInfoList" :key="index">
+					<view class="my-ext-info-name">{{item[0]}}</view>
+					<view class="my-ext-info-value">{{item[1]}}</view>
 				</view>
 			</view>
 		</view>
-		<view class="btn-login-container">
+		<view class="my-btn-login-container">
 			<button :class="btnLoginClass" @click="onLogin">{{loginButtonName}}</button>
 		</view>
-		<view class="placeholder"></view>
+		<view class="my-placeholder"></view>
 	</view>
 </template>
 
@@ -55,7 +55,7 @@
 				}
 			},
 			btnLoginClass(){
-				return this.isLogined ? "btn-logout":"btn-login";
+				return this.isLogined ? "my-btn-logout":"my-btn-login";
 			}
 		},
 		onLoad(){	
@@ -83,46 +83,47 @@
 </script>
 
 <style scoped>
-	.container{
+	.my-container{
 		background-color: #fff;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		padding: 15upx;
-		min-height: 100%;
+		padding: 60upx 50upx 0 50upx;
+		min-height: 100vh;
+		width: 100%;
+		height: 100%;
 	}
-	.user{
+	.my-user{
 		display: flex;
 		background-color: #fefefe;
 		flex-direction: column;
 		justify-content: flex-start;
-		padding: 50upx 40upx;
 		flex: none;
 	}
-	.user .base-info{
+	.my-user .my-base-info{
 		align-items: center;
 		display: flex;
 		flex:none;
 	}
-	.user .base-info .user-info{
+	.my-user .my-base-info .my-user-info{
 		flex-shrink: 1
 	}
-	.user .base-info .avatar{
+	.my-user .my-base-info .my-avatar{
 		flex-shrink: 0;
 		backgroun-color: #f00;
 		width: 160upx;
 		height: 160upx;
 		border-radius:100upx;
 	}
-	.user .base-info .user-info > text{
+	.my-user .my-base-info .my-user-info > text{
 		display:block;
 	}
-	.user .base-info .nick-name{
+	.my-user .my-base-info .my-nick-name{
 		font-weight:bolder;
 		font-size: 60upx;
 		margin-left: 20upx;
 	}
-	.user .base-info .intro{
+	.my-user .my-base-info .my-intro{
 		font-size: 32upx;
 		color:#ccc;
 		max-height:72upx;
@@ -134,39 +135,38 @@
 		-webkit-line-clamp: 2;  //需要显示时文本行数
 		line-height:36upx;
 	}
-	.ext-info{
+	.my-ext-info{
 		display: flex;
 		justify-content: space-around;
-		margin-top:20upx;
+		margin-top:40upx;
 	}
-	.ext-info-item{
+	.my-ext-info-item{
 		display:flex;
 		flex-direction: column;
 		align-items: center;
 	}
-	.ext-info-item .ext-info-name{
+	.my-ext-info-item .my-ext-info-name{
 		font-size: 0.8rem;
 		font-weight: bold;
 		margin-bottom: 10upx;
 		color: #222;
 	}
-	.ext-info-item .ext-info-value{
+	.my-ext-info-item .my-ext-info-value{
 		font-size: 0.7rem;
 		color: #aaa;
 	}
-	.btn-login-container{
+	.my-btn-login-container{
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		flex: 0 0 auto;
 	}
-	.btn-logout{
+	.my-btn-logout{
 		color: #d81e06;
 		margin: 50upx 0 50upx 0;
 		width: 85%;
 	}
-	
-	.btn-login{
+	.my-btn-login{
 		border-radius: 1000upx;
 		border:0 solid #000;
 		width:160upx;
@@ -177,7 +177,7 @@
 		text-align:center;
 		line-height: 160upx;
 	}
-	.placeholder{
+	.my-placeholder{
 		flex: auto;
 	}
 </style>

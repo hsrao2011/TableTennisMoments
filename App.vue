@@ -29,10 +29,14 @@ export default {
 	@import "colorui/icon.css";
 	
 	uni-page-body,html,body{ 
-		width: 100%;
-		height: 100%;
-		background-color: #f7f7f7;
+		
 	} 
+	image.loading::after{
+		width: 56upx;
+		height: 56upx;
+		line-height: 56upx;
+		font-size: 56upx;
+	}
 		
 /* 解决头条小程序组件内引入字体不生效的问题 */
 /* #ifdef MP-TOUTIAO */

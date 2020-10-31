@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="ttm-container">
 		<view class="logo-container">
 			<image class="logo" src="/static/data/img/u=2212215555,3661228960&fm=26&gp=0.jpg"></image>
 			<view class="">乒乓交流学习</view>
@@ -79,7 +79,7 @@
 </script>
 
 <style scoped>
-	.container{
+	.ttm-container{
 		background-color: #f8f8f8;
 	}
 	.logo-container{
