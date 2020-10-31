@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="home-container">
 		<blog-list ref="blogList" :blogList = "recommendList"></blog-list>
 		<uni-load-more :status="more"></uni-load-more>
 		<uni-popup ref="popup" type="bottom" @change="onPopupChanged">
@@ -105,7 +105,6 @@
 </script>
 
 <style scoped>
-	.container{
-		width: 100%;
+	.home-container{
 	}
 </style>

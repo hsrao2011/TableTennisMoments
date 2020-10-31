@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="comment-list-container">
 		<view class="" v-for="(item, index) in commentList" :key="index">
 			<comment :comment="item"></comment>
 		</view>
@@ -58,9 +58,10 @@
 </script>
 
 <style scoped>
-	.container{
+	.comment-list-container{
 		width: 100%;
 		background-color: #fff;
+		padding: 0 30upx 0 30upx;
 		margin-top: 20upx;
 	}
 </style>

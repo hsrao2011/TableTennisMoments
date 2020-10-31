@@ -1,10 +1,10 @@
 <template>
-	<view  class="container">
-		<view v-if="blog" class="content">
+	<view v-if="blog" class="blog-post-detail-container">
+		<view  class="blog-post-detail-content">
 			<post :blog="blog" :imageColCount="2"></post>
 			<comment-list ref="commentList" :targetId="blog.data.id" ></comment-list>
-			<uni-load-more :status="more"></uni-load-more>
 		</view>
+		<uni-load-more :status="more"></uni-load-more>
 	</view>
 </template>
 
@@ -65,15 +65,17 @@
 </script>
 
 <style scoped>
-	.container{
-		min-height: 100%;
-		padding: 10upx 30upx 0upx 30upx;
+	.blog-post-detail-container{
+		width: 100%;
+		height: 100%;
+		min-height: 100vh;
 		background-color: #fff;
 	}
-	.content{
+	.blog-post-detail-content{
+		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
-		align-items: flex-end;
+		align-items: flex-start;
 	}
 </style>

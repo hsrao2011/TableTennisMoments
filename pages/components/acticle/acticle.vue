@@ -1,21 +1,21 @@
 <template>
-	<view class="container">
-		<view class="content" >
-			<view class="content-title" :class="layout==0?'':'content-title-width'"
+	<view class="acticle-container">
+		<view class="acticle-content" >
+			<view class="acticle-content-title" :class="layout==0?'':'acticle-content-title-width'"
 				@click="onTitleClick">
-				<text class="title"> {{blog.data.title}}</text>
+				<text class="acticle-title"> {{blog.data.title}}</text>
 			</view>
-			<view v-if="thumbnailUrl" class="content-thumbnail">
-				<view class="thumbnail-view" >
-					<image class="thumbnail-image" :src="thumbnailUrl" mode="aspectFill" @click="onPreviewThumbnail"></image>
+			<view v-if="thumbnailUrl" class="acticle-content-thumbnail" :style="layout==0?'':'margin-left:10upx;'">
+				<view class="acticle-thumbnail-view" >
+					<image class="acticle-thumbnail-image" :src="thumbnailUrl" mode="aspectFill" @click="onPreviewThumbnail"></image>
 				</view>
 				
 			</view>
 		</view>
-		<view class="user">
-			<text class="nick-name">{{blog.user.nickName}}</text>
-			<text class="comment-count">{{commentCount}}评论</text>
-			<text class="date">{{date}}</text>
+		<view class="acticle-user">
+			<text class="acticle-nick-name">{{blog.user.nickName}}</text>
+			<text class="acticle-comment-count">{{commentCount}}评论</text>
+			<text class="acticle-date">{{date}}</text>
 		</view>
 	</view>
 </template>
@@ -71,28 +71,27 @@
 	}
 </script>
 
-<style>
-	.container{
+<style scoped>
+	.acticle-container{
 		background-color: #fff;
-		padding: 15upx 30upx 15upx 30upx;
+		padding: 24upx 30upx 24upx 30upx;
 		margin-bottom: 10upx;
 	}
-	.content{
+	.acticle-content{
 		display: flex;
 		flex-wrap: wrap;
 		align-items: flex-start;
 		justify-content: space-between;
 	}
-	.content-title{
+	.acticle-content-title{
 		flex: 1 1 auto;
 		width: 100%;
-		padding-top: 20upx;
 		margin-bottom: 20upx;
 	}
-	.content-title-width{
+	.acticle-content-title-width{
 		width: 35%;
 	}
-	.title{
+	.acticle-title{
 		font-size: 1.4rem;
 		font-weight: 550;
 		line-height:1.4;
@@ -101,18 +100,19 @@
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 3;  //需要显示时文本行数
-		
 	}
-	.content-thumbnail{
+	.acticle-content-thumbnail{
 		flex: auto;
-		padding: 10upx 10upx 0 10upx;
+		width: 100%;
 	}
-	.thumbnail-view{
+	.acticle-thumbnail-view{
 		position: relative;
-		padding: 60% 15upx 15upx 15upx;
+		width: 100%;
+		height: 0;
+		padding-top: 60%;
 		overflow: hidden;
 	}
-	.thumbnail-image{
+	.acticle-thumbnail-image{
 		position: absolute;
 		left: 0;
 		top: 0;
@@ -120,18 +120,18 @@
 		height: 100%;
 		border-radius: 5upx;
 	}
-	.user{
-		margin: 10upx 0 0 30upx;
+	.acticle-user{
+		margin-top: 20upx;
 		color: #7f7f7f;
 	}
-	.nick-name{
+	.acticle-nick-name{
 		font-size: 0.9rem;
 	}
-	.comment-count{
+	.acticle-comment-count{
 		margin-left: 10upx;
 		font-size: 0.9rem;
 	}
-	.date{
+	.acticle-date{
 		margin-left: 10upx;
 		font-size: 0.9rem;
 	}

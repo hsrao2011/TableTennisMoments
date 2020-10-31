@@ -1,22 +1,22 @@
 <template>
-	<view class="container">
-		<view class="user-list">
+	<view class="follow-container">
+		<view class="follow-user-list">
 			<scroll-view scroll-x="true">
-				<view class="user-item"  v-for="(item, index) in listUser" :key="index">
-					<view class="user">
-						<image class="avatar" :src="'/static/data/avatar/' + item.user.avatar" alt="头像" mode="aspectFill"></image>
+				<view class="follow-user-item"  v-for="(item, index) in listUser" :key="index">
+					<view class="follow-user">
+						<image class="follow-avatar" :src="'/static/data/avatar/' + item.user.avatar" alt="头像" mode="aspectFill"></image>
 						<text>{{item.user.nickName}}</text>
 					</view>
 				</view>
-				<view class="user-item"  v-for="(item, index) in listUser" :key="index + 100">
-					<view class="user">
-						<image class="avatar" :src="'/static/data/avatar/' + item.user.avatar" alt="头像" mode="aspectFill"></image>
+				<view class="follow-user-item"  v-for="(item, index) in listUser" :key="index + 100">
+					<view class="follow-user">
+						<image class="follow-avatar" :src="'/static/data/avatar/' + item.user.avatar" alt="头像" mode="aspectFill"></image>
 						<text>{{item.user.nickName}}</text>
 					</view>
 				</view>
-				<view class="user-item"  v-for="(item, index) in listUser" :key="index+ 200">
-					<view class="user">
-						<image class="avatar" :src="'/static/data/avatar/' + item.user.avatar" alt="头像" mode="aspectFill"></image>
+				<view class="follow-user-item"  v-for="(item, index) in listUser" :key="index+ 200">
+					<view class="follow-user">
+						<image class="follow-avatar" :src="'/static/data/avatar/' + item.user.avatar" alt="头像" mode="aspectFill"></image>
 						<text>{{item.user.nickName}}</text>
 					</view>
 				</view>
@@ -153,10 +153,10 @@
 </script>
 
 <style scoped>
-	.container{
+	.follow-container{
 		width: 100%;
 	}
-	.user-list > scroll-view{
+	.follow-user-list > scroll-view{
 		flex: 1 1 auto;
 		white-space: nowrap;
 		overflow: hidden;
@@ -167,19 +167,19 @@
 		flex-wrap: nowrap;
 		margin: 20upx 0 20upx 0;
 	}
-	.user-list .user-item{
+	.follow-user-list .follow-user-item{
 		display: inline-block;
 		flex: 0 0 auto;
 		margin-left: 40upx;
 		width: 100upx;
 	}
-	.user-item .user{
+	.follow-user-item .follow-user{
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: center;
 	}
-	.user .avatar{
+	.follow-user .follow-avatar{
 		flex: 0 0 auto;
 		position:relative;
 		width:90upx;
@@ -187,7 +187,7 @@
 		border-radius:1000upx;
 		border: 2px red solid;
 	}
-	.user text{
+	.follow-user text{
 		display: inline-block;
 		margin-top: 15upx;
 		font-size: 24upx;

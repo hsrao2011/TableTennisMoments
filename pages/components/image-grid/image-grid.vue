@@ -1,13 +1,13 @@
 <template>
-	<view class="container">
+	<view class="image-grid-container">
 		<view class="grid grid-square" :class="'col-' + colCount">
 			<view   v-for="(image,index) in images" :key="index">
-				<image class="image-grid-image" :src="imageUrl(image)" mode="aspectFill" @click="onPreviewImage(index)"></image>
-				<view v-if="editable" class="remove-image" @click="removeImage(index)">X</view>
+				<image class="image-grid-image loading" :src="imageUrl(image)" mode="aspectFill" @click="onPreviewImage(index)"></image>
+				<view v-if="editable" class="image-grid-remove-image" @click="removeImage(index)">X</view>
 			</view>
-			<view v-if="editable && this.restImageCount > 0" class="add-image">
+			<view v-if="editable && this.restImageCount > 0" class="image-grid-add-image">
 				<view @click="addImage">
-					<view class="add-image-text">+</view>
+					<view class="image-grid-add-image-text">+</view>
 				</view>
 			</view>
 		</view>
@@ -105,7 +105,8 @@
 </script>
 
 <style scoped>
-	.container{
+	.image-grid-container{
+		width: 100%;
 		margin-top: 10upx;
 	}
 	.grid.col-1.grid-square > view {
@@ -117,7 +118,7 @@
 		height:100%;
 		top: 0;
 	}
-	.remove-image{
+	.image-grid-remove-image{
 		position: absolute;
 		right: 15upx;
 		top: 15upx;
@@ -126,7 +127,7 @@
 		font-weight: 300;
 		color: #2e2e2e;
 	}
-	.add-image view{
+	.image-grid-add-image view{
 		position: absolute;
 		top: 0;
 		width:100%;
@@ -136,7 +137,7 @@
 		justify-content:center;
 		
 	}
-	.add-image-text{
+	.image-grid-add-image-text{
 		font-size: 100upx;
 		font-weight: 550;
 		text-align: center;

@@ -1,21 +1,21 @@
 <template>
-	<view class="container">
-		<view class="content-video">
-			<video id="video" class="video" :src="videoUrl" controls autoplay>
-				<cover-image src="/static/icon/btn-play-return.png" class="backButton" @click="onBack"></cover-image>
+	<view class="blog-short-video-container">
+		<view class="blog-short-video-content-video">
+			<video id="video" class="blog-short-video-video" :src="videoUrl" controls autoplay>
+				<cover-image src="/static/icon/btn-play-return.png" class="blog-short-video-backButton" @click="onBack"></cover-image>
 			</video>
 		</view>
-		<view class="content-title">
-			<label class="title-label">标题</label>
-			<view class="title-editor">
+		<view class="blog-short-video-content-title">
+			<label class="blog-short-video-title-label">标题</label>
+			<view class="blog-short-video-title-editor">
 				<textarea v-model:value="title" placeholder="输入标题" 
 				placeholder-style="font-size: 1.4rem; font-weight:500;"
 				@blur="onTitleBlur" @input="onTitleInput"/>
-				<text v-if="titlePrompt" class="title-prompt" >{{titlePrompt}}</text>
+				<text v-if="titlePrompt" class="blog-short-video-title-prompt" >{{titlePrompt}}</text>
 			</view>
 		</view>
-		<view class="distribute">
-			<button class="distribure-btn" type="default" @click="onDistribute">发布</button>
+		<view class="blog-short-video-distribute">
+			<button class="blog-short-video-distribure-btn" type="default" @click="onDistribute">发布</button>
 		</view>
 	</view>
 </template>
@@ -164,27 +164,27 @@
 </script>
 
 <style scoped>
-	.container{
+	.blog-short-video-container{
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: flex-start;
 		background-color: #fff;
 		width: 100%;
-		height: 100%;
+		height: 100vh;
 	}
-	.content-video{
+	.blog-short-video-content-video{
 		width: 100%;
 		padding-bottom: 60%;
 		height: 0;
 		position: relative;
 	}
-	.video{
+	.blog-short-video-video{
 		position: absolute;
 		width: 100%;
 		height: 100%;
 	}
-	.backButton{
+	.blog-short-video-backButton{
 		position: absolute;
 		top: 40upx;
 		left: 30upx;
@@ -193,7 +193,7 @@
 		padding: 5upx;
 		background-color: rgba(0,0,0,0.2);
 	}
-	.content-title{
+	.blog-short-video-content-title{
 		width: 100%;
 		overflow: hidden;
 		padding: 40upx 30upx;
@@ -202,34 +202,34 @@
 		font-size: 1.4rem;
 		font-weight: 400;
 	}
-	.title-label{
+	.blog-short-video-title-label{
 		width: 120upx;
 		padding-top: 20upx;
 		flex: 0 0 auto;
 	}
-	.title-label::after{
+	.blog-short-video-title-label::after{
 		content:"*";
 		color: #d81e06;
 	}
-	.title-editor{
+	.blog-short-video-title-editor{
 		flex: 1 1 auto;
 		padding: 20upx;
 		display: flex;
 		flex-direction: column;
 	}
-	.title-editor textarea{
+	.blog-short-video-title-editor textarea{
 		width: 100%;
 		height: 160upx;
 		font-size: 1.4rem;
 		font-weight: 550;
 		
 	}
-	.title-prompt{
+	.blog-short-video-title-prompt{
 		color:#d81e06;
 		font-size: 1rem;
 		line-height: 1.2;
 	}
-	.distribute{
+	.blog-short-video-distribute{
 		width: 100%;
 		display: flex;
 		justify-content: center;
@@ -237,7 +237,7 @@
 		position: fixed;
 		bottom: 30upx;
 	}
-	.distribure-btn{
+	.blog-short-video-distribure-btn{
 		width: 40%;
 		height: 75upx;
 		line-height: 75upx;

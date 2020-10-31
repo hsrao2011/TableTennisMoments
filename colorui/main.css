@@ -25,7 +25,7 @@ input,
 textarea,
 label,
 navigator,
-image {
+image{
 	box-sizing: border-box;
 }
 

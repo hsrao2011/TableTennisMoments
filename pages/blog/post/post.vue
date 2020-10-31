@@ -1,16 +1,16 @@
 <template>
-	<view class="container">
-		<view class="content">
-			<view class="content-editor">
-				<textarea class="editor" v-model:value="content"
+	<view class="blog-post-container">
+		<view class="blog-post-content">
+			<view class="blog-post-content-editor">
+				<textarea class="blog-post-editor" v-model:value="content"
 				:placeholder="placeholder" placeholder-style="font-size: 1.4rem;"
 				auto-height="true"/>
 			</view>
 			<image-grid ref="imageGrid" :images="images" :editable="true"></image-grid>
 		</view>
-		<view class="toolbar-placeholder">
+		<view class="blog-post-toolbar-placeholder">
 		</view>
-		<view class="toolbar">
+		<view class="blog-post-toolbar">
 			<view class="text-black cuIcon-pic " @click="onToolBarAddImage">
 			</view>
 		</view>
@@ -137,32 +137,31 @@
 	}
 </script>
 
-<style>
-	.container{
+<style scoped>
+	.blog-post-container{
 		padding: 15upx;
 		background-color: #fff;
-		width: 100%;
-		height: 100%;
+		height: 100vh;
 	}
-	.content{
+	.blog-post-content{
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
 	}
-	.toolbar-placeholder{
+	.blog-post-toolbar-placeholder{
 		height: 80upx;
 		flex: 0 0 auto;
 	}
-	.content-editor{
+	.blog-post-content-editor{
 		flex: auto;
 	}
-	.editor{
+	.blog-post-editor{
 		min-height: 600upx;
 		width: 100%;
 		font-size: 1.4rem;
 		line-height: 1.2;
 	}
-	.toolbar{
+	.blog-post-toolbar{
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
@@ -174,7 +173,7 @@
 		width: 100%;
 		background-color: #F2F2F2;
 	}
-	.toolbar view{
+	.blog-post-toolbar view{
 		width: 100upx;
 		height: 80upx;
 		font-size: 56upx;

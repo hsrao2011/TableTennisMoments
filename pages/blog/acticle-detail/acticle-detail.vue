@@ -1,15 +1,15 @@
 <template>
-	<view  class="container">
-		<view v-if="blog" class="content">
-			<view class="title">
+	<view v-if="blog" class="blog-acticle-detail-container">
+		<view class="blog-acticle-detail-content">
+			<view class="blog-acticle-detail-title">
 				<text>{{blog.data.title}}</text>
 			</view>
 			<user-base-info :user="blog.user"></user-base-info>
 			<view class="ql-container">  
 				<jyf-parser class="ql-editor" :html="blog.data.html" ></jyf-parser>  
 			</view>
-			<comment-list ref="commentList" :targetId="blog.data.id" ></comment-list>
 		</view>
+		<comment-list ref="commentList" :targetId="blog.data.id" ></comment-list>
 		<uni-load-more :status="more"></uni-load-more>
 	</view>
 </template>
@@ -88,19 +88,22 @@
 </script>
 
 <style scoped>
-	.container{
+	.blog-acticle-detail-container{
 		background-color:#fff;
-		padding: 60upx 30upx 0 30upx;
-		min-height: 100%;
+		padding-top: 60upx;
+		min-height: 100vh;
+		width: 100%;
+		height: 100%;
 	}
-	.content{
+	.blog-acticle-detail-content{
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: flex-start;
+		padding: 0 30upx 0 30upx;
 	}
-	.title{
-		padding: 0 10upx 0 10upx;
+	.blog-acticle-detail-title{
+		padding: 0 10upx 40upx 10upx;
 		font-size: 1.4rem;
 		font-weight: 550;
 		line-height:1.6;
