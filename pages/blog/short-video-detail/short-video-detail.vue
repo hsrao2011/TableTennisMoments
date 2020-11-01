@@ -1,8 +1,8 @@
 <template>
 	<view v-if="blog" class="bsvd-container">
-		<view ref="fixed" class="bsvd-fixed" id="fixed">
-			<view class="bsvd-content-video-container" :class="onlyVideo?'bsvd-content-video-container-fullscreen':''">
-				<video  id="short-video-detail" class="bsvd-content-video" 
+		<view id="bsvd-video-container" class="bsvd-video-container-fixed">
+			<view class="bsvd-video-container-relative">
+				<video  id="short-video-detail" class="bsvd-video" 
 					:src="blog.data.content" :initial-time="playPos(uniqueName)" autoplay
 					controls  show-center-play-btn 
 					@play="onVideoPlaying" @ended="onVideoCompleted" @pause="onVideoPaused"
@@ -47,7 +47,6 @@
 		},
 		onLoad(){
 			// #ifdef APP-PLUS
-			plus.screen.unlockOrientation(); 
 			plus.navigator.setFullscreen(true);
 			// #endif
 			this.playState = kPlayState.stopped;
@@ -59,11 +58,10 @@
 					that.refreshComment();
 					that.$nextTick(function(){
 						const query = uni.createSelectorQuery().in(that);
-						query.select("#fixed").boundingClientRect(data => {
+						query.select("#bsvd-video-container").boundingClientRect(data => {
 							if(data){
 								that.fixedHeight = data.height;
 							}
-							
 						}).exec();
 					})
 				})
@@ -78,15 +76,13 @@
 			this.landscapeObserver.observe({
 				orientation: 'landscape'  //屏幕方向为纵向
 			}, matches => {
-				//console.log("landscapeObserver:" + this.landscape);
-				this.landscape = matches
+				that.landscape = matches
 			})
 		},
 		onUnload(){
 			this.landscapeObserver.disconnect();
 			// #ifdef APP-PLUS
 			plus.navigator.setFullscreen(false);
-			plus.screen.lockOrientation("portrait-primary"); 
 			// #endif
 			this.setPlayPos({videoId: this.uniqueName, pos: this.pos});
 		},
@@ -173,43 +169,32 @@
 		min-height: 100vh;
 		background-color: #fff;
 	}
-	.bsvd-fixed{
+	.bsvd-video-container-fixed{
 		position: fixed;
+		width: 100%;
 		top: 0;
 		left: 0;
-		width: 100%;
-		display:flex;
+		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: flex-start;
-		z-index: 10;
 		background-color: #fff;
+		z-index: 100;
 	}
-	.bsvd-content-video-container{
-		width: 100%;
+	.bsvd-video-container-relative{
 		position: relative;
-		top: 0;
-		left: 0;
+		width: 100%;
 		height: 0;
 		padding-top: 60%;
 		overflow: hidden;
 		background-color: red;
 	}
-	.bsvd-content-video-container-fullscreen{
-		height: 100vh;
-		right: 0;
-		bottom: 0;
-		padding-top: 0;
-	},
-	.bsvd-content-video{
+	.bsvd-video{
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
 		height: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
 	}
 	.bsvd-user-base-info{
 		padding: 30upx;
